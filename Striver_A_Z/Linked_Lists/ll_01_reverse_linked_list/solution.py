@@ -2,11 +2,6 @@
 # Space Complexity: O(1) (Constraint)
 # Explanation: Iterative approach: Maintain three pointers (`prev`, `curr`, `next_node`). Re-point `curr->next` to `prev` and slide forward.
 
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
-
 def reverse_list(head: ListNode) -> ListNode:
     prev = None
     curr = head

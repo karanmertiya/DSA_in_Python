@@ -19,29 +19,20 @@
     <tr>
       <td rowspan="1">1</td>
       <td rowspan="1">Bs 01 Binary Search<br><br></b> <a href='https://leetcode.com/problems/binary-search/' target='_blank'>LeetCode 704</a></td>
-      <td rowspan="1"><b>Example 1:</b> Input: nums = [-1,0,3,5,9,12], target = 9, Output: 4<br><br><b>Note (Constraint):</b> 1 &le; N &le; 10<sup>4</sup></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [-1,0,3,5,9,12], target = 9, Output: 4</td>
       <td><b>Time:</b> O(log N) (Constraint)<br><b>Space:</b> O(1) (Constraint)</td>
       <td>-</td>
-      <td><b>Mid Overflow:</b> Calculate mid as `low + (high - low) / 2` to prevent integer overflow for large arrays.</td>
-      <td><b>Explanation:</b> Compare target with the middle element. If smaller, search the left half. If larger, search the right half.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def search(nums: list[int], target: int) -&gt; int:&#10;    low, high = 0, len(nums) - 1&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if nums[mid] == target: return mid&#10;        elif nums[mid] &lt; target: low = mid + 1&#10;        else: high = mid - 1&#10;    return -1</code></pre></details></td>
+      <td><b>Mid Overflow:</b> Use `mid = low + (high - low) / 2` to avoid integer overflow if boundaries are large.</td>
+      <td><b>Explanation:</b> Standard Iterative approach. Maintain `low` and `high` boundaries, shrinking the search space by half.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def search(nums: list[int], target: int) -&gt; int:&#10;    low, high = 0, len(nums) - 1&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if nums[mid] == target:&#10;            return mid&#10;        elif nums[mid] &lt; target:&#10;            low = mid + 1&#10;        else:&#10;            high = mid - 1&#10;    return -1</code></pre></details></td>
     </tr>
     <tr>
       <td rowspan="1">2</td>
-      <td rowspan="1">Bs 02 Lower Bound And Upper Bound<br><br></b> <a href='https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/' target='_blank'>LeetCode 34</a></td>
-      <td rowspan="1"><b>Example 1:</b> Input: nums = [5,7,7,8,8,10], target = 8, Output: [3,4]<br><br><b>Note (Constraint):</b> Must be `O(log N)`.</td>
-      <td><b>Time:</b> O(log N) (Constraint)<br><b>Space:</b> O(1)</td>
-      <td>-</td>
-      <td><b>Biasing:</b> If `nums[mid] == target`, don't return. Record the index and continue searching left (for lower) or right (for upper).</td>
-      <td><b>Explanation:</b> Perform two separate binary searches: one for the first occurrence (bias left) and one for the last (bias right).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def search_range(nums: list[int], target: int) -&gt; list[int]:&#10;    def find_bound(is_first):&#10;        low, high, res = 0, len(nums) - 1, -1&#10;        while low &lt;= high:&#10;            mid = low + (high - low) // 2&#10;            if nums[mid] == target:&#10;                res = mid&#10;                if is_first: high = mid - 1&#10;                else: low = mid + 1&#10;            elif nums[mid] &lt; target: low = mid + 1&#10;            else: high = mid - 1&#10;        return res&#10;    return [find_bound(True), find_bound(False)]</code></pre></details></td>
-    </tr>
-    <tr>
-      <td rowspan="1">3</td>
-      <td rowspan="1">Bs 04 Binary Search On Answers Koko Eating Bananas<br><br></b> <a href='https://leetcode.com/problems/koko-eating-bananas/' target='_blank'>LeetCode 875</a></td>
-      <td rowspan="1"><b>Example 1:</b> Input: piles = [3,6,7,11], h = 8, Output: 4<br><br><b>Note (Constraint):</b> Binary Search on Answers.</td>
-      <td><b>Time:</b> O(N log(Max(Pile))) (Constraint)<br><b>Space:</b> O(1)</td>
-      <td><code>std::ceil</code> / <code>math.ceil</code></td>
-      <td><b>Answer Range:</b> The minimum speed is 1, and the maximum speed needed is the largest pile size (which finishes every pile in 1 hour).</td>
-      <td><b>Explanation:</b> Search space is `1` to `max(piles)`. Calculate total hours for `mid`. If possible, try a slower speed (left half).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def min_eating_speed(piles: list[int], h: int) -&gt; int:&#10;    def can_eat(speed):&#10;        hours = 0&#10;        for p in piles:&#10;            hours += math.ceil(p / speed)&#10;        return hours &lt;= h&#10;        &#10;    low, high = 1, max(piles)&#10;    ans = high&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if can_eat(mid):&#10;            ans = mid&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return ans</code></pre></details></td>
+      <td rowspan="1">Bs 02 Lower Bound<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/floor-in-a-sorted-array-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: arr = [1,2,8,10,11,12,19], target = 0, Output: 0</td>
+      <td><b>Time:</b> O(log N) (Constraint)<br><b>Space:</b> O(1) (Constraint)</td>
+      <td><code>std::lower_bound</code> internal alternative</td>
+      <td><b>Not Found:</b> If all elements are smaller, `ans` stays `N`.</td>
+      <td><b>Explanation:</b> When `nums[mid] >= target`, it is a potential answer. Store it and search left (`high = mid - 1`) for smaller potentials.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lowerBound(arr: list[int], n: int, x: int) -&gt; int:&#10;    low, high = 0, n - 1&#10;    ans = n&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if arr[mid] &gt;= x:&#10;            ans = mid&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return ans</code></pre></details></td>
     </tr>
   </tbody>
 </table>

@@ -19,11 +19,11 @@
     <tr>
       <td rowspan="1">1</td>
       <td rowspan="1">Tree 01 Binary Tree Inorder Traversal<br><br></b> <a href='https://leetcode.com/problems/binary-tree-inorder-traversal/' target='_blank'>LeetCode 94</a></td>
-      <td rowspan="1"><b>Example 1:</b> Input: root = [1,null,2,3], Output: [1,3,2]<br><br><b>Note (Constraint):</b> Inorder -> Left, Root, Right.</td>
-      <td><b>Time:</b> O(N) (Constraint)<br><b>Space:</b> O(N) (Constraint)</td>
+      <td rowspan="1"><b>Example 1:</b> Input: root = [1,null,2,3], Output: [1,3,2]</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
       <td>-</td>
-      <td><b>Recursion Depth:</b> In the worst-case (skewed tree), the recursion stack takes `O(N)` space. For balanced trees, it takes `O(log N)`.</td>
-      <td><b>Explanation:</b> Recursive approach. Traverse the left subtree, process the current node, then traverse the right subtree.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># class TreeNode:&#10;#     def __init__(self, val=0, left=None, right=None):&#10;#         self.val = val&#10;#         self.left = left&#10;#         self.right = right&#10;&#10;def inorder_traversal(root: TreeNode) -&gt; list[int]:&#10;    ans = []&#10;    def inorder(node):&#10;        if not node: return&#10;        inorder(node.left)&#10;        ans.append(node.val)&#10;        inorder(node.right)&#10;    inorder(root)&#10;    return ans</code></pre></details></td>
+      <td><b>Recursion Depth:</b> Worst-case skewed tree takes `O(N)` space.</td>
+      <td><b>Explanation:</b> Recursive approach. Traverse Left, process Root, then traverse Right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def inorderTraversal(root: TreeNode) -&gt; list[int]:&#10;    ans = []&#10;    def inorder(node):&#10;        if not node: return&#10;        inorder(node.left)&#10;        ans.append(node.val)&#10;        inorder(node.right)&#10;    inorder(root)&#10;    return ans</code></pre></details></td>
     </tr>
   </tbody>
 </table>

@@ -43,5 +43,14 @@
       <td><b>Unreachable Oranges:</b> Track total fresh oranges initially. If remaining fresh > 0 after BFS, return -1.</td>
       <td><b>Explanation:</b> Multi-source BFS. Put all initially rotten oranges in queue. Process level by level.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def orangesRotting(grid: list[list[int]]) -&gt; int:&#10;    q = deque()&#10;    fresh = 0&#10;    for i in range(len(grid)):&#10;        for j in range(len(grid[0])):&#10;            if grid[i][j] == 2: q.append((i, j))&#10;            elif grid[i][j] == 1: fresh += 1&#10;    time = 0&#10;    dirs = [(1,0), (-1,0), (0,1), (0,-1)]&#10;    while q and fresh &gt; 0:&#10;        for _ in range(len(q)):&#10;            r, c = q.popleft()&#10;            for dr, dc in dirs:&#10;                nr, nc = r + dr, c + dc&#10;                if 0 &lt;= nr &lt; len(grid) and 0 &lt;= nc &lt; len(grid[0]) and grid[nr][nc] == 1:&#10;                    grid[nr][nc] = 2&#10;                    q.append((nr, nc))&#10;                    fresh -= 1&#10;        time += 1&#10;    return time if fresh == 0 else -1</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">4</td>
+      <td rowspan="1">Graph 04 Bipartite Graph<br><br></b> <a href='https://leetcode.com/problems/is-graph-bipartite/' target='_blank'>LeetCode 785</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: graph = [[1,2,3],[0,2],[0,1,3],[0,2]], Output: false</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td><code>std::queue</code></td>
+      <td><b>Disconnected Graph:</b> Must loop over all nodes `0` to `V-1` to ensure every disconnected component is checked.</td>
+      <td><b>Explanation:</b> BFS/DFS coloring approach. Color adjacent nodes with alternate colors (0 and 1). If an adjacent node has the SAME color, it's not bipartite.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def isBipartite(graph: list[list[int]]) -&gt; bool:&#10;    n = len(graph)&#10;    color = [-1] * n&#10;    for i in range(n):&#10;        if color[i] != -1: continue&#10;        q = deque([i])&#10;        color[i] = 0&#10;        while q:&#10;            node = q.popleft()&#10;            for neighbor in graph[node]:&#10;                if color[neighbor] == -1:&#10;                    color[neighbor] = 1 - color[node]&#10;                    q.append(neighbor)&#10;                elif color[neighbor] == color[node]:&#10;                    return False&#10;    return True</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

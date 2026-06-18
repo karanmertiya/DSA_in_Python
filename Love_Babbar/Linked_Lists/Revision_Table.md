@@ -1,0 +1,38 @@
+# Linked Lists Revision Table
+
+<table border="1">
+  <thead>
+    <tr>
+      <th rowspan="2" style="width: 5%;">S.No</th>
+      <th rowspan="2" style="width: 15%;">Problem Name</th>
+      <th rowspan="2" style="width: 25%;">Example & Constraints</th>
+      <th rowspan="2" style="width: 10%;">Complexity</th>
+      <th colspan="2" style="width: 20%;">Conditions & Edge Cases</th>
+      <th rowspan="2" style="width: 25%;">Logic</th>
+    </tr>
+    <tr>
+      <th>Dependencies / Setup</th>
+      <th>Edge Case Handling</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="1">1</td>
+      <td rowspan="1">Ll 01 Reverse Linked List<br><br></b> <a href='https://leetcode.com/problems/reverse-linked-list/' target='_blank'>LeetCode 206</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: head = [1,2,3,4,5], Output: [5,4,3,2,1]<br><br><b>Note (Constraint):</b> 0 &le; N &le; 5000</td>
+      <td><b>Time:</b> O(N) (Constraint)<br><b>Space:</b> O(1) (Constraint)</td>
+      <td>-</td>
+      <td><b>Null List:</b> Automatically handled because the `while` loop checks `curr != NULL`.</td>
+      <td><b>Explanation:</b> Iterative approach: Maintain three pointers (`prev`, `curr`, `next_node`). Re-point `curr->next` to `prev` and slide forward.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># class ListNode:&#10;#     def __init__(self, val=0, next=None):&#10;#         self.val = val&#10;#         self.next = next&#10;&#10;def reverse_list(head: ListNode) -&gt; ListNode:&#10;    prev = None&#10;    curr = head&#10;    while curr:&#10;        next_node = curr.next&#10;        curr.next = prev&#10;        prev = curr&#10;        curr = next_node&#10;    return prev</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">2</td>
+      <td rowspan="1">Ll 03 Linked List Cycle<br><br></b> <a href='https://leetcode.com/problems/linked-list-cycle/' target='_blank'>LeetCode 141</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: head = [3,2,0,-4], pos = 1 (tail connects to pos 1), Output: true</td>
+      <td><b>Time:</b> O(N) (Constraint)<br><b>Space:</b> O(1) (Constraint)</td>
+      <td>-</td>
+      <td><b>No Cycle:</b> Handled if `fast == NULL` or `fast->next == NULL`.</td>
+      <td><b>Explanation:</b> Tortoise and Hare algorithm. If there is a cycle, the fast pointer will eventually "lap" and collide with the slow pointer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def has_cycle(head: ListNode) -&gt; bool:&#10;    slow, fast = head, head&#10;    while fast and fast.next:&#10;        slow = slow.next&#10;        fast = fast.next.next&#10;        if slow == fast: return True&#10;    return False</code></pre></details></td>
+    </tr>
+  </tbody>
+</table>

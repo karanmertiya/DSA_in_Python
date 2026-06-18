@@ -1,102 +1,95 @@
-# Apna College - Basic Maths Revision Table
+# Basic Maths Revision Table
 
 <table border="1">
   <thead>
     <tr>
-      <th>S.No</th>
-      <th>Problem Name</th>
-      <th>Example</th>
-      <th>Common Constraints</th>
-      <th>Approach Type</th>
-      <th>Time</th>
-      <th>Space</th>
-      <th>Specific Conditions / Edge Cases</th>
-      <th>Logic</th>
+      <th rowspan="2" style="width: 5%;">S.No</th>
+      <th rowspan="2" style="width: 15%;">Problem Name</th>
+      <th rowspan="2" style="width: 25%;">Example & Constraints</th>
+      <th rowspan="2" style="width: 10%;">Complexity</th>
+      <th colspan="2" style="width: 20%;">Conditions & Edge Cases</th>
+      <th rowspan="2" style="width: 25%;">Logic</th>
+    </tr>
+    <tr>
+      <th>Dependencies / Setup</th>
+      <th>Edge Case Handling</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td rowspan="3">1</td>
       <td rowspan="3">Math 01 Count Digits</td>
-      <td rowspan="3"><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-text">Example 1:&#10;Input: N = 12345&#10;Output: 5&#10;&#10;Example 2:&#10;Input: N = 8394&#10;Output: 4</code></pre></td>
-      <td rowspan="3">1 &le; N &le; 10<sup>9</sup></td>
-      <td><b>Brute Force</b></td>
-      <td><code>O(log10(N))</code><br><i>Constraint</i></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><b>Sign Edge Case:</b> Fails on N=0. Requires explicit check.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Divide by 10 continuously until N becomes 0.</i><br><br><b>Edge Case Code:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">if n &lt;= 0: return 1</code></pre><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def count_digits_brute(n: int) -&gt; int:&#10;    # Edge Case: Handle N=0 specifically&#10;    if n &lt;= 0: return 1&#10;    cnt = 0&#10;    while n &gt; 0:&#10;        cnt += 1&#10;        n //= 10&#10;    return cnt</code></pre></details></td>
+      <td rowspan="3"><b>Example 1:</b> Input: N = 12345, Output: 5<br><b>Example 2:</b> Input: N = -8394, Output: 4<br><br><b>Note (Constraint):</b> -10<sup>9</sup> &le; N &le; 10<sup>9</sup></td>
+      <td><b>Time:</b> O(log10(N))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Sign Handle:</b><br><code>if (n == 0) return 1;</code><br><code>n = abs(n);</code></td>
+      <td><b>Explanation:</b> Divide by 10 continuously until N becomes 0.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def count_digits_brute(n: int) -&gt; int:&#10;    # Edge Case: 0 has 1 digit, negative numbers require abs()&#10;    if n == 0: return 1&#10;    n = abs(n)&#10;    cnt = 0&#10;    while n &gt; 0:&#10;        cnt += 1&#10;        n //= 10&#10;    return cnt</code></pre></details></td>
     </tr>
     <tr>
-      <td><b>Better</b></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><code>O(log10(N))</code><br><i>Trade-off</i></td>
-      <td><b>Memory Trade-off:</b> String allocation required. Avoid for strictly O(1) space constraints.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Convert number to string and return length.</i><br><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def count_digits_better(n: int) -&gt; int:&#10;    # Trade-off: Allocates string memory proportional to digit count&#10;    return len(str(n))</code></pre></details></td>
+      <td><b>Time:</b> O(1) (Constraint)<br><b>Space:</b> O(log10(N)) (Trade-off)</td>
+      <td><b>Type Casting:</b><br><code>to_string()</code> / <code>str()</code></td>
+      <td><b>Sign Handle:</b><br><code>n = abs(n);</code></td>
+      <td><b>Explanation:</b> Convert number to string and return length.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def count_digits_better(n: int) -&gt; int:&#10;    if n == 0: return 1&#10;    # Trade-off: Allocates string memory&#10;    return len(str(abs(n)))</code></pre></details></td>
     </tr>
     <tr>
-      <td><b>Optimal</b></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><b>Library Requirement:</b> Must use math library. Fails if standard libraries are restricted.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Use base-10 logarithm to find digit count mathematically.</i><br><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;&#10;def count_digits_optimal(n: int) -&gt; int:&#10;    # Edge Case check for zero&#10;    if n &lt;= 0: return 1&#10;    return int(math.log10(n) + 1)</code></pre></details></td>
+      <td><b>Time:</b> O(1) (Constraint)<br><b>Space:</b> O(1)</td>
+      <td><b>Math Lib:</b><br><code>log10()</code></td>
+      <td><b>Sign Handle:</b><br><code>n = abs(n);</code></td>
+      <td><b>Explanation:</b> Use base-10 logarithm to find digit count mathematically.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;&#10;def count_digits_optimal(n: int) -&gt; int:&#10;    if n == 0: return 1&#10;    n = abs(n)&#10;    return int(math.log10(n) + 1)</code></pre></details></td>
     </tr>
     <tr>
       <td rowspan="2">2</td>
       <td rowspan="2">Math 02 Reverse A Number</td>
-      <td rowspan="2"><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-text">Example 1:&#10;Input: N = 1234&#10;Output: 4321&#10;&#10;Example 2:&#10;Input: N = 10400&#10;Output: 401</code></pre></td>
-      <td rowspan="2">-2<sup>31</sup> &le; N &le; 2<sup>31</sup> - 1</td>
-      <td><b>Brute Force</b></td>
-      <td><code>O(log10(N))</code><br><i>Trade-off</i></td>
-      <td><code>O(log10(N))</code><br><i>Trade-off</i></td>
-      <td><b>Negative Signs:</b> Reversing a string with '-' results in invalid parsing.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Convert to string, reverse the string, and parse back to integer.</i><br><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse_number_brute(n: int) -&gt; int:&#10;    # Edge Case: Explicitly store and remove sign before string conversion&#10;    is_neg = n &lt; 0&#10;    s = str(abs(n))&#10;    res = int(s[::-1])&#10;    return -res if is_neg else res</code></pre></details></td>
+      <td rowspan="2"><b>Example 1:</b> Input: N = 1234, Output: 4321<br><b>Example 2:</b> Input: N = -10400, Output: -401<br><br><b>Note (Constraint):</b> -2<sup>31</sup> &le; N &le; 2<sup>31</sup> - 1</td>
+      <td><b>Time:</b> O(log10(N))<br><b>Space:</b> O(log10(N)) (Trade-off)</td>
+      <td><b>String Lib:</b><br><code>reverse()</code>, <code>stoi()</code></td>
+      <td><b>Negative Signs:</b> Reversing a '-' results in invalid parsing. Store sign, process <code>abs(n)</code>.</td>
+      <td><b>Explanation:</b> Convert to string, reverse the string, and parse back to integer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse_number_brute(n: int) -&gt; int:&#10;    # Edge Case: Explicitly store and remove sign before string conversion&#10;    is_neg = n &lt; 0&#10;    s = str(abs(n))&#10;    res = int(s[::-1])&#10;    if res &gt; 2**31 - 1: return 0&#10;    return -res if is_neg else res</code></pre></details></td>
     </tr>
     <tr>
-      <td><b>Optimal</b></td>
-      <td><code>O(log10(N))</code><br><i>Constraint</i></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><b>Overflow Risk:</b> Number fits in 32-bit int, but its reverse might not. Forces explicit checks.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Extract digits using modulo 10 and build the reversed number mathematically.</i><br><br><b>Edge Case Code:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"></code></pre><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse_number_optimal(n: int) -&gt; int:&#10;    rev_num = 0&#10;    sign = -1 if n &lt; 0 else 1&#10;    n = abs(n)&#10;    while n &gt; 0:&#10;        ld = n % 10&#10;        rev_num = (rev_num * 10) + ld&#10;        n //= 10&#10;    # Python handles arbitrarily large ints, but we enforce 32-bit constraint artificially if required.&#10;    return sign * rev_num</code></pre></details></td>
+      <td><b>Time:</b> O(log10(N))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Data-type Agnostic Overflow Check:</b><br><code>temp / 10 != revNum</code></td>
+      <td><b>Explanation:</b> Extract digits using modulo 10 and build the reversed number mathematically.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse_number_optimal(n: int) -&gt; int:&#10;    rev_num = 0&#10;    sign = -1 if n &lt; 0 else 1&#10;    n = abs(n)&#10;    while n &gt; 0:&#10;        ld = n % 10&#10;        rev_num = (rev_num * 10) + ld&#10;        n //= 10&#10;    if rev_num &gt; 2**31 - 1: return 0&#10;    return sign * rev_num</code></pre></details></td>
     </tr>
     <tr>
-      <td rowspan="1">3</td>
-      <td rowspan="1">Math 03 Check Palindrome</td>
-      <td rowspan="1"><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-text">Example 1:&#10;Input: N = 121&#10;Output: true&#10;&#10;Example 2:&#10;Input: N = 123&#10;Output: false</code></pre></td>
-      <td rowspan="1">-2<sup>31</sup> &le; N &le; 2<sup>31</sup> - 1</td>
-      <td><b>Optimal</b></td>
-      <td><code>O(log10(N))</code><br><i>Constraint</i></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><b>Variable Requirement:</b> Number is destroyed during loop, requires `dup` variable for final check.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Reverse the number mathematically and compare it to the original.</i><br><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def is_palindrome_optimal(n: int) -&gt; bool:&#10;    # Edge Case: Negative numbers are strictly not palindromes&#10;    if n &lt; 0: return False&#10;    &#10;    dup = n&#10;    rev_num = 0&#10;    while n &gt; 0:&#10;        ld = n % 10&#10;        rev_num = (rev_num * 10) + ld&#10;        n //= 10&#10;    return dup == rev_num</code></pre></details></td>
+      <td rowspan="2">3</td>
+      <td rowspan="2">Math 03 Check Palindrome</td>
+      <td rowspan="2"><b>Example 1:</b> Input: N = 121, Output: true<br><b>Example 2:</b> Input: N = -121, Output: false<br><br><b>Note (Constraint):</b> -2<sup>31</sup> &le; N &le; 2<sup>31</sup> - 1</td>
+      <td><b>Time:</b> O(log10(N))<br><b>Space:</b> O(log10(N)) (Trade-off)</td>
+      <td><b>String Lib:</b><br><code>to_string()</code>, <code>reverse()</code></td>
+      <td><b>Negative Numbers:</b> Naturally handled by string equality (`-121` != `121-`)</td>
+      <td><b>Explanation:</b> Convert the number to a string and compare it with its reversed version.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def is_palindrome_brute(n: int) -&gt; bool:&#10;    s = str(n)&#10;    return s == s[::-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td><b>Time:</b> O(log10(N))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>State Preservation:</b> Loop destroys `n`, requires `dup` variable.<br><b>Negative Signs:</b><br><code>if(n < 0) return false;</code></td>
+      <td><b>Explanation:</b> Reverse the number mathematically and compare it to the original.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def is_palindrome_optimal(n: int) -&gt; bool:&#10;    # Edge Case: Negative numbers are strictly not palindromes&#10;    if n &lt; 0: return False&#10;    &#10;    dup = n&#10;    rev_num = 0&#10;    while n &gt; 0:&#10;        ld = n % 10&#10;        rev_num = (rev_num * 10) + ld&#10;        n //= 10&#10;    return dup == rev_num</code></pre></details></td>
     </tr>
     <tr>
       <td rowspan="1">4</td>
       <td rowspan="1">Math 05 Armstrong Numbers</td>
-      <td rowspan="1"><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-text">Example 1:&#10;Input: N = 153&#10;Output: true&#10;&#10;Example 2:&#10;Input: N = 170&#10;Output: false</code></pre></td>
-      <td rowspan="1">1 &le; N &le; 10<sup>9</sup></td>
-      <td><b>Optimal</b></td>
-      <td><code>O(log10(N))</code><br><i>Constraint</i></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><b>Two-Pass Logic:</b> Requires digit count upfront before processing sum of powers.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Calculate digit count first, then mathematically extract digits and compute power sums.</i><br><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;&#10;def is_armstrong(n: int) -&gt; bool:&#10;    dup = n&#10;    sum_val = 0&#10;    digits = int(math.log10(n) + 1) if n &gt; 0 else 1&#10;    while n &gt; 0:&#10;        ld = n % 10&#10;        sum_val += ld ** digits&#10;        n //= 10&#10;    return sum_val == dup</code></pre></details></td>
+      <td rowspan="1"><b>Example 1:</b> Input: N = 153, Output: true<br><b>Example 2:</b> Input: N = 1634, Output: true<br><br><b>Note (Constraint):</b> 1 &le; N &le; 10<sup>9</sup></td>
+      <td><b>Time:</b> O(log10(N))<br><b>Space:</b> O(1)</td>
+      <td><b>Math Lib:</b><br><code>log10()</code>, <code>pow()</code>, <code>round()</code></td>
+      <td><b>Two-Pass Logic:</b> Requires digit count upfront (e.g. 1634 requires ^4).</td>
+      <td><b>Explanation:</b> Extract digit count first, then mathematically sum digits raised to that count.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;&#10;def is_armstrong(n: int) -&gt; bool:&#10;    dup = n&#10;    sum_val = 0&#10;    digits = int(math.log10(n) + 1) if n &gt; 0 else 1&#10;    while n &gt; 0:&#10;        ld = n % 10&#10;        sum_val += ld ** digits&#10;        n //= 10&#10;    return sum_val == dup</code></pre></details></td>
     </tr>
     <tr>
       <td rowspan="2">5</td>
       <td rowspan="2">Math 07 Check For Prime</td>
-      <td rowspan="2"><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-text">Example 1:&#10;Input: N = 11&#10;Output: true&#10;&#10;Example 2:&#10;Input: N = 15&#10;Output: false</code></pre></td>
-      <td rowspan="2">1 &le; N &le; 10<sup>9</sup></td>
-      <td><b>Brute Force</b></td>
-      <td><code>O(N)</code><br><i>Trade-off</i></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><b>TLE Guarantee:</b> N=10^9 takes ~10<sup>9</sup> ops. Guaranteed TLE on any modern platform.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Iterate from 2 to N-1 and check divisibility.</i><br><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def check_prime_brute(n: int) -&gt; bool:&#10;    if n &lt;= 1:&#10;        return False&#10;    for i in range(2, n):&#10;        if n % i == 0:&#10;            return False&#10;    return True</code></pre></details></td>
+      <td rowspan="2"><b>Example 1:</b> Input: N = 11, Output: true<br><br><b>Note (Constraint):</b> 1 &le; N &le; 10<sup>9</sup></td>
+      <td><b>Time:</b> O(N) (Trade-off)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>TLE Guarantee:</b> N=10^9 takes ~10<sup>9</sup> ops. Fails tight bounds.</td>
+      <td><b>Explanation:</b> Iterate from 2 to N-1 and check divisibility.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def check_prime_brute(n: int) -&gt; bool:&#10;    if n &lt;= 1:&#10;        return False&#10;    for i in range(2, n):&#10;        if n % i == 0:&#10;            return False&#10;    return True</code></pre></details></td>
     </tr>
     <tr>
-      <td><b>Optimal</b></td>
-      <td><code>O(&radic;N)</code><br><i>Constraint</i></td>
-      <td><code>O(1)</code><br><i>Constraint</i></td>
-      <td><b>Loop Optimization:</b> `i * i <= n` is far superior to computing `sqrt(n)` repeatedly.</td>
-      <td><details><summary>View Code</summary><br><i>Note: Iterate from 2 up to sqrt(N) since divisors come in pairs.</i><br><br><b>Implementation:</b><br><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def check_prime_optimal(n: int) -&gt; bool:&#10;    if n &lt;= 1:&#10;        return False&#10;    limit = int(n**0.5)&#10;    for i in range(2, limit + 1):&#10;        if n % i == 0:&#10;            return False&#10;    return True</code></pre></details></td>
+      <td><b>Time:</b> O(&radic;N) (Constraint)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Math Optimization:</b> <code>i * i <= n</code> prevents floating point <code>sqrt(n)</code> overhead.<br><br><b>Skipping Evens:</b> <code>if(n%2==0) return false;</code> halves the loop size.</td>
+      <td><b>Explanation:</b> Iterate from 2 up to sqrt(N) checking divisor pairs.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def check_prime_optimal(n: int) -&gt; bool:&#10;    if n &lt;= 1: return False&#10;    if n == 2: return True&#10;    # Edge Case Optimization: Halve range by skipping evens&#10;    if n % 2 == 0: return False&#10;    &#10;    limit = int(n**0.5)&#10;    for i in range(3, limit + 1, 2):&#10;        if n % i == 0:&#10;            return False&#10;    return True</code></pre></details></td>
     </tr>
   </tbody>
 </table>

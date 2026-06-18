@@ -13,3 +13,4 @@ def print_pattern(n: int) -> None:
 
 if __name__ == "__main__":
     print_pattern(5)
+

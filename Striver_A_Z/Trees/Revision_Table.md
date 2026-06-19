@@ -637,5 +637,14 @@
       <td>-</td>
       <td><b>Explanation:</b> If root is null or root matches n1 or n2, return root. Recurse for left and right. If both return non-null, root is LCA. If one returns non-null, return that one.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lowestCommonAncestor(root: &#x27;TreeNode&#x27;, p: &#x27;TreeNode&#x27;, q: &#x27;TreeNode&#x27;) -&gt; &#x27;TreeNode&#x27;:&#10;    if not root or root == p or root == q: return root&#10;    left = lowestCommonAncestor(root.left, p, q)&#10;    right = lowestCommonAncestor(root.right, p, q)&#10;    if not left: return right&#10;    if not right: return left&#10;    return root</code></pre></details></td>
     </tr>
+    <tr>
+      <td>70</td>
+      <td>Tree 29 Construct Tree From Inorder And Preorder<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/construct-tree-1/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Hash map for fast search.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> The first element in preorder is the root. Find this root in inorder using a hash map. Elements to the left in inorder form the left subtree, elements to the right form the right subtree. Recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self,val): self.data = val; self.left = None; self.right = None&#10;def buildTree(In, pre, n):&#10;    mp = {val: idx for idx, val in enumerate(In)}&#10;    preIdx = [0]&#10;    def buildTreeUtil(inSt, inEnd):&#10;        if inSt &gt; inEnd: return None&#10;        curr = pre[preIdx[0]]&#10;        preIdx[0] += 1&#10;        node = Node(curr)&#10;        if inSt == inEnd: return node&#10;        inIdx = mp[curr]&#10;        node.left = buildTreeUtil(inSt, inIdx - 1)&#10;        node.right = buildTreeUtil(inIdx + 1, inEnd)&#10;        return node&#10;    return buildTreeUtil(0, n - 1)</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

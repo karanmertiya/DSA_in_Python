@@ -268,5 +268,95 @@
       <td>Odd length string</td>
       <td><b>Explanation:</b> Remove all balanced brackets using a stack. The remaining string will be of the form `}}...{{...`. The required reversals will be `ceil(open_count/2) + ceil(close_count/2)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def countRev(s):&#10;    if len(s) % 2 != 0: return -1&#10;    stack = []&#10;    for c in s:&#10;        if c == &#x27;{&#x27;: stack.append(c)&#10;        else:&#10;            if stack and stack[-1] == &#x27;{&#x27;: stack.pop()&#10;            else: stack.append(c)&#10;    open_count = stack.count(&#x27;{&#x27;)&#10;    close_count = len(stack) - open_count&#10;    return math.ceil(open_count / 2) + math.ceil(close_count / 2)</code></pre></details></td>
     </tr>
+    <tr>
+      <td>29</td>
+      <td>Str 21 Minimum Number Of Bracket Reversals Needed To Make An Expression Balanced<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/count-the-reversals0401/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Stack logic.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Stack</td>
+      <td>Odd length</td>
+      <td><b>Explanation:</b> If the length of string is odd, return -1. Remove all balanced parts. The remaining string looks like `}}}{{{`. The number of reversals needed is `ceil(close/2) + ceil(open/2)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def countRev(s):&#10;    if len(s) % 2 != 0: return -1&#10;    stack = []&#10;    for c in s:&#10;        if c == &#x27;{&#x27;: stack.append(c)&#10;        else:&#10;            if stack and stack[-1] == &#x27;{&#x27;: stack.pop()&#10;            else: stack.append(c)&#10;    open_count = stack.count(&#x27;{&#x27;)&#10;    close_count = len(stack) - open_count&#10;    return math.ceil(open_count / 2) + math.ceil(close_count / 2)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>Str 22 Count Palindromic Subsequences<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/count-palindromic-subsequences/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Dynamic Programming.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DP. `dp[i][j]` stores the count of palindromic subsequences in `str[i..j]`. If `str[i] == str[j]`, `dp[i][j] = dp[i+1][j] + dp[i][j-1] + 1`. Else, `dp[i][j] = dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countPS(str_val):&#10;    MOD = 10**9 + 7&#10;    n = len(str_val)&#10;    dp = [[0]*n for _ in range(n)]&#10;    for i in range(n): dp[i][i] = 1&#10;    for length in range(2, n + 1):&#10;        for i in range(n - length + 1):&#10;            j = i + length - 1&#10;            if str_val[i] == str_val[j]:&#10;                dp[i][j] = (dp[i+1][j] + dp[i][j-1] + 1) % MOD&#10;            else:&#10;                dp[i][j] = (dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1]) % MOD&#10;    return dp[0][n - 1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td>Str 23 Count Of Number Of Given String In 2D Character Array<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/count-occurences-of-a-given-word-in-a-2-d-array/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DFS.</td>
+      <td><b>Time:</b> O(R * C * 4^L)<br><b>Space:</b> O(L)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DFS. For each cell, if it matches the first character of the word, start a DFS to look for the rest of the word in all 4 directions. Keep track of visited cells.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findOccurrence(mat, target):&#10;    def dfs(r, c, idx):&#10;        if idx == len(target): return 1&#10;        if r &lt; 0 or r &gt;= len(mat) or c &lt; 0 or c &gt;= len(mat[0]) or mat[r][c] != target[idx]: return 0&#10;        temp = mat[r][c]&#10;        mat[r][c] = &#x27;#&#x27;&#10;        found = (dfs(r + 1, c, idx + 1) +&#10;                 dfs(r - 1, c, idx + 1) +&#10;                 dfs(r, c + 1, idx + 1) +&#10;                 dfs(r, c - 1, idx + 1))&#10;        mat[r][c] = temp&#10;        return found&#10;    count = 0&#10;    for i in range(len(mat)):&#10;        for j in range(len(mat[0])):&#10;            if mat[i][j] == target[0]:&#10;                count += dfs(i, j, 0)&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>Str 24 Search A Word In A 2D Grid Of Characters<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-the-string-in-grid0111/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> 8 Directions Loop.</td>
+      <td><b>Time:</b> O(N * M * 8 * L)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the grid. For each matching starting character, check all 8 directions to see if the full word exists in a straight line.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def searchWord(grid, word):&#10;    R, C, L = len(grid), len(grid[0]), len(word)&#10;    dr = [-1, -1, -1, 0, 0, 1, 1, 1]&#10;    dc = [-1, 0, 1, -1, 1, -1, 0, 1]&#10;    ans = []&#10;    for r in range(R):&#10;        for c in range(C):&#10;            if grid[r][c] == word[0]:&#10;                for dir in range(8):&#10;                    currR, currC = r + dr[dir], c + dc[dir]&#10;                    k = 1&#10;                    while k &lt; L:&#10;                        if currR &lt; 0 or currR &gt;= R or currC &lt; 0 or currC &gt;= C: break&#10;                        if grid[currR][currC] != word[k]: break&#10;                        currR += dr[dir]&#10;                        currC += dc[dir]&#10;                        k += 1&#10;                    if k == L:&#10;                        ans.append([r, c])&#10;                        break&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>33</td>
+      <td>Str 25 Boyer Moore Algorithm For Pattern Searching<br><br></b> <a href='https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Bad Character Heuristic.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(256)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a Bad Character table for the pattern, which stores the last occurrence of each character. Align pattern with text. Compare from right to left. If mismatch, shift the pattern so that the mismatched character in text aligns with its last occurrence in the pattern. If not present, shift pattern past it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def search(txt, pat):&#10;    m, n = len(pat), len(txt)&#10;    badChar = [-1] * 256&#10;    for i in range(m): badChar[ord(pat[i])] = i&#10;    s = 0&#10;    while s &lt;= n - m:&#10;        j = m - 1&#10;        while j &gt;= 0 and pat[j] == txt[s + j]: j -= 1&#10;        if j &lt; 0:&#10;            print(f&quot;Pattern occurs at shift = {s}&quot;)&#10;            s += (m - badChar[ord(txt[s + m])] if s + m &lt; n else 1)&#10;        else:&#10;            s += max(1, j - badChar[ord(txt[s + j])])</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>Str 26 Roman Number To Integer<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/roman-number-to-integer3201/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Value mapping.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Map each Roman numeral to its integer value. Iterate from right to left. If a character is smaller than its right character, subtract its value, else add it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def romanToDecimal(S):&#10;    m = {&#x27;I&#x27;: 1, &#x27;V&#x27;: 5, &#x27;X&#x27;: 10, &#x27;L&#x27;: 50, &#x27;C&#x27;: 100, &#x27;D&#x27;: 500, &#x27;M&#x27;: 1000}&#10;    ans = 0&#10;    for i in range(len(S)):&#10;        if i + 1 &lt; len(S) and m[S[i]] &lt; m[S[i+1]]:&#10;            ans -= m[S[i]]&#10;        else:&#10;            ans += m[S[i]]&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td>Str 27 Longest Common Prefix<br><br></b> <a href='https://leetcode.com/problems/longest-common-prefix/' target='_blank'>LeetCode 14</a></td>
+      <td><b>Example 1:</b> Sort array.</td>
+      <td><b>Time:</b> O(N log N * M)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>Empty Array</td>
+      <td><b>Explanation:</b> Sort the array of strings. Compare the first and the last string in the sorted array, as they will be the most different. The common prefix of these two will be the common prefix for all.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestCommonPrefix(strs):&#10;    if not strs: return &quot;&quot;&#10;    strs.sort()&#10;    first, last = strs[0], strs[-1]&#10;    i = 0&#10;    while i &lt; len(first) and i &lt; len(last) and first[i] == last[i]:&#10;        i += 1&#10;    return first[:i]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>Str 28 Number Of Flips To Make Binary String Alternate<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/min-number-of-flips3210/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Two target strings.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> There are only two possible alternating strings for length N: starting with '0' (`010101...`) and starting with '1' (`101010...`). Count the differences between the given string and both of these. The minimum count is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minFlips(S):&#10;    count1, count2 = 0, 0&#10;    for i in range(len(S)):&#10;        if i % 2 == 0:&#10;            if S[i] != &#x27;0&#x27;: count1 += 1&#10;            if S[i] != &#x27;1&#x27;: count2 += 1&#10;        else:&#10;            if S[i] != &#x27;1&#x27;: count1 += 1&#10;            if S[i] != &#x27;0&#x27;: count2 += 1&#10;    return min(count1, count2)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>37</td>
+      <td>Str 29 Find The First Repeated Word In String<br><br></b> <a href='https://www.geeksforgeeks.org/find-first-repeated-word-string/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> HashSet.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Set</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Split the string into words. Iterate through the words. If a word is already in the hash set, it is the first repeated word. Return it. Else, add it to the hash set.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def firstRepeatedWord(s):&#10;    import re&#10;    words = re.findall(r&#x27;\w+&#x27;, s)&#10;    st = set()&#10;    for word in words:&#10;        if word in st: return word&#10;        st.add(word)&#10;    return &quot;No Repetition&quot;</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td>Str 30 Minimum Swaps For Bracket Balancing<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-swaps-for-bracket-balancing2704/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Track balance.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Keep track of the number of opening and closing brackets, and an `imbalance` counter. When encountering `[`, decrease imbalance. When encountering `]`, increase imbalance. The number of swaps is updated when an imbalance is found and we find the next `[`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minimumNumberOfSwaps(S):&#10;    open_count = 0&#10;    close_count = 0&#10;    fault = 0&#10;    ans = 0&#10;    for char in S:&#10;        if char == &#x27;]&#x27;:&#10;            close_count += 1&#10;            fault = close_count - open_count&#10;        else:&#10;            open_count += 1&#10;            if fault &gt; 0:&#10;                ans += fault&#10;                fault -= 1&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

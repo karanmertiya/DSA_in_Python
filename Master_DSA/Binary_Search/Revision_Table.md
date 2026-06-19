@@ -466,5 +466,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Ensure arr1 is smaller. Binary search on arr1. `cut1` is between `max(0, k-m)` and `min(k, n)`. `cut2 = k - cut1`. Compare `l1 <= r2` and `l2 <= r1`. If so, return `max(l1, l2)`. Else adjust `low` and `high`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kthElement(arr1: List[int], arr2: List[int], n: int, m: int, k: int) -&gt; int:&#10;    if n &gt; m: return kthElement(arr2, arr1, m, n, k)&#10;    low, high = max(0, k - m), min(k, n)&#10;    while low &lt;= high:&#10;        cut1 = (low + high) // 2&#10;        cut2 = k - cut1&#10;        l1 = float(&#x27;-inf&#x27;) if cut1 == 0 else arr1[cut1 - 1]&#10;        l2 = float(&#x27;-inf&#x27;) if cut2 == 0 else arr2[cut2 - 1]&#10;        r1 = float(&#x27;inf&#x27;) if cut1 == n else arr1[cut1]&#10;        r2 = float(&#x27;inf&#x27;) if cut2 == m else arr2[cut2]&#10;        if l1 &lt;= r2 and l2 &lt;= r1: return max(l1, l2)&#10;        elif l1 &gt; r2: high = cut1 - 1&#10;        else: low = cut1 + 1&#10;    return 1</code></pre></details></td>
     </tr>
+    <tr>
+      <td>51</td>
+      <td>Bs 09 Search In Rotated Sorted Array<br><br></b> <a href='https://leetcode.com/problems/search-in-rotated-sorted-array/' target='_blank'>LeetCode 33</a></td>
+      <td><b>Example 1:</b> Binary Search.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Find which half is sorted. If left half is sorted, check if target lies in it. If yes, search left, else search right. If right half is sorted, check if target lies in it. If yes, search right, else search left.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def search(nums, target):&#10;    low, high = 0, len(nums) - 1&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if nums[mid] == target: return mid&#10;        if nums[low] &lt;= nums[mid]:&#10;            if nums[low] &lt;= target &lt; nums[mid]: high = mid - 1&#10;            else: low = mid + 1&#10;        else:&#10;            if nums[mid] &lt; target &lt;= nums[high]: low = mid + 1&#10;            else: high = mid - 1&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td>Bs 10 Find First And Last Position Of Element In Sorted Array<br><br></b> <a href='https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/' target='_blank'>LeetCode 34</a></td>
+      <td><b>Example 1:</b> Two Binary Searches.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Binary Search twice. Once to find the first occurrence (when nums[mid] == target, high = mid - 1 but record mid) and once to find the last occurrence (when nums[mid] == target, low = mid + 1 but record mid).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def searchRange(nums, target):&#10;    res = [-1, -1]&#10;    low, high = 0, len(nums) - 1&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if nums[mid] == target:&#10;            res[0] = mid&#10;            high = mid - 1&#10;        elif nums[mid] &lt; target: low = mid + 1&#10;        else: high = mid - 1&#10;    low, high = 0, len(nums) - 1&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if nums[mid] == target:&#10;            res[1] = mid&#10;            low = mid + 1&#10;        elif nums[mid] &lt; target: low = mid + 1&#10;        else: high = mid - 1&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>53</td>
+      <td>Bs 11 Value Equal To Index Value<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/value-equal-to-index-value1330/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Linear scan.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the array. If the value at `i` is equal to `i + 1`, append it to the result array.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def valueEqualToIndex(arr, n):&#10;    ans = []&#10;    for i in range(n):&#10;        if arr[i] == i + 1:&#10;            ans.append(arr[i])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>54</td>
+      <td>Bs 12 Count Squares<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/count-squares3649/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Square root.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> The number of perfect squares less than `N` is equal to `sqrt(N - 1)` rounded down.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def countSquares(N):&#10;    return int(math.sqrt(N - 1))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>55</td>
+      <td>Bs 13 Middle Of Three<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/middle-of-three2926/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Simple if-else.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Compare the numbers. If A is between B and C, return A. If B is between A and C, return B. Else return C.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def middle(A, B, C):&#10;    if (A &lt; B and B &lt; C) or (C &lt; B and B &lt; A): return B&#10;    if (B &lt; A and A &lt; C) or (C &lt; A and A &lt; B): return A&#10;    return C</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>56</td>
+      <td>Bs 14 Find Missing And Repeating<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-missing-and-repeating2512/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Math or XOR.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use the array elements as indices. For each element `abs(Arr[i])`, negate the value at index `abs(Arr[i]) - 1`. If the value is already negative, it's the repeating element. After the loop, the index with a positive value corresponds to the missing element.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findTwoElement(arr, n):&#10;    ans = [0, 0]&#10;    for i in range(n):&#10;        val = abs(arr[i])&#10;        if arr[val - 1] &lt; 0: ans[0] = val&#10;        else: arr[val - 1] = -arr[val - 1]&#10;    for i in range(n):&#10;        if arr[i] &gt; 0:&#10;            ans[1] = i + 1&#10;            break&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>57</td>
+      <td>Bs 15 Majority Element<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/majority-element-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Moore's Voting Algorithm.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Moore's Voting Algorithm to find a candidate for majority element. Then count the occurrences of the candidate in the array to verify if it appears more than N/2 times.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def majorityElement(a, size):&#10;    count = 0&#10;    candidate = -1&#10;    for num in a:&#10;        if count == 0:&#10;            candidate = num&#10;            count = 1&#10;        elif num == candidate: count += 1&#10;        else: count -= 1&#10;    count = 0&#10;    for num in a:&#10;        if num == candidate: count += 1&#10;    return candidate if count &gt; size // 2 else -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>58</td>
+      <td>Bs 16 Searching In An Array Where Adjacent Differ By At Most K<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/searching-in-an-array-where-adjacent-differ-by-at-most-k0456/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Jump Search.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Instead of linear search, we can jump ahead. The minimum jump we can make from index `i` to reach `x` is `abs(arr[i] - x) / k`. We jump this amount and check if we found it. Make sure jump is at least 1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def search(arr, n, x, k):&#10;    i = 0&#10;    while i &lt; n:&#10;        if arr[i] == x: return i&#10;        i = i + max(1, abs(arr[i] - x) // k)&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>59</td>
+      <td>Bs 17 Find A Pair With The Given Difference<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-pair-given-difference1559/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sort and two pointers.</td>
+      <td><b>Time:</b> O(L log L)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort the array. Use two pointers `i = 0` and `j = 1`. If `arr[j] - arr[i] == N` and `i != j`, return true. If difference < N, `j++`. Else `i++`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPair(arr, size, n):&#10;    arr.sort()&#10;    i, j = 0, 1&#10;    while i &lt; size and j &lt; size:&#10;        if i != j and arr[j] - arr[i] == n: return True&#10;        elif arr[j] - arr[i] &lt; n: j += 1&#10;        else: i += 1&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>60</td>
+      <td>Bs 18 Find Four Elements That Sum To A Given Value<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-all-four-sum-numbers1732/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Two loops and two pointers.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort the array. Use two nested loops for the first two elements. Then use two pointers for the remaining two elements to find the target sum. Skip duplicates at all levels.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def fourSum(arr, k):&#10;    ans = []&#10;    n = len(arr)&#10;    arr.sort()&#10;    for i in range(n):&#10;        if i &gt; 0 and arr[i] == arr[i-1]: continue&#10;        for j in range(i + 1, n):&#10;            if j &gt; i + 1 and arr[j] == arr[j-1]: continue&#10;            left, right = j + 1, n - 1&#10;            while left &lt; right:&#10;                total = arr[i] + arr[j] + arr[left] + arr[right]&#10;                if total == k:&#10;                    ans.append([arr[i], arr[j], arr[left], arr[right]])&#10;                    left += 1; right -= 1&#10;                    while left &lt; right and arr[left] == arr[left-1]: left += 1&#10;                    while left &lt; right and arr[right] == arr[right+1]: right -= 1&#10;                elif total &lt; k: left += 1&#10;                else: right -= 1&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

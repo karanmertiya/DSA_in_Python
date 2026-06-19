@@ -583,5 +583,59 @@
       <td>-</td>
       <td><b>Explanation:</b> If total sum is odd, it's impossible. Otherwise, target is `sum / 2`. The problem reduces to subset sum. Use a boolean `dp` array of size `target + 1`. `dp[j] = dp[j] || dp[j - num]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def canPartition(nums: List[int]) -&gt; bool:&#10;    total = sum(nums)&#10;    if total % 2 != 0: return False&#10;    target = total // 2&#10;    dp = [False] * (target + 1)&#10;    dp[0] = True&#10;    for num in nums:&#10;        for j in range(target, num - 1, -1):&#10;            dp[j] = dp[j] or dp[j - num]&#10;    return dp[target]</code></pre></details></td>
     </tr>
+    <tr>
+      <td>64</td>
+      <td>Dp 24 Maximum Sum Increasing Subsequence<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/maximum-sum-increasing-subsequence4749/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP (LIS variant).</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Variation of LIS. Create an array `msis` initialized with the given array values. For each `i` from 1 to `n-1`, for each `j` from 0 to `i-1`, if `arr[i] > arr[j]` and `msis[i] < msis[j] + arr[i]`, update `msis[i]`. The max in `msis` is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSumIS(arr, n):&#10;    msis = list(arr)&#10;    max_sum = msis[0]&#10;    for i in range(1, n):&#10;        for j in range(i):&#10;            if arr[i] &gt; arr[j] and msis[i] &lt; msis[j] + arr[i]:&#10;                msis[i] = msis[j] + arr[i]&#10;        max_sum = max(max_sum, msis[i])&#10;    return max_sum</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>65</td>
+      <td>Dp 28 Egg Dropping Puzzle<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/egg-dropping-puzzle-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP + Binary Search / Math.</td>
+      <td><b>Time:</b> O(N * K log K)<br><b>Space:</b> O(N * K)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DP. `dp[i][j]` is the min attempts with `i` eggs and `j` floors. Try dropping from every floor `x` from 1 to `j`. `res = 1 + max(dp[i-1][x-1] (breaks), dp[i][j-x] (doesn't break))`. Optimize this nested loop using Binary Search or use a different state `dp[m][k]` = floors checked with `m` moves and `k` eggs.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def eggDrop(n, k):&#10;    dp = [[0] * (n + 1) for _ in range(k + 1)]&#10;    m = 0&#10;    while dp[m][n] &lt; k:&#10;        m += 1&#10;        for x in range(1, n + 1):&#10;            dp[m][x] = 1 + dp[m-1][x-1] + dp[m-1][x]&#10;    return m</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>66</td>
+      <td>Dp 29 Maximum Length Chain Of Pairs<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/max-length-chain/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sort and Greedy / DP.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> This is exactly the Activity Selection Problem. Sort the pairs by their second element. Iterate through the sorted pairs and keep track of the end of the last selected pair. If the next pair's start is > last end, select it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Pair:&#10;    def __init__(self, a, b):&#10;        self.a = a&#10;        self.b = b&#10;def maxChainLen(Parr, n):&#10;    Parr.sort(key=lambda x: x.b)&#10;    count = 1&#10;    last_end = Parr[0].b&#10;    for i in range(1, n):&#10;        if Parr[i].a &gt; last_end:&#10;            count += 1&#10;            last_end = Parr[i].b&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>67</td>
+      <td>Dp 30 Maximum Size Square Sub Matrix With All 1S<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/largest-square-formed-in-a-matrix0806/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(M)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DP. `dp[i][j]` stores the size of the maximum square ending at cell `(i, j)`. If `mat[i][j] == 1`, `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSquare(n, m, mat):&#10;    prev = [0] * m&#10;    curr = [0] * m&#10;    ans = 0&#10;    for i in range(n):&#10;        for j in range(m):&#10;            if mat[i][j] == 1:&#10;                if i == 0 or j == 0: curr[j] = 1&#10;                else: curr[j] = min(prev[j], curr[j-1], prev[j-1]) + 1&#10;                ans = max(ans, curr[j])&#10;            else: curr[j] = 0&#10;        prev = list(curr)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>68</td>
+      <td>Dp 31 Maximum Profit By Buying And Selling A Share At Most Twice<br><br></b> <a href='https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/' target='_blank'>LeetCode 123</a></td>
+      <td><b>Example 1:</b> 4 states DP.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Track 4 states: `buy1`, `sell1`, `buy2`, `sell2`. Initialize buys to negative infinity, sells to 0. Update them for each price. `buy1 = max(buy1, -price)`, `sell1 = max(sell1, buy1 + price)`, `buy2 = max(buy2, sell1 - price)`, `sell2 = max(sell2, buy2 + price)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProfit(prices):&#10;    buy1, sell1 = float(&#x27;-inf&#x27;), 0&#10;    buy2, sell2 = float(&#x27;-inf&#x27;), 0&#10;    for price in prices:&#10;        buy1 = max(buy1, -price)&#10;        sell1 = max(sell1, buy1 + price)&#10;        buy2 = max(buy2, sell1 - price)&#10;        sell2 = max(sell2, buy2 + price)&#10;    return sell2</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>69</td>
+      <td>Dp 33 Boolean Parenthesization Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/boolean-parenthesization5610/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> MCM DP variant.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a 3D DP array `dp[i][j][isTrue]` representing the number of ways to evaluate the substring from `i` to `j` to `isTrue`. Iterate over all possible split points `k` with an operator. Combine the True and False counts from left and right halves based on the operator.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countWays(N, S):&#10;    dp = [[[0] * 2 for _ in range(N)] for _ in range(N)]&#10;    for i in range(0, N, 2):&#10;        dp[i][i][1] = 1 if S[i] == &#x27;T&#x27; else 0&#10;        dp[i][i][0] = 1 if S[i] == &#x27;F&#x27; else 0&#10;    for length in range(3, N + 1, 2):&#10;        for i in range(0, N - length + 1, 2):&#10;            j = i + length - 1&#10;            for k in range(i + 1, j, 2):&#10;                lt, lf = dp[i][k-1][1], dp[i][k-1][0]&#10;                rt, rf = dp[k+1][j][1], dp[k+1][j][0]&#10;                if S[k] == &#x27;&amp;&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lt * rf + lf * rt + lf * rf) % 1003&#10;                elif S[k] == &#x27;|&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rt + lt * rf + lf * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lf * rf) % 1003&#10;                elif S[k] == &#x27;^&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rf + lf * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lt * rt + lf * rf) % 1003&#10;    return dp[0][N-1][1]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

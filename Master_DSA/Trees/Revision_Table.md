@@ -691,5 +691,95 @@
       <td>-</td>
       <td><b>Explanation:</b> 1. Find LCA of the two nodes. 2. Find distance from LCA to node 1. 3. Find distance from LCA to node 2. 4. Return the sum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findDist(root: Optional[TreeNode], a: int, b: int) -&gt; int:&#10;    def lca(node):&#10;        if not node or node.val == a or node.val == b: return node&#10;        left = lca(node.left)&#10;        right = lca(node.right)&#10;        if not left: return right&#10;        if not right: return left&#10;        return node&#10;    &#10;    def getDist(node, val, dist):&#10;        if not node: return -1&#10;        if node.val == val: return dist&#10;        d = getDist(node.left, val, dist + 1)&#10;        if d != -1: return d&#10;        return getDist(node.right, val, dist + 1)&#10;        &#10;    lca_node = lca(root)&#10;    return getDist(lca_node, a, 0) + getDist(lca_node, b, 0)</code></pre></details></td>
     </tr>
+    <tr>
+      <td>76</td>
+      <td>Tree 26 Construct Binary Tree From String With Bracket Representation<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/construct-binary-tree-from-string-with-bracket-representation/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursive approach.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a recursive function. Read the number (handling negatives and multi-digits) to create the node. If the next character is `(`, make a recursive call for the left child. If there's another `(`, make a recursive call for the right child. Return the node.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self, val): self.data = val; self.left = None; self.right = None&#10;def treeFromString(s):&#10;    if not s: return None&#10;    idx = [0]&#10;    def construct():&#10;        if idx[0] &gt;= len(s): return None&#10;        num = 0; sign = 1&#10;        if s[idx[0]] == &#x27;-&#x27;: sign = -1; idx[0] += 1&#10;        while idx[0] &lt; len(s) and s[idx[0]].isdigit():&#10;            num = num * 10 + int(s[idx[0]])&#10;            idx[0] += 1&#10;        node = Node(num * sign)&#10;        if idx[0] &lt; len(s) and s[idx[0]] == &#x27;(&#x27;:&#10;            idx[0] += 1&#10;            node.left = construct()&#10;            idx[0] += 1&#10;        if idx[0] &lt; len(s) and s[idx[0]] == &#x27;(&#x27;:&#10;            idx[0] += 1&#10;            node.right = construct()&#10;            idx[0] += 1&#10;        return node&#10;    return construct()</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>77</td>
+      <td>Tree 27 Binary Tree To Cdll<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/binary-tree-to-cdll/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Inorder traversal.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Perform an inorder traversal. Maintain a `prev` pointer. If `prev` is NULL, it's the `head`. Else, set `prev->right = curr` and `curr->left = prev`. Update `prev = curr`. Finally, connect `head` and `prev` (the tail).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def bTreeToCList(root):&#10;    head = [None]&#10;    prev = [None]&#10;    def inorder(node):&#10;        if not node: return&#10;        inorder(node.left)&#10;        if not head[0]: head[0] = node&#10;        else:&#10;            prev[0].right = node&#10;            node.left = prev[0]&#10;        prev[0] = node&#10;        inorder(node.right)&#10;    inorder(root)&#10;    if head[0] and prev[0]:&#10;        head[0].left = prev[0]&#10;        prev[0].right = head[0]&#10;    return head[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>78</td>
+      <td>Tree 28 Transform To Sum Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/transform-to-sum-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Postorder traversal.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a postorder traversal. For a node, store its original value. Update the node's value to the sum of its left and right subtrees. Return the old value plus the new value to the parent.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def toSumTree(root):&#10;    def toSumTreeUtil(node):&#10;        if not node: return 0&#10;        old_val = node.data&#10;        node.data = toSumTreeUtil(node.left) + toSumTreeUtil(node.right)&#10;        return node.data + old_val&#10;    toSumTreeUtil(root)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>79</td>
+      <td>Tree 29 Construct Tree From Inorder And Preorder<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/construct-tree-1/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Hash map for fast search.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> The first element in preorder is the root. Find this root in inorder using a hash map. Elements to the left in inorder form the left subtree, elements to the right form the right subtree. Recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self,val): self.data = val; self.left = None; self.right = None&#10;def buildTree(In, pre, n):&#10;    mp = {val: idx for idx, val in enumerate(In)}&#10;    preIdx = [0]&#10;    def buildTreeUtil(inSt, inEnd):&#10;        if inSt &gt; inEnd: return None&#10;        curr = pre[preIdx[0]]&#10;        preIdx[0] += 1&#10;        node = Node(curr)&#10;        if inSt == inEnd: return node&#10;        inIdx = mp[curr]&#10;        node.left = buildTreeUtil(inSt, inIdx - 1)&#10;        node.right = buildTreeUtil(inIdx + 1, inEnd)&#10;        return node&#10;    return buildTreeUtil(0, n - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>80</td>
+      <td>Tree 30 Minimum Swap Required To Convert Binary Tree To Binary Search Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-swap-required-to-convert-binary-tree-to-binary-search-tree/0' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Graph cycle detection on Inorder.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> The inorder traversal of a BST is sorted. First, get the inorder traversal of the given complete binary tree using array indices. Then, the problem reduces to finding the minimum swaps to sort an array. Use graph cycles to find min swaps.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minSwaps(A, n):&#10;    v = []&#10;    def inorder(index):&#10;        if index &gt;= n: return&#10;        inorder(2 * index + 1)&#10;        v.append(A[index])&#10;        inorder(2 * index + 2)&#10;    inorder(0)&#10;    t = [(val, idx) for idx, val in enumerate(v)]&#10;    t.sort()&#10;    ans = 0&#10;    vis = {i: False for i in range(n)}&#10;    for i in range(n):&#10;        if vis[i] or t[i][1] == i: continue&#10;        cycle_size, j = 0, i&#10;        while not vis[j]:&#10;            vis[j] = True&#10;            j = t[j][1]&#10;            cycle_size += 1&#10;        if cycle_size &gt; 0: ans += (cycle_size - 1)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>81</td>
+      <td>Tree 31 Check If Binary Tree Is Sum Tree Or Not<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/sum-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursive check.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a recursive function. A leaf node is always a SumTree. For an internal node, calculate the sum of its left and right subtrees. If its value equals the sum, and both subtrees are SumTrees, return true.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isSumTree(root):&#10;    def isSumTreeFast(node):&#10;        if not node: return True, 0&#10;        if not node.left and not node.right: return True, node.data&#10;        left_is, left_sum = isSumTreeFast(node.left)&#10;        right_is, right_sum = isSumTreeFast(node.right)&#10;        is_sum = node.data == (left_sum + right_sum)&#10;        if left_is and right_is and is_sum:&#10;            return True, 2 * node.data&#10;        else:&#10;            return False, 0&#10;    return isSumTreeFast(root)[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>82</td>
+      <td>Tree 32 Check If All Leaf Nodes Are At Same Level Or Not<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/leaf-at-same-level/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursive check with global variable.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Traverse the tree, maintaining the current level. The first time a leaf is encountered, store its level. For subsequent leaves, compare their level with the stored level. If any mismatch occurs, return false.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def check(root):&#10;    leafLevel = [0]&#10;    def checkUtil(node, level):&#10;        if not node: return True&#10;        if not node.left and not node.right:&#10;            if leafLevel[0] == 0:&#10;                leafLevel[0] = level&#10;                return True&#10;            return level == leafLevel[0]&#10;        return checkUtil(node.left, level + 1) and checkUtil(node.right, level + 1)&#10;    return checkUtil(root, 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>83</td>
+      <td>Tree 33 Check If A Binary Tree Contains Duplicate Subtrees Of Size 2 Or More<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/duplicate-subtree-in-binary-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> String serialization.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Serialize each subtree into a string. Use a hash map to store the frequencies of the serialized strings. If any string (of length > 3 to ignore leaves) has a frequency > 1, a duplicate subtree exists.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def dupSub(root):&#10;    m = {}&#10;    def solve(node):&#10;        if not node: return &quot;$&quot;&#10;        s = &quot;&quot;&#10;        if not node.left and not node.right:&#10;            return str(node.data)&#10;        s = str(node.data) + &quot;-&quot; + solve(node.left) + &quot;-&quot; + solve(node.right)&#10;        m[s] = m.get(s, 0) + 1&#10;        return s&#10;    solve(root)&#10;    for count in m.values():&#10;        if count &gt;= 2: return 1&#10;    return 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>84</td>
+      <td>Tree 34 Check If 2 Trees Are Mirror Or Not<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/check-mirror-in-n-ary-tree1528/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Stack and Queue.</td>
+      <td><b>Time:</b> O(E)<br><b>Space:</b> O(E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Store the children of the first tree in a stack (LIFO) and the children of the second tree in a queue (FIFO) for each node using hash maps. Then compare if the stack top matches the queue front for all nodes.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def checkMirrorTree(n, e, A, B):&#10;    s = collections.defaultdict(list)&#10;    q = collections.defaultdict(collections.deque)&#10;    for i in range(0, 2 * e, 2):&#10;        s[A[i]].append(A[i+1])&#10;        q[B[i]].append(B[i+1])&#10;    for node in s:&#10;        while s[node] and q[node]:&#10;            if s[node][-1] != q[node][0]: return 0&#10;            s[node].pop()&#10;            q[node].popleft()&#10;        if s[node] or q[node]: return 0&#10;    return 1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>85</td>
+      <td>Tree 35 Sum Of Nodes On The Longest Path From Root To Leaf Node<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/sum-of-the-longest-bloodline-of-a-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DFS.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DFS. Keep track of the maximum length and the maximum sum. At each node, check if the current length is greater than max length. If so, update max length and max sum. If lengths are equal, update max sum if current sum is greater.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def sumOfLongRootToLeafPath(root):&#10;    maxLen = [0]&#10;    maxSum = [float(&#x27;-inf&#x27;)]&#10;    def solve(node, sum_val, length):&#10;        if not node:&#10;            if length &gt; maxLen[0]:&#10;                maxLen[0] = length&#10;                maxSum[0] = sum_val&#10;            elif length == maxLen[0]:&#10;                maxSum[0] = max(sum_val, maxSum[0])&#10;            return&#10;        sum_val += node.data&#10;        solve(node.left, sum_val, length + 1)&#10;        solve(node.right, sum_val, length + 1)&#10;    solve(root, 0, 0)&#10;    return maxSum[0] if maxSum[0] != float(&#x27;-inf&#x27;) else 0</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

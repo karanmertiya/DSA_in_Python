@@ -682,5 +682,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use a greedy approach. Maintain `maxReach`, `step`, and `jump`. If `i == n - 1`, return `jump`. If `arr[0] == 0`, return -1. Otherwise, decrement `step`. If `step == 0`, `jump++`, `step = maxReach - i`. If `i >= maxReach`, it's impossible.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minJumps(arr: List[int], n: int) -&gt; int:&#10;    if n &lt;= 1: return 0&#10;    if arr[0] == 0: return -1&#10;    maxReach = arr[0]&#10;    step = arr[0]&#10;    jump = 1&#10;    for i in range(1, n):&#10;        if i == n - 1: return jump&#10;        maxReach = max(maxReach, i + arr[i])&#10;        step -= 1&#10;        if step == 0:&#10;            jump += 1&#10;            if i &gt;= maxReach: return -1&#10;            step = maxReach - i&#10;    return -1</code></pre></details></td>
     </tr>
+    <tr>
+      <td>75</td>
+      <td>Dp 24 Maximum Sum Increasing Subsequence<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/maximum-sum-increasing-subsequence4749/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP (LIS variant).</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Variation of LIS. Create an array `msis` initialized with the given array values. For each `i` from 1 to `n-1`, for each `j` from 0 to `i-1`, if `arr[i] > arr[j]` and `msis[i] < msis[j] + arr[i]`, update `msis[i]`. The max in `msis` is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSumIS(arr, n):&#10;    msis = list(arr)&#10;    max_sum = msis[0]&#10;    for i in range(1, n):&#10;        for j in range(i):&#10;            if arr[i] &gt; arr[j] and msis[i] &lt; msis[j] + arr[i]:&#10;                msis[i] = msis[j] + arr[i]&#10;        max_sum = max(max_sum, msis[i])&#10;    return max_sum</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>76</td>
+      <td>Dp 25 Count All Subsequences Having Product Less Than K<br><br></b> <a href='https://www.geeksforgeeks.org/count-subsequences-product-less-k/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP.</td>
+      <td><b>Time:</b> O(N * K)<br><b>Space:</b> O(N * K)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a 2D DP array where `dp[i][j]` is the number of subsequences of first `i` elements with product less than or equal to `j`. `dp[i][j] = dp[i-1][j] + dp[i-1][j/arr[i-1]] + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countSubsequences(a, k):&#10;    n = len(a)&#10;    dp = [[0] * (k + 1) for _ in range(n + 1)]&#10;    for i in range(1, n + 1):&#10;        for j in range(1, k + 1):&#10;            dp[i][j] = dp[i - 1][j]&#10;            if a[i - 1] &lt;= j and a[i - 1] &gt; 0:&#10;                dp[i][j] += dp[i - 1][j // a[i - 1]] + 1&#10;    return dp[n][k]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>77</td>
+      <td>Dp 26 Longest Subsequence Such That Difference Between Adjacents Is One<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/longest-subsequence-such-that-difference-between-adjacents-is-one4724/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP (LIS variant).</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a 1D DP array `dp` where `dp[i]` is the length of the longest subsequence ending at `i`. For each `i`, check all `j < i`. If `abs(A[i] - A[j]) == 1`, update `dp[i] = max(dp[i], dp[j] + 1)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestSubsequence(N, A):&#10;    dp = [1] * N&#10;    ans = 1&#10;    for i in range(1, N):&#10;        for j in range(i):&#10;            if abs(A[i] - A[j]) == 1:&#10;                dp[i] = max(dp[i], dp[j] + 1)&#10;        ans = max(ans, dp[i])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>78</td>
+      <td>Dp 27 Maximum Subsequence Sum Such That No Three Are Consecutive<br><br></b> <a href='https://www.geeksforgeeks.org/maximum-subsequence-sum-such-that-no-three-are-consecutive/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a DP array. `dp[i]` is the max sum considering up to index `i`. For `i`, the max sum is `max(dp[i-1] (exclude i), dp[i-2] + arr[i] (exclude i-1), dp[i-3] + arr[i] + arr[i-1] (exclude i-2))`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSum(arr):&#10;    n = len(arr)&#10;    if n == 0: return 0&#10;    if n == 1: return arr[0]&#10;    if n == 2: return arr[0] + arr[1]&#10;    dp = [0] * n&#10;    dp[0] = arr[0]&#10;    dp[1] = arr[0] + arr[1]&#10;    dp[2] = max(dp[1], arr[0] + arr[2], arr[1] + arr[2])&#10;    for i in range(3, n):&#10;        dp[i] = max(dp[i-1], dp[i-2] + arr[i], dp[i-3] + arr[i] + arr[i-1])&#10;    return dp[n-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>79</td>
+      <td>Dp 28 Egg Dropping Puzzle<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/egg-dropping-puzzle-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP + Binary Search / Math.</td>
+      <td><b>Time:</b> O(N * K log K)<br><b>Space:</b> O(N * K)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DP. `dp[i][j]` is the min attempts with `i` eggs and `j` floors. Try dropping from every floor `x` from 1 to `j`. `res = 1 + max(dp[i-1][x-1] (breaks), dp[i][j-x] (doesn't break))`. Optimize this nested loop using Binary Search or use a different state `dp[m][k]` = floors checked with `m` moves and `k` eggs.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def eggDrop(n, k):&#10;    dp = [[0] * (n + 1) for _ in range(k + 1)]&#10;    m = 0&#10;    while dp[m][n] &lt; k:&#10;        m += 1&#10;        for x in range(1, n + 1):&#10;            dp[m][x] = 1 + dp[m-1][x-1] + dp[m-1][x]&#10;    return m</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>80</td>
+      <td>Dp 29 Maximum Length Chain Of Pairs<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/max-length-chain/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sort and Greedy / DP.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> This is exactly the Activity Selection Problem. Sort the pairs by their second element. Iterate through the sorted pairs and keep track of the end of the last selected pair. If the next pair's start is > last end, select it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Pair:&#10;    def __init__(self, a, b):&#10;        self.a = a&#10;        self.b = b&#10;def maxChainLen(Parr, n):&#10;    Parr.sort(key=lambda x: x.b)&#10;    count = 1&#10;    last_end = Parr[0].b&#10;    for i in range(1, n):&#10;        if Parr[i].a &gt; last_end:&#10;            count += 1&#10;            last_end = Parr[i].b&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>81</td>
+      <td>Dp 30 Maximum Size Square Sub Matrix With All 1S<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/largest-square-formed-in-a-matrix0806/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(M)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DP. `dp[i][j]` stores the size of the maximum square ending at cell `(i, j)`. If `mat[i][j] == 1`, `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSquare(n, m, mat):&#10;    prev = [0] * m&#10;    curr = [0] * m&#10;    ans = 0&#10;    for i in range(n):&#10;        for j in range(m):&#10;            if mat[i][j] == 1:&#10;                if i == 0 or j == 0: curr[j] = 1&#10;                else: curr[j] = min(prev[j], curr[j-1], prev[j-1]) + 1&#10;                ans = max(ans, curr[j])&#10;            else: curr[j] = 0&#10;        prev = list(curr)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>82</td>
+      <td>Dp 31 Maximum Profit By Buying And Selling A Share At Most Twice<br><br></b> <a href='https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/' target='_blank'>LeetCode 123</a></td>
+      <td><b>Example 1:</b> 4 states DP.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Track 4 states: `buy1`, `sell1`, `buy2`, `sell2`. Initialize buys to negative infinity, sells to 0. Update them for each price. `buy1 = max(buy1, -price)`, `sell1 = max(sell1, buy1 + price)`, `buy2 = max(buy2, sell1 - price)`, `sell2 = max(sell2, buy2 + price)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProfit(prices):&#10;    buy1, sell1 = float(&#x27;-inf&#x27;), 0&#10;    buy2, sell2 = float(&#x27;-inf&#x27;), 0&#10;    for price in prices:&#10;        buy1 = max(buy1, -price)&#10;        sell1 = max(sell1, buy1 + price)&#10;        buy2 = max(buy2, sell1 - price)&#10;        sell2 = max(sell2, buy2 + price)&#10;    return sell2</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>83</td>
+      <td>Dp 32 Optimal Strategy For A Game<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/optimal-strategy-for-a-game-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If you pick `i`, opponent picks `i+1` or `j`, leaving you with `(i+2, j)` or `(i+1, j-1)`. Opponent plays optimally to minimize your profit. So you get `A[i] + min(dp(i+2, j), dp(i+1, j-1))`. Similarly for picking `j`. Take the max of these two choices.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maximumAmount(arr, n):&#10;    dp = [[0] * n for _ in range(n)]&#10;    for gap in range(n):&#10;        for i in range(n - gap):&#10;            j = i + gap&#10;            x = dp[i+2][j] if i + 2 &lt;= j else 0&#10;            y = dp[i+1][j-1] if i + 1 &lt;= j - 1 else 0&#10;            z = dp[i][j-2] if i &lt;= j - 2 else 0&#10;            dp[i][j] = max(arr[i] + min(x, y), arr[j] + min(y, z))&#10;    return dp[0][n-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>84</td>
+      <td>Dp 33 Boolean Parenthesization Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/boolean-parenthesization5610/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> MCM DP variant.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2)</td>
+      <td>DP</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a 3D DP array `dp[i][j][isTrue]` representing the number of ways to evaluate the substring from `i` to `j` to `isTrue`. Iterate over all possible split points `k` with an operator. Combine the True and False counts from left and right halves based on the operator.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countWays(N, S):&#10;    dp = [[[0] * 2 for _ in range(N)] for _ in range(N)]&#10;    for i in range(0, N, 2):&#10;        dp[i][i][1] = 1 if S[i] == &#x27;T&#x27; else 0&#10;        dp[i][i][0] = 1 if S[i] == &#x27;F&#x27; else 0&#10;    for length in range(3, N + 1, 2):&#10;        for i in range(0, N - length + 1, 2):&#10;            j = i + length - 1&#10;            for k in range(i + 1, j, 2):&#10;                lt, lf = dp[i][k-1][1], dp[i][k-1][0]&#10;                rt, rf = dp[k+1][j][1], dp[k+1][j][0]&#10;                if S[k] == &#x27;&amp;&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lt * rf + lf * rt + lf * rf) % 1003&#10;                elif S[k] == &#x27;|&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rt + lt * rf + lf * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lf * rf) % 1003&#10;                elif S[k] == &#x27;^&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rf + lf * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lt * rt + lf * rf) % 1003&#10;    return dp[0][N-1][1]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

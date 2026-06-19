@@ -295,5 +295,41 @@
       <td><b>Integer Overflow:</b> Use long long when doubling nums[j].</td>
       <td><b>Explanation:</b> Modified Merge Sort. Before merging, loop through left and right halves. If left[i] > 2 * right[j], increment j. Number of pairs is (j - (mid+1)).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reversePairs(nums: List[int]) -&gt; int:&#10;    def merge(low, mid, high):&#10;        temp, left, right = [], low, mid + 1&#10;        while left &lt;= mid and right &lt;= high:&#10;            if nums[left] &lt;= nums[right]:&#10;                temp.append(nums[left]); left += 1&#10;            else: temp.append(nums[right]); right += 1&#10;        while left &lt;= mid: temp.append(nums[left]); left += 1&#10;        while right &lt;= high: temp.append(nums[right]); right += 1&#10;        for i in range(low, high + 1): nums[i] = temp[i - low]&#10;    def countPairs(low, mid, high):&#10;        right, cnt = mid + 1, 0&#10;        for i in range(low, mid + 1):&#10;            while right &lt;= high and nums[i] &gt; 2 * nums[right]: right += 1&#10;            cnt += (right - (mid + 1))&#10;        return cnt&#10;    def mergeSort(low, high):&#10;        cnt = 0&#10;        if low &gt;= high: return cnt&#10;        mid = (low + high) // 2&#10;        cnt += mergeSort(low, mid)&#10;        cnt += mergeSort(mid + 1, high)&#10;        cnt += countPairs(low, mid, high)&#10;        merge(low, mid, high)&#10;        return cnt&#10;    return mergeSort(0, len(nums) - 1)</code></pre></details></td>
     </tr>
+    <tr>
+      <td>32</td>
+      <td>Arr 36 Rearrange Array Alternately<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/rearrange-array-alternately-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Math-based encoding O(1) space.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> To achieve O(1) space, encode two values into one using `arr[i] += (arr[max_idx] % max_elem) * max_elem`. Iterate with two pointers `max_idx` and `min_idx`. At the end, divide every element by `max_elem`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def rearrange(arr, n):&#10;    min_idx, max_idx = 0, n - 1&#10;    max_elem = arr[n - 1] + 1&#10;    for i in range(n):&#10;        if i % 2 == 0:&#10;            arr[i] += (arr[max_idx] % max_elem) * max_elem&#10;            max_idx -= 1&#10;        else:&#10;            arr[i] += (arr[min_idx] % max_elem) * max_elem&#10;            min_idx += 1&#10;    for i in range(n):&#10;        arr[i] = arr[i] // max_elem</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>33</td>
+      <td>Arr 37 Count Inversions<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Modified Merge Sort.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Merge Sort. During the merge step, if `arr[i] > arr[j]`, then there are `(mid - i + 1)` inversions because the left array is sorted, so all elements after `i` in the left array will also be greater than `arr[j]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def merge(arr, temp, left, mid, right):&#10;    i, j, k = left, mid, left&#10;    inv_count = 0&#10;    while i &lt;= mid - 1 and j &lt;= right:&#10;        if arr[i] &lt;= arr[j]:&#10;            temp[k] = arr[i]&#10;            i += 1&#10;        else:&#10;            temp[k] = arr[j]&#10;            inv_count += (mid - i)&#10;            j += 1&#10;        k += 1&#10;    while i &lt;= mid - 1:&#10;        temp[k] = arr[i]&#10;        i += 1; k += 1&#10;    while j &lt;= right:&#10;        temp[k] = arr[j]&#10;        j += 1; k += 1&#10;    for i in range(left, right + 1):&#10;        arr[i] = temp[i]&#10;    return inv_count&#10;&#10;def mergeSort(arr, temp, left, right):&#10;    inv_count = 0&#10;    if right &gt; left:&#10;        mid = (right + left) // 2&#10;        inv_count += mergeSort(arr, temp, left, mid)&#10;        inv_count += mergeSort(arr, temp, mid + 1, right)&#10;        inv_count += merge(arr, temp, left, mid + 1, right)&#10;    return inv_count&#10;&#10;def inversionCount(arr, n):&#10;    temp = [0] * n&#10;    return mergeSort(arr, temp, 0, n - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>Arr 43 Maximum Product Subarray<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/maximum-product-subarray3604/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Prefix and Suffix iteration.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>Zero elements</td>
+      <td><b>Explanation:</b> Iterate from left to right calculating prefix product, and right to left calculating suffix product. If either is 0, reset it to 1. The max product will be the max of all prefix and suffix products.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProduct(arr, n):&#10;    max_prod = float(&#x27;-inf&#x27;)&#10;    pref, suff = 1, 1&#10;    for i in range(n):&#10;        if pref == 0: pref = 1&#10;        if suff == 0: suff = 1&#10;        pref *= arr[i]&#10;        suff *= arr[n - i - 1]&#10;        max_prod = max(max_prod, pref, suff)&#10;    return max_prod</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td>Arr 44 Longest Consecutive Subsequence<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/longest-consecutive-subsequence2449/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Hash Set.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Set</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Insert all elements into a hash set. For each element, check if `element - 1` exists. If not, it's the start of a sequence. Then increment to find consecutive elements.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findLongestConseqSubseq(arr, N):&#10;    s = set(arr)&#10;    longest = 0&#10;    for num in s:&#10;        if (num - 1) not in s:&#10;            curr = num&#10;            count = 1&#10;            while (curr + 1) in s:&#10;                curr += 1&#10;                count += 1&#10;            longest = max(longest, count)&#10;    return longest</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

@@ -502,5 +502,86 @@
       <td>-</td>
       <td><b>Explanation:</b> `dp[i]` is true if `s[0..i-1]` can be segmented. For each `i` from 1 to `N`, try each word in dictionary. If `s[i-len(word)..i-1] == word` and `dp[i-len(word)]` is true, then `dp[i] = true`. Or iterate `j` from 0 to `i` and check if `dp[j]` is true and `s[j..i-1]` is in dict.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; bool:&#10;    dict_set = set(wordDict)&#10;    dp = [False] * (len(s) + 1)&#10;    dp[0] = True&#10;    for i in range(1, len(s) + 1):&#10;        for j in range(i):&#10;            if dp[j] and s[j:i] in dict_set:&#10;                dp[i] = True&#10;                break&#10;    return dp[len(s)]</code></pre></details></td>
     </tr>
+    <tr>
+      <td>55</td>
+      <td>Dp 14 Coin Change Minimum Coins<br><br></b> <a href='https://leetcode.com/problems/coin-change/' target='_blank'>LeetCode 322</a></td>
+      <td><b>Example 1:</b> 1D Tabulation.</td>
+      <td><b>Time:</b> O(amount * N)<br><b>Space:</b> O(amount)</td>
+      <td>-</td>
+      <td>Amount is 0</td>
+      <td><b>Explanation:</b> Create an array `dp` of size `amount + 1` initialized to `amount + 1` (acting as infinity). `dp[0] = 0`. For each amount from 1 to `amount`, for each coin, if `i - coin >= 0`, `dp[i] = min(dp[i], dp[i - coin] + 1)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def coinChange(coins: List[int], amount: int) -&gt; int:&#10;    dp = [amount + 1] * (amount + 1)&#10;    dp[0] = 0&#10;    for i in range(1, amount + 1):&#10;        for coin in coins:&#10;            if i - coin &gt;= 0:&#10;                dp[i] = min(dp[i], dp[i - coin] + 1)&#10;    return dp[amount] if dp[amount] &lt;= amount else -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>56</td>
+      <td>Dp 15 Coin Change Maximum Ways<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/coin-change2448/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> 1D Tabulation.</td>
+      <td><b>Time:</b> O(M * N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a `dp` array of size `N + 1` initialized to 0. `dp[0] = 1`. For each coin, iterate through all amounts from `coin` to `N` and update `dp[j] += dp[j - coin]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def count(coins: List[int], N: int, sum: int) -&gt; int:&#10;    dp = [0] * (sum + 1)&#10;    dp[0] = 1&#10;    for coin in coins:&#10;        for j in range(coin, sum + 1):&#10;            dp[j] += dp[j - coin]&#10;    return dp[sum]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>57</td>
+      <td>Dp 16 Longest Common Subsequence<br><br></b> <a href='https://leetcode.com/problems/longest-common-subsequence/' target='_blank'>LeetCode 1143</a></td>
+      <td><b>Example 1:</b> 2D Tabulation.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N * M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a 2D `dp` array. If `text1[i-1] == text2[j-1]`, then `dp[i][j] = 1 + dp[i-1][j-1]`. Else, `dp[i][j] = max(dp[i-1][j], dp[i][j-1])`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestCommonSubsequence(text1: str, text2: str) -&gt; int:&#10;    n, m = len(text1), len(text2)&#10;    dp = [[0] * (m + 1) for _ in range(n + 1)]&#10;    for i in range(1, n + 1):&#10;        for j in range(1, m + 1):&#10;            if text1[i-1] == text2[j-1]:&#10;                dp[i][j] = 1 + dp[i-1][j-1]&#10;            else:&#10;                dp[i][j] = max(dp[i-1][j], dp[i][j-1])&#10;    return dp[n][m]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>58</td>
+      <td>Dp 17 Edit Distance<br><br></b> <a href='https://leetcode.com/problems/edit-distance/' target='_blank'>LeetCode 72</a></td>
+      <td><b>Example 1:</b> 2D Tabulation.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N * M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a 2D `dp` array. If `word1[i-1] == word2[j-1]`, then `dp[i][j] = dp[i-1][j-1]`. Else, `dp[i][j] = 1 + min(dp[i-1][j] (delete), min(dp[i][j-1] (insert), dp[i-1][j-1] (replace)))`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minDistance(word1: str, word2: str) -&gt; int:&#10;    n, m = len(word1), len(word2)&#10;    dp = [[0] * (m + 1) for _ in range(n + 1)]&#10;    for i in range(n + 1): dp[i][0] = i&#10;    for j in range(m + 1): dp[0][j] = j&#10;    for i in range(1, n + 1):&#10;        for j in range(1, m + 1):&#10;            if word1[i-1] == word2[j-1]:&#10;                dp[i][j] = dp[i-1][j-1]&#10;            else:&#10;                dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])&#10;    return dp[n][m]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>59</td>
+      <td>Dp 18 Longest Increasing Subsequence<br><br></b> <a href='https://leetcode.com/problems/longest-increasing-subsequence/' target='_blank'>LeetCode 300</a></td>
+      <td><b>Example 1:</b> O(N^2) Tabulation.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a `dp` array of size `n` initialized to 1. For each `i` from 1 to `n-1`, check all `j` from 0 to `i-1`. If `nums[i] > nums[j]`, update `dp[i] = max(dp[i], dp[j] + 1)`. The result is the max in `dp`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lengthOfLIS(nums: List[int]) -&gt; int:&#10;    n = len(nums)&#10;    if n == 0: return 0&#10;    dp = [1] * n&#10;    for i in range(1, n):&#10;        for j in range(i):&#10;            if nums[i] &gt; nums[j]:&#10;                dp[i] = max(dp[i], dp[j] + 1)&#10;    return max(dp)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>60</td>
+      <td>Dp 19 0 1 Knapsack Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> 1D Space Optimized DP.</td>
+      <td><b>Time:</b> O(N * W)<br><b>Space:</b> O(W)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a 1D `dp` array of size `W + 1`. For each item, iterate backwards from `W` to `weight[i]`. `dp[w] = max(dp[w], val[i] + dp[w - weight[i]])`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def knapSack(W: int, wt: List[int], val: List[int], n: int) -&gt; int:&#10;    dp = [0] * (W + 1)&#10;    for i in range(n):&#10;        for w in range(W, wt[i] - 1, -1):&#10;            dp[w] = max(dp[w], val[i] + dp[w - wt[i]])&#10;    return dp[W]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>61</td>
+      <td>Dp 20 Maximum Product Subarray<br><br></b> <a href='https://leetcode.com/problems/maximum-product-subarray/' target='_blank'>LeetCode 152</a></td>
+      <td><b>Example 1:</b> Keep track of max and min.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>Array containing zeros</td>
+      <td><b>Explanation:</b> Iterate through the array while maintaining a `currMax` and `currMin`. If `nums[i] < 0`, swap `currMax` and `currMin`. `currMax = max(nums[i], currMax * nums[i])`. `currMin = min(nums[i], currMin * nums[i])`. Update `globalMax`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProduct(nums: List[int]) -&gt; int:&#10;    if not nums: return 0&#10;    currMax = currMin = ans = nums[0]&#10;    for num in nums[1:]:&#10;        if num &lt; 0:&#10;            currMax, currMin = currMin, currMax&#10;        currMax = max(num, currMax * num)&#10;        currMin = min(num, currMin * num)&#10;        ans = max(ans, currMax)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>62</td>
+      <td>Dp 21 Palindromic Partitioning<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/palindromic-patitioning4845/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> 1D DP.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a `dp` array where `dp[i]` is min cuts for `str[0..i]`. Also use a 2D boolean DP to check if `str[j..i]` is a palindrome. If it is, `dp[i] = min(dp[i], dp[j-1] + 1)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def palindromicPartition(string: str) -&gt; int:&#10;    n = len(string)&#10;    isPal = [[False] * n for _ in range(n)]&#10;    dp = [0] * n&#10;    for i in range(n):&#10;        minCut = i&#10;        for j in range(i + 1):&#10;            if string[i] == string[j] and (i - j &lt; 2 or isPal[j+1][i-1]):&#10;                isPal[j][i] = True&#10;                if j == 0:&#10;                    minCut = 0&#10;                else:&#10;                    minCut = min(minCut, dp[j-1] + 1)&#10;        dp[i] = minCut&#10;    return dp[-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>63</td>
+      <td>Dp 22 Partition Equal Subset Sum V2<br><br></b> <a href='https://leetcode.com/problems/partition-equal-subset-sum/' target='_blank'>LeetCode 416</a></td>
+      <td><b>Example 1:</b> Target sum = Total / 2.</td>
+      <td><b>Time:</b> O(N * Target)<br><b>Space:</b> O(Target)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If total sum is odd, it's impossible. Otherwise, target is `sum / 2`. The problem reduces to subset sum. Use a boolean `dp` array of size `target + 1`. `dp[j] = dp[j] || dp[j - num]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def canPartition(nums: List[int]) -&gt; bool:&#10;    total = sum(nums)&#10;    if total % 2 != 0: return False&#10;    target = total // 2&#10;    dp = [False] * (target + 1)&#10;    dp[0] = True&#10;    for num in nums:&#10;        for j in range(target, num - 1, -1):&#10;            dp[j] = dp[j] or dp[j - num]&#10;    return dp[target]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

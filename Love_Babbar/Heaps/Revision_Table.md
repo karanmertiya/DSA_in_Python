@@ -313,5 +313,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Maintain a min-heap of size K. While processing the stream, if heap size is < K, push current element. If heap size == K and current element is > heap top, pop and push current element. Append heap top to result if size is K, else append -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kthLargest(k: int, arr: List[int], n: int) -&gt; List[int]:&#10;    res = []&#10;    pq = []&#10;    for i in range(n):&#10;        if len(pq) &lt; k:&#10;            heapq.heappush(pq, arr[i])&#10;        elif arr[i] &gt; pq[0]:&#10;            heapq.heappop(pq)&#10;            heapq.heappush(pq, arr[i])&#10;        if len(pq) &lt; k:&#10;            res.append(-1)&#10;        else:&#10;            res.append(pq[0])&#10;    return res</code></pre></details></td>
     </tr>
+    <tr>
+      <td>34</td>
+      <td>Heap 06 Kth Largest Element In A Stream<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/kth-largest-element-in-a-stream2220/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Min Heap.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(K)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a min-heap of size K. For each element in the stream, push it to the heap. If the heap size exceeds K, pop the top (minimum) element. The top of the heap is the Kth largest element. If the size is less than K, return -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kthLargest(k: int, arr: List[int], n: int) -&gt; List[int]:&#10;    pq = []&#10;    res = []&#10;    for i in range(n):&#10;        heapq.heappush(pq, arr[i])&#10;        if len(pq) &gt; k:&#10;            heapq.heappop(pq)&#10;        if len(pq) &lt; k:&#10;            res.append(-1)&#10;        else:&#10;            res.append(pq[0])&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td>Heap 07 Merge K Sorted Arrays<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/merge-k-sorted-arrays/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Min Heap.</td>
+      <td><b>Time:</b> O(K^2 log K)<br><b>Space:</b> O(K)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a min-heap that stores a tuple: (value, array_index, element_index). Push the first element of each of the K arrays into the heap. While the heap is not empty, pop the minimum element, add it to the result, and if the array from which it was popped has more elements, push the next element to the heap.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def mergeKArrays(arr: List[List[int]], K: int) -&gt; List[int]:&#10;    pq = []&#10;    res = []&#10;    for i in range(K):&#10;        heapq.heappush(pq, (arr[i][0], i, 0))&#10;    while pq:&#10;        val, row, col = heapq.heappop(pq)&#10;        res.append(val)&#10;        if col + 1 &lt; len(arr[row]):&#10;            heapq.heappush(pq, (arr[row][col + 1], row, col + 1))&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>Heap 08 Reorganize String<br><br></b> <a href='https://leetcode.com/problems/reorganize-string/' target='_blank'>LeetCode 767</a></td>
+      <td><b>Example 1:</b> Max Heap for frequencies.</td>
+      <td><b>Time:</b> O(N log A)<br><b>Space:</b> O(A)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Count character frequencies. Use a max-heap to store (count, char). Pop the top two most frequent characters, append them to the result, decrement their counts, and push them back if count > 0. If one character is left and its count > 1, it's impossible.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections, heapq&#10;def reorganizeString(s: str) -&gt; str:&#10;    count = collections.Counter(s)&#10;    pq = [(-freq, char) for char, freq in count.items()]&#10;    heapq.heapify(pq)&#10;    res = &quot;&quot;&#10;    while len(pq) &gt; 1:&#10;        freq1, char1 = heapq.heappop(pq)&#10;        freq2, char2 = heapq.heappop(pq)&#10;        res += char1 + char2&#10;        if freq1 &lt; -1: heapq.heappush(pq, (freq1 + 1, char1))&#10;        if freq2 &lt; -1: heapq.heappush(pq, (freq2 + 1, char2))&#10;    if pq:&#10;        freq, char = pq[0]&#10;        if freq &lt; -1: return &quot;&quot;&#10;        res += char&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>37</td>
+      <td>Heap 09 Find Median From Data Stream<br><br></b> <a href='https://leetcode.com/problems/find-median-from-data-stream/' target='_blank'>LeetCode 295</a></td>
+      <td><b>Example 1:</b> Two Heaps.</td>
+      <td><b>Time:</b> O(log N) add, O(1) find<br><b>Space:</b> O(N)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain two heaps: a max-heap for the smaller half of the numbers, and a min-heap for the larger half. Ensure the max-heap has either the same size or one more element than the min-heap. The median is either the top of the max-heap or the average of the tops.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;class MedianFinder:&#10;    def __init__(self):&#10;        self.maxHeap = []&#10;        self.minHeap = []&#10;    def addNum(self, num: int) -&gt; None:&#10;        if not self.maxHeap or num &lt;= -self.maxHeap[0]:&#10;            heapq.heappush(self.maxHeap, -num)&#10;        else:&#10;            heapq.heappush(self.minHeap, num)&#10;        if len(self.maxHeap) &gt; len(self.minHeap) + 1:&#10;            heapq.heappush(self.minHeap, -heapq.heappop(self.maxHeap))&#10;        elif len(self.minHeap) &gt; len(self.maxHeap):&#10;            heapq.heappush(self.maxHeap, -heapq.heappop(self.minHeap))&#10;    def findMedian(self) -&gt; float:&#10;        if len(self.maxHeap) == len(self.minHeap):&#10;            return (-self.maxHeap[0] + self.minHeap[0]) / 2.0&#10;        return -self.maxHeap[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td>Heap 10 Smallest Range Covering Elements From K Lists<br><br></b> <a href='https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/' target='_blank'>LeetCode 632</a></td>
+      <td><b>Example 1:</b> Min Heap.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(K)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a min-heap storing `(value, list_idx, elem_idx)`. Also maintain the `current_max` of the elements currently in the heap. The current range is `[heap_top, current_max]`. Pop the min, push the next element from its list, and update `current_max`. Continue until any list is exhausted.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def smallestRange(nums: List[List[int]]) -&gt; List[int]:&#10;    pq = []&#10;    currMax = float(&#x27;-inf&#x27;)&#10;    for i in range(len(nums)):&#10;        heapq.heappush(pq, (nums[i][0], i, 0))&#10;        currMax = max(currMax, nums[i][0])&#10;    ans = [pq[0][0], currMax]&#10;    while True:&#10;        val, r, c = heapq.heappop(pq)&#10;        if currMax - val &lt; ans[1] - ans[0]:&#10;            ans = [val, currMax]&#10;        if c + 1 == len(nums[r]):&#10;            break&#10;        next_val = nums[r][c + 1]&#10;        heapq.heappush(pq, (next_val, r, c + 1))&#10;        currMax = max(currMax, next_val)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>39</td>
+      <td>Heap 11 Kth Smallest Element In A Sorted Matrix<br><br></b> <a href='https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/' target='_blank'>LeetCode 378</a></td>
+      <td><b>Example 1:</b> Min Heap.</td>
+      <td><b>Time:</b> O(K log N)<br><b>Space:</b> O(N)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Similar to merging K sorted arrays. Push the first element of each row into a min-heap. Pop the minimum element `K-1` times, pushing the next element from the popped element's row. The Kth popped element is the answer. (Binary Search is also optimal here).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kthSmallest(matrix: List[List[int]], k: int) -&gt; int:&#10;    n = len(matrix)&#10;    pq = []&#10;    for i in range(n):&#10;        heapq.heappush(pq, (matrix[i][0], i, 0))&#10;    for _ in range(k - 1):&#10;        val, r, c = heapq.heappop(pq)&#10;        if c + 1 &lt; n:&#10;            heapq.heappush(pq, (matrix[r][c + 1], r, c + 1))&#10;    return pq[0][0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>40</td>
+      <td>Heap 12 Minimum Cost Of Ropes<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-cost-of-ropes-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Min Heap.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Insert all lengths into a min-heap. While heap size > 1, extract the two minimum elements, add them, add their sum to the total cost, and insert their sum back into the heap.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def minCost(arr: List[int], n: int) -&gt; int:&#10;    heapq.heapify(arr)&#10;    cost = 0&#10;    while len(arr) &gt; 1:&#10;        a = heapq.heappop(arr)&#10;        b = heapq.heappop(arr)&#10;        cost += (a + b)&#10;        heapq.heappush(arr, a + b)&#10;    return cost</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>41</td>
+      <td>Heap 13 K Closest Points To Origin<br><br></b> <a href='https://leetcode.com/problems/k-closest-points-to-origin/' target='_blank'>LeetCode 973</a></td>
+      <td><b>Example 1:</b> Max Heap.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(K)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a max-heap of size K to store `(distance_squared, index)`. For each point, if the heap size is < K, push it. Otherwise, if its distance is less than the max-heap's top distance, pop the top and push the new point.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kClosest(points: List[List[int]], k: int) -&gt; List[List[int]]:&#10;    pq = []&#10;    for i, (x, y) in enumerate(points):&#10;        dist = -(x*x + y*y)&#10;        if len(pq) &lt; k:&#10;            heapq.heappush(pq, (dist, i))&#10;        else:&#10;            heapq.heappushpop(pq, (dist, i))&#10;    return [points[i] for _, i in pq]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>42</td>
+      <td>Heap 14 K Largest Elements<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/k-largest-elements4206/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Min Heap.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(K)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a min-heap of size K. Iterate through the array. If the heap has < K elements, push. Else if the current element > heap's top, pop the top and push the current element. The heap will contain the K largest elements.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kLargest(arr: List[int], n: int, k: int) -&gt; List[int]:&#10;    pq = []&#10;    for i in range(n):&#10;        heapq.heappush(pq, arr[i])&#10;        if len(pq) &gt; k:&#10;            heapq.heappop(pq)&#10;    return sorted(pq, reverse=True)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>43</td>
+      <td>Heap 15 Top K Frequent Elements<br><br></b> <a href='https://leetcode.com/problems/top-k-frequent-elements/' target='_blank'>LeetCode 347</a></td>
+      <td><b>Example 1:</b> Min Heap with Frequencies.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(N)</td>
+      <td>Priority Queue, Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Count frequencies using a hash map. Maintain a min-heap of size K storing `(frequency, element)`. Push each pair into the heap. If size > K, pop. The remaining elements in the heap are the top K frequent.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections, heapq&#10;def topKFrequent(nums: List[int], k: int) -&gt; List[int]:&#10;    count = collections.Counter(nums)&#10;    pq = []&#10;    for num, freq in count.items():&#10;        heapq.heappush(pq, (freq, num))&#10;        if len(pq) &gt; k:&#10;            heapq.heappop(pq)&#10;    return [num for freq, num in pq]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

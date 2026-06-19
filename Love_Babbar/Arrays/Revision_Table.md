@@ -475,5 +475,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use three pointers `i`, `j`, `k` for the three arrays. If `A[i] == B[j] == C[k]`, it's a common element, add it to the result (handling duplicates), and increment all three pointers. Else, increment the pointer that points to the smallest value.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def commonElements(A: List[int], B: List[int], C: List[int], n1: int, n2: int, n3: int) -&gt; List[int]:&#10;    res = []&#10;    i = j = k = 0&#10;    while i &lt; n1 and j &lt; n2 and k &lt; n3:&#10;        if A[i] == B[j] == C[k]:&#10;            if not res or res[-1] != A[i]:&#10;                res.append(A[i])&#10;            i += 1; j += 1; k += 1&#10;        elif A[i] &lt;= B[j] and A[i] &lt;= C[k]: i += 1&#10;        elif B[j] &lt;= A[i] and B[j] &lt;= C[k]: j += 1&#10;        else: k += 1&#10;    return res</code></pre></details></td>
     </tr>
+    <tr>
+      <td>52</td>
+      <td>Arr 36 Rearrange Array Alternately<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/rearrange-array-alternately-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Math-based encoding O(1) space.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> To achieve O(1) space, encode two values into one using `arr[i] += (arr[max_idx] % max_elem) * max_elem`. Iterate with two pointers `max_idx` and `min_idx`. At the end, divide every element by `max_elem`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def rearrange(arr, n):&#10;    min_idx, max_idx = 0, n - 1&#10;    max_elem = arr[n - 1] + 1&#10;    for i in range(n):&#10;        if i % 2 == 0:&#10;            arr[i] += (arr[max_idx] % max_elem) * max_elem&#10;            max_idx -= 1&#10;        else:&#10;            arr[i] += (arr[min_idx] % max_elem) * max_elem&#10;            min_idx += 1&#10;    for i in range(n):&#10;        arr[i] = arr[i] // max_elem</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>53</td>
+      <td>Arr 37 Count Inversions<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Modified Merge Sort.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Merge Sort. During the merge step, if `arr[i] > arr[j]`, then there are `(mid - i + 1)` inversions because the left array is sorted, so all elements after `i` in the left array will also be greater than `arr[j]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def merge(arr, temp, left, mid, right):&#10;    i, j, k = left, mid, left&#10;    inv_count = 0&#10;    while i &lt;= mid - 1 and j &lt;= right:&#10;        if arr[i] &lt;= arr[j]:&#10;            temp[k] = arr[i]&#10;            i += 1&#10;        else:&#10;            temp[k] = arr[j]&#10;            inv_count += (mid - i)&#10;            j += 1&#10;        k += 1&#10;    while i &lt;= mid - 1:&#10;        temp[k] = arr[i]&#10;        i += 1; k += 1&#10;    while j &lt;= right:&#10;        temp[k] = arr[j]&#10;        j += 1; k += 1&#10;    for i in range(left, right + 1):&#10;        arr[i] = temp[i]&#10;    return inv_count&#10;&#10;def mergeSort(arr, temp, left, right):&#10;    inv_count = 0&#10;    if right &gt; left:&#10;        mid = (right + left) // 2&#10;        inv_count += mergeSort(arr, temp, left, mid)&#10;        inv_count += mergeSort(arr, temp, mid + 1, right)&#10;        inv_count += merge(arr, temp, left, mid + 1, right)&#10;    return inv_count&#10;&#10;def inversionCount(arr, n):&#10;    temp = [0] * n&#10;    return mergeSort(arr, temp, 0, n - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>54</td>
+      <td>Arr 38 Find All Pairs On Integer Array Whose Sum Is Equal To Given Number<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/count-pairs-with-given-sum5022/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Frequency Map.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a hash map to store frequencies. For each element `num`, check if `K - num` exists in the map. If so, add its frequency to the count. Then increment the frequency of `num` in the map.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def getPairsCount(arr, n, k):&#10;    m = collections.defaultdict(int)&#10;    count = 0&#10;    for num in arr:&#10;        if (k - num) in m:&#10;            count += m[k - num]&#10;        m[num] += 1&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>55</td>
+      <td>Arr 39 Find Common Elements In Three Sorted Arrays<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/common-elements1132/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> 3 Pointers.</td>
+      <td><b>Time:</b> O(N1 + N2 + N3)<br><b>Space:</b> O(1) extra space</td>
+      <td>-</td>
+      <td>Duplicates in arrays</td>
+      <td><b>Explanation:</b> Maintain three pointers `i`, `j`, `k` for the three arrays. If `A[i] == B[j] == C[k]`, add to result and increment all three. Otherwise, increment the pointer of the smallest element. Skip duplicates.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def commonElements(A, B, C, n1, n2, n3):&#10;    i, j, k = 0, 0, 0&#10;    res = []&#10;    while i &lt; n1 and j &lt; n2 and k &lt; n3:&#10;        if A[i] == B[j] and B[j] == C[k]:&#10;            if not res or res[-1] != A[i]:&#10;                res.append(A[i])&#10;            i += 1; j += 1; k += 1&#10;        elif A[i] &lt; B[j]: i += 1&#10;        elif B[j] &lt; C[k]: j += 1&#10;        else: k += 1&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>56</td>
+      <td>Arr 40 Rearrange Array In Alternating Positive And Negative Items<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/array-of-alternate-ve-and--ve-nos1401/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Extra Space Array.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>Unequal count of positive and negative</td>
+      <td><b>Explanation:</b> Collect all positive numbers in one array and all negative numbers in another. Overwrite the original array by picking elements alternatively from the two arrays.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def rearrange(arr, n):&#10;    pos = [x for x in arr if x &gt;= 0]&#10;    neg = [x for x in arr if x &lt; 0]&#10;    i, j, k = 0, 0, 0&#10;    while i &lt; len(pos) and j &lt; len(neg):&#10;        arr[k] = pos[i]; k += 1; i += 1&#10;        arr[k] = neg[j]; k += 1; j += 1&#10;    while i &lt; len(pos):&#10;        arr[k] = pos[i]; k += 1; i += 1&#10;    while j &lt; len(neg):&#10;        arr[k] = neg[j]; k += 1; j += 1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>57</td>
+      <td>Arr 41 Subarray With 0 Sum<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/subarray-with-0-sum-1587115621/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Prefix Sum with HashSet.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Set</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the array and calculate the prefix sum. If the prefix sum is 0 or it already exists in a hash set, it means a subarray with sum 0 exists.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def subArrayExists(arr, n):&#10;    sumSet = set()&#10;    curr_sum = 0&#10;    for num in arr:&#10;        curr_sum += num&#10;        if curr_sum == 0 or curr_sum in sumSet:&#10;            return True&#10;        sumSet.add(curr_sum)&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>58</td>
+      <td>Arr 42 Factorial Of A Large Number<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/factorials-of-large-numbers2508/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Array based multiplication.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N log(N!))</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use an array to store the result. Initially, it holds 1. Multiply the array by numbers from 2 to N. The multiplication is done school-style by carrying over remainders to the next index.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def factorial(N):&#10;    # Python handles large integers automatically&#10;    import math&#10;    fact = math.factorial(N)&#10;    return [int(x) for x in str(fact)]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>59</td>
+      <td>Arr 43 Maximum Product Subarray<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/maximum-product-subarray3604/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Prefix and Suffix iteration.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>Zero elements</td>
+      <td><b>Explanation:</b> Iterate from left to right calculating prefix product, and right to left calculating suffix product. If either is 0, reset it to 1. The max product will be the max of all prefix and suffix products.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProduct(arr, n):&#10;    max_prod = float(&#x27;-inf&#x27;)&#10;    pref, suff = 1, 1&#10;    for i in range(n):&#10;        if pref == 0: pref = 1&#10;        if suff == 0: suff = 1&#10;        pref *= arr[i]&#10;        suff *= arr[n - i - 1]&#10;        max_prod = max(max_prod, pref, suff)&#10;    return max_prod</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>60</td>
+      <td>Arr 44 Longest Consecutive Subsequence<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/longest-consecutive-subsequence2449/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Hash Set.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Set</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Insert all elements into a hash set. For each element, check if `element - 1` exists. If not, it's the start of a sequence. Then increment to find consecutive elements.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findLongestConseqSubseq(arr, N):&#10;    s = set(arr)&#10;    longest = 0&#10;    for num in s:&#10;        if (num - 1) not in s:&#10;            curr = num&#10;            count = 1&#10;            while (curr + 1) in s:&#10;                curr += 1&#10;                count += 1&#10;            longest = max(longest, count)&#10;    return longest</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>61</td>
+      <td>Arr 45 Minimum Swaps And K Together<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-swaps-required-to-bring-all-elements-less-than-or-equal-to-k-together4847/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sliding Window.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> First count all elements <= k (let's say `cnt`). This will be the window size. Find elements > k in the first window. Then slide the window, updating the number of elements > k. The minimum among all windows is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minSwap(arr, n, k):&#10;    cnt = sum(1 for x in arr if x &lt;= k)&#10;    bad = sum(1 for i in range(cnt) if arr[i] &gt; k)&#10;    ans = bad&#10;    for i in range(n - cnt):&#10;        if arr[i] &gt; k: bad -= 1&#10;        if arr[i + cnt] &gt; k: bad += 1&#10;        ans = min(ans, bad)&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

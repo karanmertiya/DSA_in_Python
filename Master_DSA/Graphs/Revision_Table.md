@@ -529,5 +529,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Step 1: Use DFS to find the first island. Mark all its cells (e.g., set to 2) and push them into a queue for BFS. Step 2: Perform multi-source BFS from the queue. Expand the island level by level. The first time we hit a `1` (which belongs to the second island), the number of layers expanded is the shortest bridge.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def shortestBridge(grid: List[List[int]]) -&gt; int:&#10;    n = len(grid)&#10;    q = collections.deque()&#10;    def dfs(r, c):&#10;        grid[r][c] = 2&#10;        q.append((r, c))&#10;        for nr, nc in [(r-1, c), (r+1, c), (r, c-1), (r, c+1)]:&#10;            if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and grid[nr][nc] == 1:&#10;                dfs(nr, nc)&#10;    found = False&#10;    for i in range(n):&#10;        if found: break&#10;        for j in range(n):&#10;            if grid[i][j] == 1:&#10;                dfs(i, j)&#10;                found = True&#10;                break&#10;    steps = 0&#10;    while q:&#10;        for _ in range(len(q)):&#10;            r, c = q.popleft()&#10;            for nr, nc in [(r-1, c), (r+1, c), (r, c-1), (r, c+1)]:&#10;                if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n:&#10;                    if grid[nr][nc] == 1: return steps&#10;                    if grid[nr][nc] == 0:&#10;                        grid[nr][nc] = 2&#10;                        q.append((nr, nc))&#10;        steps += 1&#10;    return steps</code></pre></details></td>
     </tr>
+    <tr>
+      <td>58</td>
+      <td>Graph 14 Detect Cycle In A Directed Graph<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DFS with pathVisited.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>Multiple disconnected components</td>
+      <td><b>Explanation:</b> Use DFS. Maintain a `visited` array and a `pathVisited` array. Mark both as true for the current node. Recurse for adjacent nodes. If an adjacent node is `visited` AND `pathVisited`, a cycle exists.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isCyclic(V: int, adj: List[List[int]]) -&gt; bool:&#10;    vis = [0] * V&#10;    pathVis = [0] * V&#10;    def dfsCheck(node):&#10;        vis[node] = 1&#10;        pathVis[node] = 1&#10;        for neighbor in adj[node]:&#10;            if not vis[neighbor]:&#10;                if dfsCheck(neighbor): return True&#10;            elif pathVis[neighbor]:&#10;                return True&#10;        pathVis[node] = 0&#10;        return False&#10;    for i in range(V):&#10;        if not vis[i]:&#10;            if dfsCheck(i): return True&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>59</td>
+      <td>Graph 15 Topological Sort Bfs Kahn<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/topological-sort/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Indegree based BFS.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Calculate indegree for all nodes. Push all nodes with indegree 0 to a queue. While queue is not empty, pop a node, add it to result, and decrement indegree of all its adjacent nodes. If indegree becomes 0, push to queue.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def topoSort(V: int, adj: List[List[int]]) -&gt; List[int]:&#10;    indegree = [0] * V&#10;    for i in range(V):&#10;        for node in adj[i]:&#10;            indegree[node] += 1&#10;    q = collections.deque()&#10;    for i in range(V):&#10;        if indegree[i] == 0:&#10;            q.append(i)&#10;    topo = []&#10;    while q:&#10;        node = q.popleft()&#10;        topo.append(node)&#10;        for neighbor in adj[node]:&#10;            indegree[neighbor] -= 1&#10;            if indegree[neighbor] == 0:&#10;                q.append(neighbor)&#10;    return topo</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>60</td>
+      <td>Graph 16 Topological Sort Dfs<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/topological-sort/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DFS + Stack.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>Stack</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use standard DFS. When returning from the DFS call of a node (meaning all its descendants are visited), push the node to a stack. The stack will contain the topological sort.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def topoSort(V: int, adj: List[List[int]]) -&gt; List[int]:&#10;    vis = [0] * V&#10;    st = []&#10;    def dfs(node):&#10;        vis[node] = 1&#10;        for neighbor in adj[node]:&#10;            if not vis[neighbor]:&#10;                dfs(neighbor)&#10;        st.append(node)&#10;    for i in range(V):&#10;        if not vis[i]:&#10;            dfs(i)&#10;    return st[::-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>61</td>
+      <td>Graph 17 Minimum Time Taken By Each Job To Be Completed Given By A Directed Acyclic Graph<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-time-taken-by-each-job-to-be-completed-given-by-a-directed-acyclic-graph/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Modified Kahn's Algorithm.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Kahn's Algorithm. All nodes with indegree 0 take 1 unit of time. For other nodes `V`, when they are pushed to the queue from `U`, their time is `time[U] + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minimumTime(n: int, edges: List[List[int]], m: int) -&gt; List[int]:&#10;    adj = [[] for _ in range(n + 1)]&#10;    indegree = [0] * (n + 1)&#10;    for u, v in edges:&#10;        adj[u].append(v)&#10;        indegree[v] += 1&#10;    q = collections.deque()&#10;    ans = [0] * (n + 1)&#10;    for i in range(1, n + 1):&#10;        if indegree[i] == 0:&#10;            q.append(i)&#10;            ans[i] = 1&#10;    while q:&#10;        node = q.popleft()&#10;        for neighbor in adj[node]:&#10;            indegree[neighbor] -= 1&#10;            if indegree[neighbor] == 0:&#10;                ans[neighbor] = ans[node] + 1&#10;                q.append(neighbor)&#10;    return ans[1:]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>62</td>
+      <td>Graph 18 Find Whether It Is Possible To Finish All Tasks Or Not From Given Dependencies<br><br></b> <a href='https://leetcode.com/problems/course-schedule/' target='_blank'>LeetCode 207</a></td>
+      <td><b>Example 1:</b> Detect cycle using Kahn's algorithm.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> This is equivalent to detecting a cycle in a directed graph. If a cycle exists, it's impossible. Use Kahn's algorithm: if the number of elements in the topological sort is not equal to `N`, then a cycle exists.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def canFinish(numCourses: int, prerequisites: List[List[int]]) -&gt; bool:&#10;    adj = [[] for _ in range(numCourses)]&#10;    for u, v in prerequisites:&#10;        adj[v].append(u)&#10;    indegree = [0] * numCourses&#10;    for i in range(numCourses):&#10;        for node in adj[i]:&#10;            indegree[node] += 1&#10;    q = collections.deque()&#10;    for i in range(numCourses):&#10;        if indegree[i] == 0:&#10;            q.append(i)&#10;    cnt = 0&#10;    while q:&#10;        node = q.popleft()&#10;        cnt += 1&#10;        for neighbor in adj[node]:&#10;            indegree[neighbor] -= 1&#10;            if indegree[neighbor] == 0:&#10;                q.append(neighbor)&#10;    return cnt == numCourses</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>63</td>
+      <td>Graph 19 Find The Number Of Islands<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-the-number-of-islands/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DFS or BFS.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N * M) worst case stack</td>
+      <td>-</td>
+      <td>Empty grid</td>
+      <td><b>Explanation:</b> Traverse the grid. When a '1' is found, increment island count and use DFS/BFS to mark all its 8-connected neighbors as '0' (or visited) to avoid recounting.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numIslands(grid: List[List[str]]) -&gt; int:&#10;    if not grid: return 0&#10;    n, m = len(grid), len(grid[0])&#10;    def dfs(r, c):&#10;        grid[r][c] = &#x27;0&#x27;&#10;        for delrow in [-1, 0, 1]:&#10;            for delcol in [-1, 0, 1]:&#10;                nrow, ncol = r + delrow, c + delcol&#10;                if 0 &lt;= nrow &lt; n and 0 &lt;= ncol &lt; m and grid[nrow][ncol] == &#x27;1&#x27;:&#10;                    dfs(nrow, ncol)&#10;    count = 0&#10;    for i in range(n):&#10;        for j in range(m):&#10;            if grid[i][j] == &#x27;1&#x27;:&#10;                count += 1&#10;                dfs(i, j)&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>64</td>
+      <td>Graph 20 Alien Dictionary<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/alien-dictionary/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Topological Sort on Characters.</td>
+      <td><b>Time:</b> O(N * length of words + K)<br><b>Space:</b> O(K)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Compare adjacent words. The first mismatching character defines a directed edge `char1 -> char2`. Create an adjacency list of these edges. Then perform a topological sort to get the valid character order.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findOrder(dict: List[str], N: int, K: int) -&gt; str:&#10;    adj = [[] for _ in range(K)]&#10;    for i in range(N - 1):&#10;        s1, s2 = dict[i], dict[i+1]&#10;        for ptr in range(min(len(s1), len(s2))):&#10;            if s1[ptr] != s2[ptr]:&#10;                adj[ord(s1[ptr]) - ord(&#x27;a&#x27;)].append(ord(s2[ptr]) - ord(&#x27;a&#x27;))&#10;                break&#10;    indegree = [0] * K&#10;    for i in range(K):&#10;        for node in adj[i]:&#10;            indegree[node] += 1&#10;    q = collections.deque()&#10;    for i in range(K):&#10;        if indegree[i] == 0:&#10;            q.append(i)&#10;    topo = &quot;&quot;&#10;    while q:&#10;        node = q.popleft()&#10;        topo += chr(node + ord(&#x27;a&#x27;))&#10;        for neighbor in adj[node]:&#10;            indegree[neighbor] -= 1&#10;            if indegree[neighbor] == 0:&#10;                q.append(neighbor)&#10;    return topo</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>65</td>
+      <td>Graph 21 Kruskals Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Disjoint Set Union.</td>
+      <td><b>Time:</b> O(E log E)<br><b>Space:</b> O(V + E)</td>
+      <td>Disjoint Set</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort all edges by weight. Iterate through sorted edges, if the two vertices do not belong to the same set (using Disjoint Set Union `findParent`), add the edge to MST and `union` the two sets.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class DisjointSet:&#10;    def __init__(self, n):&#10;        self.parent = list(range(n + 1))&#10;        self.size = [1] * (n + 1)&#10;    def findUPar(self, node):&#10;        if node == self.parent[node]: return node&#10;        self.parent[node] = self.findUPar(self.parent[node])&#10;        return self.parent[node]&#10;    def unionBySize(self, u, v):&#10;        ulp_u = self.findUPar(u)&#10;        ulp_v = self.findUPar(v)&#10;        if ulp_u == ulp_v: return&#10;        if self.size[ulp_u] &lt; self.size[ulp_v]:&#10;            self.parent[ulp_u] = ulp_v&#10;            self.size[ulp_v] += self.size[ulp_u]&#10;        else:&#10;            self.parent[ulp_v] = ulp_u&#10;            self.size[ulp_u] += self.size[ulp_v]&#10;&#10;def spanningTree(V: int, adj: List[List[List[int]]]) -&gt; int:&#10;    edges = []&#10;    for i in range(V):&#10;        for neighbor, weight in adj[i]:&#10;            edges.append((weight, i, neighbor))&#10;    edges.sort()&#10;    ds = DisjointSet(V)&#10;    mstWt = 0&#10;    for wt, u, v in edges:&#10;        if ds.findUPar(u) != ds.findUPar(v):&#10;            mstWt += wt&#10;            ds.unionBySize(u, v)&#10;    return mstWt</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>66</td>
+      <td>Graph 22 Dijkstra Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Priority Queue / Min Heap.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(V + E)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a min-heap to always pick the node with the minimum distance. Relax its adjacent edges. If `dist[node] + weight < dist[adjNode]`, update distance and push to priority queue.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def dijkstra(V: int, adj: List[List[List[int]]], S: int) -&gt; List[int]:&#10;    pq = [(0, S)]&#10;    dist = [float(&#x27;inf&#x27;)] * V&#10;    dist[S] = 0&#10;    while pq:&#10;        dis, node = heapq.heappop(pq)&#10;        if dis &gt; dist[node]: continue&#10;        for adjNode, edgeWeight in adj[node]:&#10;            if dis + edgeWeight &lt; dist[adjNode]:&#10;                dist[adjNode] = dis + edgeWeight&#10;                heapq.heappush(pq, (dist[adjNode], adjNode))&#10;    return dist</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>67</td>
+      <td>Graph 23 Bipartite Graph<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/bipartite-graph/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Graph Coloring (BFS).</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>Multiple disconnected components</td>
+      <td><b>Explanation:</b> Try to color the graph using 2 colors. Use BFS/DFS. For every unvisited node, color it 0. For its neighbors, color them opposite (1). If a neighbor is already colored with the SAME color, it's not bipartite.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isBipartite(V: int, adj: List[List[int]]) -&gt; bool:&#10;    color = [-1] * V&#10;    def check(start):&#10;        q = collections.deque([start])&#10;        color[start] = 0&#10;        while q:&#10;            node = q.popleft()&#10;            for neighbor in adj[node]:&#10;                if color[neighbor] == -1:&#10;                    color[neighbor] = 1 - color[node]&#10;                    q.append(neighbor)&#10;                elif color[neighbor] == color[node]:&#10;                    return False&#10;        return True&#10;    for i in range(V):&#10;        if color[i] == -1:&#10;            if not check(i): return False&#10;    return True</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

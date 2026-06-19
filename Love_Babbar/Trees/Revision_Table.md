@@ -601,5 +601,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Recursively get the sum of the left subtree and right subtree. Update current node's value to the sum of left and right. Return the old value of current node + sum of left + sum of right to the caller.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def toSumTree(root):&#10;    def helper(node):&#10;        if not node: return 0&#10;        leftSum = helper(node.left)&#10;        rightSum = helper(node.right)&#10;        oldVal = node.val&#10;        node.val = leftSum + rightSum&#10;        return node.val + oldVal&#10;    helper(root)</code></pre></details></td>
     </tr>
+    <tr>
+      <td>66</td>
+      <td>Tree 16 Zigzag Tree Traversal<br><br></b> <a href='https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/' target='_blank'>LeetCode 103</a></td>
+      <td><b>Example 1:</b> Level order with alternating flag.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Queue</td>
+      <td>Empty tree</td>
+      <td><b>Explanation:</b> Use a queue for level order traversal. Maintain a `leftToRight` boolean flag. At each level, collect the nodes and reverse the list if `leftToRight` is false. Toggle the flag after each level.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def zigzagLevelOrder(root: Optional[TreeNode]) -&gt; List[List[int]]:&#10;    if not root: return []&#10;    res = []&#10;    q = collections.deque([root])&#10;    leftToRight = True&#10;    while q:&#10;        level_size = len(q)&#10;        row = [0] * level_size&#10;        for i in range(level_size):&#10;            node = q.popleft()&#10;            index = i if leftToRight else (level_size - 1 - i)&#10;            row[index] = node.val&#10;            if node.left: q.append(node.left)&#10;            if node.right: q.append(node.right)&#10;        leftToRight = not leftToRight&#10;        res.append(row)&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>67</td>
+      <td>Tree 17 Check If A Binary Tree Is Balanced<br><br></b> <a href='https://leetcode.com/problems/balanced-binary-tree/' target='_blank'>LeetCode 110</a></td>
+      <td><b>Example 1:</b> DFS post-order.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N) recursion stack</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Modify the `maxDepth` function to return -1 if the tree is not balanced. If `abs(left - right) > 1` or either subtree returns -1, return -1. Otherwise, return `max(left, right) + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isBalanced(root: Optional[TreeNode]) -&gt; bool:&#10;    def dfs(node):&#10;        if not node: return 0&#10;        left = dfs(node.left)&#10;        if left == -1: return -1&#10;        right = dfs(node.right)&#10;        if right == -1: return -1&#10;        if abs(left - right) &gt; 1: return -1&#10;        return max(left, right) + 1&#10;    return dfs(root) != -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>68</td>
+      <td>Tree 18 Diagonal Traversal Of Binary Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/diagonal-traversal-of-binary-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Queue based.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a queue. Push root. Then loop: Pop a node `curr`. While `curr` is not null, add its value to result, push `curr->left` to queue, and move to `curr->right`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def diagonal(root: Optional[TreeNode]) -&gt; List[int]:&#10;    res = []&#10;    if not root: return res&#10;    q = collections.deque([root])&#10;    while q:&#10;        curr = q.popleft()&#10;        while curr:&#10;            res.append(curr.val)&#10;            if curr.left: q.append(curr.left)&#10;            curr = curr.right&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>69</td>
+      <td>Tree 19 Boundary Traversal Of Binary Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Left boundary, then leaves, then right boundary.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> 1. If root is not leaf, add root. 2. Get left boundary (excluding leaves). 3. Get all leaves. 4. Get right boundary (excluding leaves) and reverse it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def boundary(root: Optional[TreeNode]) -&gt; List[int]:&#10;    if not root: return []&#10;    res = []&#10;    def isLeaf(node):&#10;        return not node.left and not node.right&#10;    if not isLeaf(root): res.append(root.val)&#10;    &#10;    curr = root.left&#10;    while curr:&#10;        if not isLeaf(curr): res.append(curr.val)&#10;        if curr.left: curr = curr.left&#10;        else: curr = curr.right&#10;        &#10;    def addLeaves(node):&#10;        if isLeaf(node):&#10;            res.append(node.val)&#10;            return&#10;        if node.left: addLeaves(node.left)&#10;        if node.right: addLeaves(node.right)&#10;    addLeaves(root)&#10;    &#10;    curr = root.right&#10;    temp = []&#10;    while curr:&#10;        if not isLeaf(curr): temp.append(curr.val)&#10;        if curr.right: curr = curr.right&#10;        else: curr = curr.left&#10;    for val in reversed(temp):&#10;        res.append(val)&#10;        &#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>70</td>
+      <td>Tree 20 Construct Binary Tree From String With Bracket Representation<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/construct-binary-tree-from-string-with-bracket-representation/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursion with index pointer.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a helper function that takes the string and an index pointer. Extract the number. Then if there's a '(' build left tree, and if there's another '(' build right tree.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def treeFromString(s: str) -&gt; Optional[TreeNode]:&#10;    i = 0&#10;    def helper():&#10;        nonlocal i&#10;        if i &gt;= len(s): return None&#10;        sign = 1&#10;        if s[i] == &#x27;-&#x27;:&#10;            sign = -1&#10;            i += 1&#10;        num = 0&#10;        while i &lt; len(s) and s[i].isdigit():&#10;            num = num * 10 + int(s[i])&#10;            i += 1&#10;        root = TreeNode(num * sign)&#10;        if i &lt; len(s) and s[i] == &#x27;(&#x27;:&#10;            i += 1&#10;            root.left = helper()&#10;            i += 1&#10;        if i &lt; len(s) and s[i] == &#x27;(&#x27;:&#10;            i += 1&#10;            root.right = helper()&#10;            i += 1&#10;        return root&#10;    return helper()</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>71</td>
+      <td>Tree 21 Convert Binary Tree Into Doubly Linked List<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/binary-tree-to-dll/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DFS Inorder, maintaining a `prev` pointer.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Perform Inorder traversal. Maintain a `prev` pointer (initially null). At each node: if `prev == null`, this node is the head of DLL. Else, `prev->right = node` and `node->left = prev`. Update `prev = node`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def bToDLL(root: Optional[TreeNode]) -&gt; Optional[TreeNode]:&#10;    head = prev = None&#10;    def inorder(node):&#10;        nonlocal head, prev&#10;        if not node: return&#10;        inorder(node.left)&#10;        if prev is None:&#10;            head = node&#10;        else:&#10;            node.left = prev&#10;            prev.right = node&#10;        prev = node&#10;        inorder(node.right)&#10;    inorder(root)&#10;    return head</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>72</td>
+      <td>Tree 22 Construct Tree From Inorder And Preorder V2<br><br></b> <a href='https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/' target='_blank'>LeetCode 105</a></td>
+      <td><b>Example 1:</b> Map Inorder indices.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> The first element of preorder is the root. Find its index in inorder array using a hash map. The left part of inorder is the left subtree, right part is right subtree. Recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def buildTree(preorder: List[int], inorder: List[int]) -&gt; Optional[TreeNode]:&#10;    inMap = {val: i for i, val in enumerate(inorder)}&#10;    def helper(preStart, preEnd, inStart, inEnd):&#10;        if preStart &gt; preEnd or inStart &gt; inEnd: return None&#10;        root = TreeNode(preorder[preStart])&#10;        inRoot = inMap[root.val]&#10;        numsLeft = inRoot - inStart&#10;        root.left = helper(preStart + 1, preStart + numsLeft, inStart, inRoot - 1)&#10;        root.right = helper(preStart + numsLeft + 1, preEnd, inRoot + 1, inEnd)&#10;        return root&#10;    return helper(0, len(preorder) - 1, 0, len(inorder) - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>73</td>
+      <td>Tree 23 Check If Tree Is Isomorphic<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/check-if-tree-is-isomorphic/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Check swapped and unswapped subtrees.</td>
+      <td><b>Time:</b> O(min(M, N))<br><b>Space:</b> O(min(H1, H2))</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Two trees are isomorphic if one can be obtained from another by a series of flips. If roots are null, return true. If values don't match, false. Then check `(isIsomorphic(n1.left, n2.left) && isIsomorphic(n1.right, n2.right))` OR `(isIsomorphic(n1.left, n2.right) && isIsomorphic(n1.right, n2.left))`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isIsomorphic(n1: Optional[TreeNode], n2: Optional[TreeNode]) -&gt; bool:&#10;    if not n1 and not n2: return True&#10;    if not n1 or not n2: return False&#10;    if n1.val != n2.val: return False&#10;    no_swap = isIsomorphic(n1.left, n2.left) and isIsomorphic(n1.right, n2.right)&#10;    swap = isIsomorphic(n1.left, n2.right) and isIsomorphic(n1.right, n2.left)&#10;    return no_swap or swap</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>74</td>
+      <td>Tree 24 Lowest Common Ancestor In A Binary Tree<br><br></b> <a href='https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/' target='_blank'>LeetCode 236</a></td>
+      <td><b>Example 1:</b> DFS.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If root is null or root matches n1 or n2, return root. Recurse for left and right. If both return non-null, root is LCA. If one returns non-null, return that one.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lowestCommonAncestor(root: &#x27;TreeNode&#x27;, p: &#x27;TreeNode&#x27;, q: &#x27;TreeNode&#x27;) -&gt; &#x27;TreeNode&#x27;:&#10;    if not root or root == p or root == q: return root&#10;    left = lowestCommonAncestor(root.left, p, q)&#10;    right = lowestCommonAncestor(root.right, p, q)&#10;    if not left: return right&#10;    if not right: return left&#10;    return root</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>75</td>
+      <td>Tree 25 Min Distance Between Two Given Nodes Of A Binary Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/min-distance-between-two-given-nodes-of-a-binary-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Find LCA, then distance from LCA to nodes.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> 1. Find LCA of the two nodes. 2. Find distance from LCA to node 1. 3. Find distance from LCA to node 2. 4. Return the sum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findDist(root: Optional[TreeNode], a: int, b: int) -&gt; int:&#10;    def lca(node):&#10;        if not node or node.val == a or node.val == b: return node&#10;        left = lca(node.left)&#10;        right = lca(node.right)&#10;        if not left: return right&#10;        if not right: return left&#10;        return node&#10;    &#10;    def getDist(node, val, dist):&#10;        if not node: return -1&#10;        if node.val == val: return dist&#10;        d = getDist(node.left, val, dist + 1)&#10;        if d != -1: return d&#10;        return getDist(node.right, val, dist + 1)&#10;        &#10;    lca_node = lca(root)&#10;    return getDist(lca_node, a, 0) + getDist(lca_node, b, 0)</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

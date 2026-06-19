@@ -187,5 +187,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Create a prefix XOR array. Query answer for `[L, R]` is `prefix[R] ^ prefix[L-1]`. If `L == 0`, answer is `prefix[R]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def xorQueries(arr: List[int], queries: List[List[int]]) -&gt; List[int]:&#10;    pref = [0] * len(arr)&#10;    pref[0] = arr[0]&#10;    for i in range(1, len(arr)):&#10;        pref[i] = pref[i-1] ^ arr[i]&#10;    ans = []&#10;    for l, r in queries:&#10;        if l == 0: ans.append(pref[r])&#10;        else: ans.append(pref[r] ^ pref[l-1])&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">20</td>
+      <td rowspan="1">Bm 20 Count Set Bits In An Integer<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/set-bits0143/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Brian Kernighan's algorithm.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Brian Kernighan's algorithm: `n = n & (n - 1)` unsets the rightmost set bit. Keep doing this until `n` becomes 0 and count the operations.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def setBits(N: int) -&gt; int:&#10;    count = 0&#10;    while N &gt; 0:&#10;        N = N &amp; (N - 1)&#10;        count += 1&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">21</td>
+      <td rowspan="1">Bm 21 Find The Two Non Repeating Elements In An Array Of Repeating Elements<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/finding-the-numbers0215/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> XOR and rightmost set bit.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> 1. XOR all elements to get `x ^ y`. 2. Find the rightmost set bit in `x ^ y` using `(x ^ y) & -(x ^ y)`. 3. Divide elements into two groups based on this bit. 4. XOR elements in each group to get `x` and `y`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def singleNumber(nums: List[int]) -&gt; List[int]:&#10;    XOR = 0&#10;    for n in nums: XOR ^= n&#10;    rightmost_set_bit = XOR &amp; ~(XOR - 1)&#10;    x, y = 0, 0&#10;    for n in nums:&#10;        if n &amp; rightmost_set_bit:&#10;            x ^= n&#10;        else:&#10;            y ^= n&#10;    return sorted([x, y])</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">22</td>
+      <td rowspan="1">Bm 22 Count Number Of Bits To Be Flipped To Convert A To B<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/bit-difference-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Count set bits in XOR.</td>
+      <td><b>Time:</b> O(log(A^B))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Take the XOR of A and B (`A ^ B`). The number of set bits in the result is the number of bits that need to be flipped. Use Brian Kernighan's algorithm to count.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countBitsFlip(a: int, b: int) -&gt; int:&#10;    n = a ^ b&#10;    count = 0&#10;    while n &gt; 0:&#10;        n &amp;= (n - 1)&#10;        count += 1&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">23</td>
+      <td rowspan="1">Bm 23 Count Total Set Bits In All Numbers From 1 To N<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/count-total-set-bits-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive approach based on largest power of 2.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(log N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Find largest power of 2 <= n (`x`). Bits up to `2^x - 1` are `x * 2^(x-1)`. The MSB of remaining numbers is `n - 2^x + 1`. Then recursively call for `n - 2^x`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countSetBits(n: int) -&gt; int:&#10;    if n &lt;= 0: return 0&#10;    x = 0&#10;    while (1 &lt;&lt; x) &lt;= n:&#10;        x += 1&#10;    x -= 1&#10;    bitsUpTo2x = x * (1 &lt;&lt; (x - 1))&#10;    msbOfRest = n - (1 &lt;&lt; x) + 1&#10;    rest = n - (1 &lt;&lt; x)&#10;    return bitsUpTo2x + msbOfRest + countSetBits(rest)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">24</td>
+      <td rowspan="1">Bm 24 Program To Find Whether A No Is Power Of Two<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/power-of-2-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Bitwise AND.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If `N` is a power of 2, it has only 1 set bit. `N & (N - 1)` unsets the rightmost set bit. So if `N` is a power of 2, `N & (N - 1)` will be 0.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isPowerofTwo(n: int) -&gt; bool:&#10;    if n == 0: return False&#10;    return (n &amp; (n - 1)) == 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">25</td>
+      <td rowspan="1">Bm 25 Find Position Of The Only Set Bit<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-position-of-set-bit3706/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Log base 2.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> First, check if `N` is a power of 2 using `N & (N - 1) == 0`. If yes, the position is `log2(N) + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def findPosition(N: int) -&gt; int:&#10;    if N == 0 or (N &amp; (N - 1)) != 0: return -1&#10;    return int(math.log2(N)) + 1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">26</td>
+      <td rowspan="1">Bm 26 Copy Set Bits In A Range<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/copy-set-bits-in-range0623/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Masking.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a mask of length `r - l + 1` with all 1s. Shift this mask left by `l - 1`. Apply this mask to `y` using AND (`y & mask`). Finally, OR the result with `x`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def setSetBit(x: int, y: int, l: int, r: int) -&gt; int:&#10;    maskLen = r - l + 1&#10;    mask = ((1 &lt;&lt; maskLen) - 1) &lt;&lt; (l - 1)&#10;    yMasked = y &amp; mask&#10;    return x | yMasked</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">27</td>
+      <td rowspan="1">Bm 27 Divide Two Integers Without Using Multiplication Division And Mod Operator<br><br></b> <a href='https://leetcode.com/problems/divide-two-integers/' target='_blank'>LeetCode 29</a></td>
+      <td rowspan="1"><b>Example 1:</b> Bit shifting.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Keep shifting `divisor` left by `i` bits until it's just smaller than `dividend`. Subtract `divisor << i` from `dividend` and add `1 << i` to the `quotient`. Repeat.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def divide(dividend: int, divisor: int) -&gt; int:&#10;    if dividend == -2147483648 and divisor == -1: return 2147483647&#10;    a, b = abs(dividend), abs(divisor)&#10;    res = 0&#10;    while a &gt;= b:&#10;        x = 0&#10;        while a &gt;= (b &lt;&lt; 1 &lt;&lt; x):&#10;            x += 1&#10;        res += 1 &lt;&lt; x&#10;        a -= b &lt;&lt; x&#10;    return res if (dividend &gt; 0) == (divisor &gt; 0) else -res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">28</td>
+      <td rowspan="1">Bm 28 Calculate Square Of A Number Without Using And Pow<br><br></b> <a href='https://www.geeksforgeeks.org/calculate-square-of-a-number-without-using-and-pow/' target='_blank'>Article</a></td>
+      <td rowspan="1"><b>Example 1:</b> Bit shifting and adding.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(log N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If `n` is even, `n = 2*x`, then `n^2 = 4*x^2 = (x^2) << 2`. If `n` is odd, `n = 2*x + 1`, then `n^2 = 4*x^2 + 4*x + 1 = ((x^2 + x) << 2) + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def square(n: int) -&gt; int:&#10;    if n == 0: return 0&#10;    n = abs(n)&#10;    x = n &gt;&gt; 1&#10;    if n &amp; 1:&#10;        return (square(x) &lt;&lt; 2) + (x &lt;&lt; 2) + 1&#10;    else:&#10;        return square(x) &lt;&lt; 2</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">29</td>
+      <td rowspan="1">Bm 29 Power Set<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/power-set4302/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Bit manipulation (0 to 2^N - 1).</td>
+      <td><b>Time:</b> O(N * 2^N)<br><b>Space:</b> O(N * 2^N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate from 1 to `(1 << n) - 1`. For each number, its binary representation indicates which characters of the string to include. Example: 011 means include 1st and 2nd char.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def AllPossibleStrings(s: str) -&gt; List[str]:&#10;    n = len(s)&#10;    res = []&#10;    for i in range(1, 1 &lt;&lt; n):&#10;        sub = &quot;&quot;&#10;        for j in range(n):&#10;            if i &amp; (1 &lt;&lt; j):&#10;                sub += s[j]&#10;        res.append(sub)&#10;    res.sort()&#10;    return res</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

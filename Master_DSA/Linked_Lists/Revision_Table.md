@@ -385,5 +385,86 @@
       <td>-</td>
       <td><b>Explanation:</b> Iterate through the list. When a node has a child, find the tail of the child list. Connect the tail to `node->next`, and `node->next` to the child. Update `prev` pointers. Set `node->child` to `nullptr`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def flatten(head: &#x27;Optional[Node]&#x27;) -&gt; &#x27;Optional[Node]&#x27;:&#10;    if not head: return None&#10;    curr = head&#10;    while curr:&#10;        if curr.child:&#10;            tail = curr.child&#10;            while tail.next: tail = tail.next&#10;            tail.next = curr.next&#10;            if curr.next: curr.next.prev = tail&#10;            curr.next = curr.child&#10;            curr.child.prev = curr&#10;            curr.child = None&#10;        curr = curr.next&#10;    return head</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">42</td>
+      <td rowspan="1">Ll 42 Multiply Two Linked Lists<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/multiply-two-linked-lists/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Traverse and compute numbers.</td>
+      <td><b>Time:</b> O(N + M)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Traverse the first linked list and compute the number it represents modulo 10^9+7. Do the same for the second linked list. Multiply the two numbers and return the result modulo 10^9+7.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def multiplyTwoLists(head1: Node, head2: Node) -&gt; int:&#10;    num1 = num2 = 0&#10;    mod = 10**9 + 7&#10;    while head1:&#10;        num1 = (num1 * 10 + head1.data) % mod&#10;        head1 = head1.next&#10;    while head2:&#10;        num2 = (num2 * 10 + head2.data) % mod&#10;        head2 = head2.next&#10;    return (num1 * num2) % mod</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">43</td>
+      <td rowspan="1">Ll 43 Delete Nodes Having Greater Value On Right<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/delete-nodes-having-greater-value-on-right/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Reverse, filter, reverse.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Reverse the linked list. Traverse the reversed list and keep track of the maximum value seen so far. If a node's value is less than the maximum, delete it. Otherwise, update the maximum. Finally, reverse the list again.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def compute(head: Node) -&gt; Node:&#10;    def reverseList(node):&#10;        prev, curr = None, node&#10;        while curr:&#10;            nxt = curr.next&#10;            curr.next = prev&#10;            prev = curr&#10;            curr = nxt&#10;        return prev&#10;    head = reverseList(head)&#10;    curr = head&#10;    max_val = head.data&#10;    while curr and curr.next:&#10;        if curr.next.data &lt; max_val:&#10;            curr.next = curr.next.next&#10;        else:&#10;            curr = curr.next&#10;            max_val = curr.data&#10;    return reverseList(head)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">44</td>
+      <td rowspan="1">Ll 44 Segregate Even And Odd Nodes In A Linked List<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/segregate-even-and-odd-nodes-in-a-linked-list5035/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two pointers for even and odd.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create two dummy nodes, one for the even list and one for the odd list. Traverse the original list and append even nodes to the even list and odd nodes to the odd list. Finally, connect the end of the even list to the head of the odd list and terminate the odd list with NULL.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def divide(N: int, head: Node) -&gt; Node:&#10;    evenStart = evenEnd = None&#10;    oddStart = oddEnd = None&#10;    curr = head&#10;    while curr:&#10;        val = curr.data&#10;        if val % 2 == 0:&#10;            if not evenStart:&#10;                evenStart = evenEnd = curr&#10;            else:&#10;                evenEnd.next = curr&#10;                evenEnd = evenEnd.next&#10;        else:&#10;            if not oddStart:&#10;                oddStart = oddEnd = curr&#10;            else:&#10;                oddEnd.next = curr&#10;                oddEnd = oddEnd.next&#10;        curr = curr.next&#10;    if not oddStart or not evenStart: return head&#10;    evenEnd.next = oddStart&#10;    oddEnd.next = None&#10;    return evenStart</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">45</td>
+      <td rowspan="1">Ll 45 Nth Node From End Of Linked List<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/nth-node-from-end-of-linked-list/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two pointers.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use two pointers, `fast` and `slow`. Move `fast` `N` steps ahead. If `fast` becomes NULL before `N` steps, return -1 (N > length). Then move both `fast` and `slow` one step at a time until `fast` reaches the end. `slow` will be pointing to the Nth node from the end.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def getNthFromLast(head: Node, n: int) -&gt; int:&#10;    fast, slow = head, head&#10;    for _ in range(n):&#10;        if not fast: return -1&#10;        fast = fast.next&#10;    while fast:&#10;        slow = slow.next&#10;        fast = fast.next&#10;    return slow.data</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">46</td>
+      <td rowspan="1">Ll 46 First Non Repeating Character In A Stream<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/first-non-repeating-character-in-a-stream1216/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Queue and frequency array.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a queue to maintain the order of characters and an array to keep track of their frequencies. For each character, increment its frequency and push it to the queue. Then, while the queue is not empty and the frequency of the front character is greater than 1, pop it. If the queue is empty, append '#', else append the front character.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def FirstNonRepeating(A: str) -&gt; str:&#10;    freq = [0] * 26&#10;    q = collections.deque()&#10;    res = []&#10;    for c in A:&#10;        freq[ord(c) - ord(&#x27;a&#x27;)] += 1&#10;        q.append(c)&#10;        while q and freq[ord(q[0]) - ord(&#x27;a&#x27;)] &gt; 1:&#10;            q.popleft()&#10;        if not q: res.append(&#x27;#&#x27;)&#10;        else: res.append(q[0])&#10;    return &quot;&quot;.join(res)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">47</td>
+      <td rowspan="1">Ll 47 Clone A Linked List With Next And Random Pointer<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/clone-a-linked-list-with-next-and-random-pointer/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Interleaving lists.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a copy of each node and insert it immediately after the original node. Then, set the random pointers for the copied nodes (`curr->next->arb = curr->arb ? curr->arb->next : NULL`). Finally, separate the original and copied lists.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def copyList(head: Node) -&gt; Node:&#10;    if not head: return None&#10;    curr = head&#10;    while curr:&#10;        temp = Node(curr.data)&#10;        temp.next = curr.next&#10;        curr.next = temp&#10;        curr = temp.next&#10;    curr = head&#10;    while curr:&#10;        if curr.arb:&#10;            curr.next.arb = curr.arb.next&#10;        curr = curr.next.next&#10;    curr = head&#10;    copyHead = head.next&#10;    copyCurr = copyHead&#10;    while curr:&#10;        curr.next = curr.next.next&#10;        if copyCurr.next:&#10;            copyCurr.next = copyCurr.next.next&#10;        curr = curr.next&#10;        copyCurr = copyCurr.next&#10;    return copyHead</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">48</td>
+      <td rowspan="1">Ll 48 Merge K Sorted Linked Lists<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/merge-k-sorted-linked-lists/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-Heap.</td>
+      <td><b>Time:</b> O(N * K * log K)<br><b>Space:</b> O(K)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a min-heap and push the head of each linked list into it. Pop the minimum element, append it to the result list, and if the popped node has a next node, push the next node into the heap. Continue until the heap is empty.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def mergeKLists(arr: List[Node], K: int) -&gt; Node:&#10;    pq = []&#10;    for i in range(K):&#10;        if arr[i]:&#10;            heapq.heappush(pq, (arr[i].data, i, arr[i]))&#10;    dummy = Node(0)&#10;    tail = dummy&#10;    while pq:&#10;        val, idx, curr = heapq.heappop(pq)&#10;        tail.next = curr&#10;        tail = tail.next&#10;        if curr.next:&#10;            heapq.heappush(pq, (curr.next.data, idx, curr.next))&#10;    return dummy.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">49</td>
+      <td rowspan="1">Ll 49 Flattening A Linked List<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/flattening-a-linked-list/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive merging.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N) for recursion</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Recursively flatten the `next` list, then merge the current list (`bottom`) with the flattened `next` list using a `merge` function similar to merging two sorted linked lists.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def flatten(root: Node) -&gt; Node:&#10;    def merge(a, b):&#10;        if not a: return b&#10;        if not b: return a&#10;        if a.data &lt; b.data:&#10;            res = a&#10;            res.bottom = merge(a.bottom, b)&#10;        else:&#10;            res = b&#10;            res.bottom = merge(a, b.bottom)&#10;        res.next = None&#10;        return res&#10;    if not root or not root.next: return root&#10;    root.next = flatten(root.next)&#10;    root = merge(root, root.next)&#10;    return root</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">50</td>
+      <td rowspan="1">Ll 50 Reverse A Linked List In Groups Of Given Size<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/reverse-a-linked-list-in-groups-of-given-size/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive grouping.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N/K)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Reverse the first `k` nodes of the linked list iteratively. After reversing, the `head` pointer will be the end of the reversed group, and `curr` will point to the next node. Recursively call the function for `curr` and set `head->next` to the result.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse(head: Node, k: int) -&gt; Node:&#10;    if not head: return None&#10;    curr, prev, nxt = head, None, None&#10;    count = 0&#10;    while curr and count &lt; k:&#10;        nxt = curr.next&#10;        curr.next = prev&#10;        prev = curr&#10;        curr = nxt&#10;        count += 1&#10;    if nxt:&#10;        head.next = reverse(nxt, k)&#10;    return prev</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

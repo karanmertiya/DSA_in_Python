@@ -385,5 +385,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Floyd's Tortoise and Hare (Cycle Detection). Treat the array values as pointers to the next index. Since there's a duplicate, a cycle must exist. Find the intersection point of slow and fast pointers, then find the entrance to the cycle.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findDuplicate(nums: List[int]) -&gt; int:&#10;    slow, fast = nums[0], nums[0]&#10;    while True:&#10;        slow = nums[slow]&#10;        fast = nums[nums[fast]]&#10;        if slow == fast: break&#10;    fast = nums[0]&#10;    while slow != fast:&#10;        slow = nums[slow]&#10;        fast = nums[fast]&#10;    return slow</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">42</td>
+      <td rowspan="1">Array 43 Minimum Number Of Jumps<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-number-of-jumps-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Greedy tracking bounds.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain `maxReach`, `steps`, and `jumps`. At each step `i`, `maxReach = max(maxReach, i + arr[i])`. Decrement `steps`. If `steps == 0`, `jumps++` and `steps = maxReach - i`. If `i >= maxReach`, return -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minJumps(arr: List[int], n: int) -&gt; int:&#10;    if n &lt;= 1: return 0&#10;    if arr[0] == 0: return -1&#10;    maxReach = steps = arr[0]&#10;    jumps = 1&#10;    for i in range(1, n):&#10;        if i == n - 1: return jumps&#10;        maxReach = max(maxReach, i + arr[i])&#10;        steps -= 1&#10;        if steps == 0:&#10;            jumps += 1&#10;            if i &gt;= maxReach: return -1&#10;            steps = maxReach - i&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">43</td>
+      <td rowspan="1">Array 44 Find Duplicate In An Array Of N 1 Integers<br><br></b> <a href='https://leetcode.com/problems/find-the-duplicate-number/' target='_blank'>LeetCode 287</a></td>
+      <td rowspan="1"><b>Example 1:</b> Floyd's cycle finding.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Floyd's Tortoise and Hare algorithm. Initialize `slow = nums[0]` and `fast = nums[0]`. Move `slow` by 1 step (`nums[slow]`) and `fast` by 2 steps (`nums[nums[fast]]`). They will meet in a cycle. Then, reset `slow` to `nums[0]` and move both by 1 step until they meet. The meeting point is the duplicate.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findDuplicate(nums: List[int]) -&gt; int:&#10;    slow, fast = nums[0], nums[0]&#10;    while True:&#10;        slow = nums[slow]&#10;        fast = nums[nums[fast]]&#10;        if slow == fast:&#10;            break&#10;    slow = nums[0]&#10;    while slow != fast:&#10;        slow = nums[slow]&#10;        fast = nums[fast]&#10;    return slow</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">44</td>
+      <td rowspan="1">Array 45 Merge Two Sorted Arrays Without Extra Space<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/merge-two-sorted-arrays-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Gap method (Shell sort idea).</td>
+      <td><b>Time:</b> O((N + M) log(N + M))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use the Gap method. Initial gap is `ceil((n + m) / 2)`. Iterate with two pointers separated by `gap`. If `left` and `right` elements are out of order, swap them. Reduce `gap` by `ceil(gap / 2)` until `gap == 0`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def merge(arr1: List[int], arr2: List[int], n: int, m: int):&#10;    length = n + m&#10;    gap = math.ceil(length / 2)&#10;    while gap &gt; 0:&#10;        left = 0&#10;        right = left + gap&#10;        while right &lt; length:&#10;            if left &lt; n and right &lt; n:&#10;                if arr1[left] &gt; arr1[right]:&#10;                    arr1[left], arr1[right] = arr1[right], arr1[left]&#10;            elif left &lt; n and right &gt;= n:&#10;                if arr1[left] &gt; arr2[right - n]:&#10;                    arr1[left], arr2[right - n] = arr2[right - n], arr1[left]&#10;            else:&#10;                if arr2[left - n] &gt; arr2[right - n]:&#10;                    arr2[left - n], arr2[right - n] = arr2[right - n], arr2[left - n]&#10;            left += 1&#10;            right += 1&#10;        if gap == 1: break&#10;        gap = math.ceil(gap / 2)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">45</td>
+      <td rowspan="1">Array 46 Kadanes Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/kadanes-algorithm-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Keep tracking current sum.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain `max_sum` and `curr_sum`. For each element, `curr_sum = max(element, curr_sum + element)`. `max_sum = max(max_sum, curr_sum)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSubarraySum(arr: List[int], n: int) -&gt; int:&#10;    maxSum = currSum = arr[0]&#10;    for i in range(1, n):&#10;        currSum = max(arr[i], currSum + arr[i])&#10;        maxSum = max(maxSum, currSum)&#10;    return maxSum</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">46</td>
+      <td rowspan="1">Array 47 Merge Intervals<br><br></b> <a href='https://leetcode.com/problems/merge-intervals/' target='_blank'>LeetCode 56</a></td>
+      <td rowspan="1"><b>Example 1:</b> Sort and merge.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort the intervals based on the starting time. Create a result list and add the first interval. For subsequent intervals, if the current interval's start time is <= the last merged interval's end time, update the end time of the last merged interval to `max(last.end, current.end)`. Else, add the current interval to the result list.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def merge(intervals: List[List[int]]) -&gt; List[List[int]]:&#10;    if not intervals: return []&#10;    intervals.sort(key=lambda x: x[0])&#10;    res = [intervals[0]]&#10;    for i in range(1, len(intervals)):&#10;        if intervals[i][0] &lt;= res[-1][1]:&#10;            res[-1][1] = max(res[-1][1], intervals[i][1])&#10;        else:&#10;            res.append(intervals[i])&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">47</td>
+      <td rowspan="1">Array 48 Next Permutation<br><br></b> <a href='https://leetcode.com/problems/next-permutation/' target='_blank'>LeetCode 31</a></td>
+      <td rowspan="1"><b>Example 1:</b> From right to left.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> 1. Find largest index `k` such that `nums[k] < nums[k + 1]`. If no such index exists, the permutation is the last permutation, reverse it. 2. Find the largest index `l` greater than `k` such that `nums[k] < nums[l]`. 3. Swap `nums[k]` and `nums[l]`. 4. Reverse the sub-array `nums[k + 1:]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def nextPermutation(nums: List[int]) -&gt; None:&#10;    n = len(nums)&#10;    k = n - 2&#10;    while k &gt;= 0 and nums[k] &gt;= nums[k + 1]:&#10;        k -= 1&#10;    if k &lt; 0:&#10;        nums.reverse()&#10;        return&#10;    l = n - 1&#10;    while l &gt; k and nums[l] &lt;= nums[k]:&#10;        l -= 1&#10;    nums[k], nums[l] = nums[l], nums[k]&#10;    nums[k+1:] = reversed(nums[k+1:])</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">48</td>
+      <td rowspan="1">Array 49 Count Inversions<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Merge Sort.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Modify Merge Sort. While merging two sorted halves, if `left[i] > right[j]`, then there are `mid - i + 1` inversions.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def inversionCount(arr: List[int], N: int) -&gt; int:&#10;    def mergeSort(arr, temp, left, right):&#10;        inv_count = 0&#10;        if right &gt; left:&#10;            mid = (left + right) // 2&#10;            inv_count += mergeSort(arr, temp, left, mid)&#10;            inv_count += mergeSort(arr, temp, mid + 1, right)&#10;            inv_count += merge(arr, temp, left, mid + 1, right)&#10;        return inv_count&#10;    def merge(arr, temp, left, mid, right):&#10;        inv_count = 0&#10;        i, j, k = left, mid, left&#10;        while i &lt;= mid - 1 and j &lt;= right:&#10;            if arr[i] &lt;= arr[j]:&#10;                temp[k] = arr[i]&#10;                i += 1&#10;            else:&#10;                temp[k] = arr[j]&#10;                inv_count += (mid - i)&#10;                j += 1&#10;            k += 1&#10;        while i &lt;= mid - 1:&#10;            temp[k] = arr[i]&#10;            i += 1; k += 1&#10;        while j &lt;= right:&#10;            temp[k] = arr[j]&#10;            j += 1; k += 1&#10;        for i in range(left, right + 1):&#10;            arr[i] = temp[i]&#10;        return inv_count&#10;    temp = [0] * N&#10;    return mergeSort(arr, temp, 0, N - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">49</td>
+      <td rowspan="1">Array 50 Best Time To Buy And Sell Stock<br><br></b> <a href='https://leetcode.com/problems/best-time-to-buy-and-sell-stock/' target='_blank'>LeetCode 121</a></td>
+      <td rowspan="1"><b>Example 1:</b> Keep track of minimum.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain `min_price` seen so far and calculate potential profit for each day: `prices[i] - min_price`. Update `max_profit` if this profit is greater.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProfit(prices: List[int]) -&gt; int:&#10;    minPrice, maxProf = float(&#x27;inf&#x27;), 0&#10;    for p in prices:&#10;        minPrice = min(minPrice, p)&#10;        maxProf = max(maxProf, p - minPrice)&#10;    return maxProf</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">50</td>
+      <td rowspan="1">Array 51 Count Pairs With Given Sum<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/count-pairs-with-given-sum5022/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Hash Map.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a hash map to store the frequencies of the elements seen so far. For each element `x`, check if `K - x` is in the hash map. If it is, add its frequency to the `count`. Finally, increment the frequency of `x` in the hash map.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def getPairsCount(arr: List[int], n: int, k: int) -&gt; int:&#10;    m = collections.defaultdict(int)&#10;    count = 0&#10;    for x in arr:&#10;        if k - x in m:&#10;            count += m[k - x]&#10;        m[x] += 1&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">51</td>
+      <td rowspan="1">Array 52 Common Elements In Three Sorted Arrays<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/common-elements1132/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Three pointers.</td>
+      <td><b>Time:</b> O(N1 + N2 + N3)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use three pointers `i`, `j`, `k` for the three arrays. If `A[i] == B[j] == C[k]`, it's a common element, add it to the result (handling duplicates), and increment all three pointers. Else, increment the pointer that points to the smallest value.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def commonElements(A: List[int], B: List[int], C: List[int], n1: int, n2: int, n3: int) -&gt; List[int]:&#10;    res = []&#10;    i = j = k = 0&#10;    while i &lt; n1 and j &lt; n2 and k &lt; n3:&#10;        if A[i] == B[j] == C[k]:&#10;            if not res or res[-1] != A[i]:&#10;                res.append(A[i])&#10;            i += 1; j += 1; k += 1&#10;        elif A[i] &lt;= B[j] and A[i] &lt;= C[k]: i += 1&#10;        elif B[j] &lt;= A[i] and B[j] &lt;= C[k]: j += 1&#10;        else: k += 1&#10;    return res</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

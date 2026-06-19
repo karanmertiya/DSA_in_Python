@@ -241,5 +241,95 @@
       <td>-</td>
       <td><b>Explanation:</b> DFS traversal. If the current node is p or q, return the current node. Recurse left and right. If both left and right return non-null, the current node is the LCA. If one returns non-null, return that one.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lowestCommonAncestor(root: &#x27;TreeNode&#x27;, p: &#x27;TreeNode&#x27;, q: &#x27;TreeNode&#x27;) -&gt; &#x27;TreeNode&#x27;:&#10;    if root is None or root == p or root == q: return root&#10;    left = lowestCommonAncestor(root.left, p, q)&#10;    right = lowestCommonAncestor(root.right, p, q)&#10;    if left is None: return right&#10;    elif right is None: return left&#10;    else: return root</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">26</td>
+      <td rowspan="1">Tree 25 Construct Binary Tree From Preorder And Inorder Traversal<br><br></b> <a href='https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/' target='_blank'>LeetCode 105</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive construction.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a hash map to store indices of inorder elements. The first element of preorder is the root. Find its index in inorder array to divide into left and right subtrees. Recursively build left and right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def buildTree(preorder: List[int], inorder: List[int]) -&gt; Optional[TreeNode]:&#10;    inMap = {val: i for i, val in enumerate(inorder)}&#10;    def helper(preStart, preEnd, inStart, inEnd):&#10;        if preStart &gt; preEnd or inStart &gt; inEnd: return None&#10;        root = TreeNode(preorder[preStart])&#10;        inRoot = inMap[root.val]&#10;        numsLeft = inRoot - inStart&#10;        root.left = helper(preStart + 1, preStart + numsLeft, inStart, inRoot - 1)&#10;        root.right = helper(preStart + numsLeft + 1, preEnd, inRoot + 1, inEnd)&#10;        return root&#10;    return helper(0, len(preorder) - 1, 0, len(inorder) - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">27</td>
+      <td rowspan="1">Tree 26 Construct Binary Tree From Inorder And Postorder Traversal<br><br></b> <a href='https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/' target='_blank'>LeetCode 106</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive construction.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Similar to preorder+inorder, but the root is at the end of the postorder array. Map inorder indices. Find root, divide, and recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def buildTree(inorder: List[int], postorder: List[int]) -&gt; Optional[TreeNode]:&#10;    inMap = {val: i for i, val in enumerate(inorder)}&#10;    def helper(inStart, inEnd, postStart, postEnd):&#10;        if inStart &gt; inEnd or postStart &gt; postEnd: return None&#10;        root = TreeNode(postorder[postEnd])&#10;        inRoot = inMap[root.val]&#10;        numsLeft = inRoot - inStart&#10;        root.left = helper(inStart, inRoot - 1, postStart, postStart + numsLeft - 1)&#10;        root.right = helper(inRoot + 1, inEnd, postStart + numsLeft, postEnd - 1)&#10;        return root&#10;    return helper(0, len(inorder) - 1, 0, len(postorder) - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">28</td>
+      <td rowspan="1">Tree 27 Serialize And Deserialize Binary Tree<br><br></b> <a href='https://leetcode.com/problems/serialize-and-deserialize-binary-tree/' target='_blank'>LeetCode 297</a></td>
+      <td rowspan="1"><b>Example 1:</b> String based tree.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <queue>\n#include <sstream></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Level Order Traversal (BFS) to serialize into a comma-separated string, using '#' for null. For deserialization, split string and use a queue to rebuild.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;class Codec:&#10;    def serialize(self, root):&#10;        if not root: return &quot;&quot;&#10;        q = collections.deque([root])&#10;        res = []&#10;        while q:&#10;            node = q.popleft()&#10;            if node:&#10;                res.append(str(node.val))&#10;                q.append(node.left)&#10;                q.append(node.right)&#10;            else:&#10;                res.append(&quot;#&quot;)&#10;        return &quot;,&quot;.join(res)&#10;    def deserialize(self, data):&#10;        if not data: return None&#10;        values = data.split(&quot;,&quot;)&#10;        root = TreeNode(int(values[0]))&#10;        q = collections.deque([root])&#10;        i = 1&#10;        while q:&#10;            node = q.popleft()&#10;            if values[i] != &quot;#&quot;:&#10;                node.left = TreeNode(int(values[i]))&#10;                q.append(node.left)&#10;            i += 1&#10;            if values[i] != &quot;#&quot;:&#10;                node.right = TreeNode(int(values[i]))&#10;                q.append(node.right)&#10;            i += 1&#10;        return root</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">29</td>
+      <td rowspan="1">Tree 28 Flatten Binary Tree To Linked List<br><br></b> <a href='https://leetcode.com/problems/flatten-binary-tree-to-linked-list/' target='_blank'>LeetCode 114</a></td>
+      <td rowspan="1"><b>Example 1:</b> In-place flatten.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Morris Traversal. If node has a left child, find the rightmost node of the left subtree. Point its right to current node's right. Move current node's left to its right, and set left to null. Move to current's right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def flatten(root: Optional[TreeNode]) -&gt; None:&#10;    curr = root&#10;    while curr:&#10;        if curr.left:&#10;            pre = curr.left&#10;            while pre.right: pre = pre.right&#10;            pre.right = curr.right&#10;            curr.right = curr.left&#10;            curr.left = None&#10;        curr = curr.right</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">30</td>
+      <td rowspan="1">Tree 29 Validate Binary Search Tree<br><br></b> <a href='https://leetcode.com/problems/validate-binary-search-tree/' target='_blank'>LeetCode 98</a></td>
+      <td rowspan="1"><b>Example 1:</b> Check valid ranges.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td><b>Integer Overflow:</b> Use long long for bounds to handle INT_MIN/INT_MAX node values.</td>
+      <td><b>Explanation:</b> Recursive validation with min and max bounds. `isValidBST(root, min_val, max_val)`. Ensure `min_val < root.val < max_val`. For left child update `max_val = root.val`. For right child update `min_val = root.val`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isValidBST(root: Optional[TreeNode]) -&gt; bool:&#10;    def helper(node, min_val, max_val):&#10;        if not node: return True&#10;        if not (min_val &lt; node.val &lt; max_val): return False&#10;        return helper(node.left, min_val, node.val) and helper(node.right, node.val, max_val)&#10;    return helper(root, float(&#x27;-inf&#x27;), float(&#x27;inf&#x27;))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">31</td>
+      <td rowspan="1">Tree 30 Kth Smallest Element In A Bst<br><br></b> <a href='https://leetcode.com/problems/kth-smallest-element-in-a-bst/' target='_blank'>LeetCode 230</a></td>
+      <td rowspan="1"><b>Example 1:</b> Inorder traversal.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1) using Morris Traversal</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Inorder traversal of BST gives sorted elements. Keep a counter, when it reaches K, store the result. Morris Traversal can do this in O(1) space.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kthSmallest(root: Optional[TreeNode], k: int) -&gt; int:&#10;    count, ans = 0, -1&#10;    curr = root&#10;    while curr:&#10;        if curr.left is None:&#10;            count += 1&#10;            if count == k: ans = curr.val&#10;            curr = curr.right&#10;        else:&#10;            pre = curr.left&#10;            while pre.right and pre.right != curr: pre = pre.right&#10;            if pre.right is None:&#10;                pre.right = curr&#10;                curr = curr.left&#10;            else:&#10;                pre.right = None&#10;                count += 1&#10;                if count == k: ans = curr.val&#10;                curr = curr.right&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">32</td>
+      <td rowspan="1">Tree 31 Lowest Common Ancestor Of A Binary Search Tree<br><br></b> <a href='https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/' target='_blank'>LeetCode 235</a></td>
+      <td rowspan="1"><b>Example 1:</b> Exploit BST property.</td>
+      <td><b>Time:</b> O(H)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If both `p` and `q` are less than root, LCA is in the left subtree. If both are greater, LCA is in the right subtree. Otherwise, the current node is the LCA.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lowestCommonAncestor(root: &#x27;TreeNode&#x27;, p: &#x27;TreeNode&#x27;, q: &#x27;TreeNode&#x27;) -&gt; &#x27;TreeNode&#x27;:&#10;    while root:&#10;        if root.val &gt; p.val and root.val &gt; q.val: root = root.left&#10;        elif root.val &lt; p.val and root.val &lt; q.val: root = root.right&#10;        else: return root&#10;    return None</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">33</td>
+      <td rowspan="1">Tree 32 Insert Into A Binary Search Tree<br><br></b> <a href='https://leetcode.com/problems/insert-into-a-binary-search-tree/' target='_blank'>LeetCode 701</a></td>
+      <td rowspan="1"><b>Example 1:</b> Traverse and insert.</td>
+      <td><b>Time:</b> O(H)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Traverse left or right depending on the value. Keep track of parent. Insert as left or right child of parent when a null pointer is reached.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def insertIntoBST(root: Optional[TreeNode], val: int) -&gt; Optional[TreeNode]:&#10;    if not root: return TreeNode(val)&#10;    curr = root&#10;    while True:&#10;        if val &lt; curr.val:&#10;            if curr.left: curr = curr.left&#10;            else: curr.left = TreeNode(val); break&#10;        else:&#10;            if curr.right: curr = curr.right&#10;            else: curr.right = TreeNode(val); break&#10;    return root</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">34</td>
+      <td rowspan="1">Tree 33 Delete Node In A Bst<br><br></b> <a href='https://leetcode.com/problems/delete-node-in-a-bst/' target='_blank'>LeetCode 450</a></td>
+      <td rowspan="1"><b>Example 1:</b> Locate and delete.</td>
+      <td><b>Time:</b> O(H)<br><b>Space:</b> O(H) or O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Find the node. If it has no left child, return right child. If no right, return left. If both exist, find the right child of the rightmost node in the left subtree, and point it to the node's right child. Return the node's left child.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def deleteNode(root: Optional[TreeNode], key: int) -&gt; Optional[TreeNode]:&#10;    def helper(node):&#10;        if not node.left: return node.right&#10;        if not node.right: return node.left&#10;        rightChild = node.right&#10;        lastRight = node.left&#10;        while lastRight.right: lastRight = lastRight.right&#10;        lastRight.right = rightChild&#10;        return node.left&#10;    if not root: return None&#10;    if root.val == key: return helper(root)&#10;    curr = root&#10;    while curr:&#10;        if curr.val &gt; key:&#10;            if curr.left and curr.left.val == key:&#10;                curr.left = helper(curr.left)&#10;                break&#10;            else: curr = curr.left&#10;        else:&#10;            if curr.right and curr.right.val == key:&#10;                curr.right = helper(curr.right)&#10;                break&#10;            else: curr = curr.right&#10;    return root</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">35</td>
+      <td rowspan="1">Tree 34 Inorder Successor In Bst<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/inorder-successor-in-bst/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Find next greater.</td>
+      <td><b>Time:</b> O(H)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Traverse BST. If `curr.val > node.val`, then `curr` is a potential successor, store it and move left to find smaller. Else, move right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def inOrderSuccessor(root, x):&#10;    successor = None&#10;    while root:&#10;        if root.val &lt;= x.val:&#10;            root = root.right&#10;        else:&#10;            successor = root&#10;            root = root.left&#10;    return successor</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

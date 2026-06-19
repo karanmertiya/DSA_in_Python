@@ -196,5 +196,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Binary search on capacity. Low = `max(weights)`, High = `sum(weights)`. Iterate through packages and accumulate weight, increment day if limit is exceeded.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def shipWithinDays(weights: List[int], days: int) -&gt; int:&#10;    def canShip(cap):&#10;        d, load = 1, 0&#10;        for w in weights:&#10;            if load + w &gt; cap: d += 1; load = w&#10;            else: load += w&#10;        return d &lt;= days&#10;    low, high = max(weights), sum(weights)&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if canShip(mid): high = mid - 1&#10;        else: low = mid + 1&#10;    return low</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">21</td>
+      <td rowspan="1">Bs 25 Minimum Number Of Days To Make M Bouquets<br><br></b> <a href='https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/' target='_blank'>LeetCode 1482</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary search on answer.</td>
+      <td><b>Time:</b> O(N log(Max-Min))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Impossible:</b> If m * k > n, return -1.</td>
+      <td><b>Explanation:</b> Binary search on days from `min(bloomDay)` to `max(bloomDay)`. For a given `day`, count consecutive flowers that have bloomed. If count reaches `k`, increment bouquet count and reset flower count. If `bouquets >= m`, move `high = mid - 1`, else `low = mid + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minDays(bloomDay: List[int], m: int, k: int) -&gt; int:&#10;    if m * k &gt; len(bloomDay): return -1&#10;    def possible(day):&#10;        count, bouquets = 0, 0&#10;        for bd in bloomDay:&#10;            if bd &lt;= day:&#10;                count += 1&#10;            else:&#10;                bouquets += count // k&#10;                count = 0&#10;        bouquets += count // k&#10;        return bouquets &gt;= m&#10;    low, high = min(bloomDay), max(bloomDay)&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if possible(mid): high = mid - 1&#10;        else: low = mid + 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">22</td>
+      <td rowspan="1">Bs 26 Find The Smallest Divisor Given A Threshold<br><br></b> <a href='https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/' target='_blank'>LeetCode 1283</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary search divisor.</td>
+      <td><b>Time:</b> O(N log(Max))<br><b>Space:</b> O(1)</td>
+      <td><code>#include <cmath></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Binary search for divisor from `1` to `max(nums)`. For a divisor `mid`, sum `ceil(num / mid)`. If sum <= threshold, move `high = mid - 1`, else `low = mid + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def smallestDivisor(nums: List[int], threshold: int) -&gt; int:&#10;    def sum_by_d(d):&#10;        return sum(math.ceil(num / d) for num in nums)&#10;    low, high = 1, max(nums)&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if sum_by_d(mid) &lt;= threshold: high = mid - 1&#10;        else: low = mid + 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">23</td>
+      <td rowspan="1">Bs 27 Capacity To Ship Packages Within D Days<br><br></b> <a href='https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/' target='_blank'>LeetCode 1011</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary search capacity.</td>
+      <td><b>Time:</b> O(N log(Sum-Max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Binary search for capacity from `max(weights)` to `sum(weights)`. For a capacity `mid`, calculate days required to ship. If required days <= D, move `high = mid - 1`, else `low = mid + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def shipWithinDays(weights: List[int], days: int) -&gt; int:&#10;    def find_days(cap):&#10;        d, load = 1, 0&#10;        for weight in weights:&#10;            if load + weight &gt; cap:&#10;                d += 1&#10;                load = weight&#10;            else:&#10;                load += weight&#10;        return d&#10;    low, high = max(weights), sum(weights)&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if find_days(mid) &lt;= days: high = mid - 1&#10;        else: low = mid + 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">24</td>
+      <td rowspan="1">Bs 28 Kth Missing Positive Number<br><br></b> <a href='https://leetcode.com/problems/kth-missing-positive-number/' target='_blank'>LeetCode 1539</a></td>
+      <td rowspan="1"><b>Example 1:</b> Calculate missing.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Binary search. At index `mid`, the number of missing elements before `arr[mid]` is `arr[mid] - (mid + 1)`. If this is < `k`, search right `low = mid + 1`. Else search left `high = mid - 1`. Ans is `high + 1 + k` or `low + k`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findKthPositive(arr: List[int], k: int) -&gt; int:&#10;    low, high = 0, len(arr) - 1&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        missing = arr[mid] - (mid + 1)&#10;        if missing &lt; k: low = mid + 1&#10;        else: high = mid - 1&#10;    return low + k</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">25</td>
+      <td rowspan="1">Bs 29 Aggressive Cows<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/aggressive-cows/0' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Minimax binary search.</td>
+      <td><b>Time:</b> O(N log N + N log(Max-Min))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort the stalls. Binary search for distance from `1` to `max-min`. For a distance `mid`, check if we can place all `C` cows such that distance between any two is >= `mid`. If possible, move `low = mid + 1` to maximize it, else `high = mid - 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def aggressiveCows(stalls: List[int], k: int) -&gt; int:&#10;    stalls.sort()&#10;    def can_place(dist):&#10;        cnt_cows = 1&#10;        last = stalls[0]&#10;        for i in range(1, len(stalls)):&#10;            if stalls[i] - last &gt;= dist:&#10;                cnt_cows += 1&#10;                last = stalls[i]&#10;        return cnt_cows &gt;= k&#10;    low, high = 1, stalls[-1] - stalls[0]&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if can_place(mid): low = mid + 1&#10;        else: high = mid - 1&#10;    return high</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">26</td>
+      <td rowspan="1">Bs 30 Allocate Books<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Minimizing max pages.</td>
+      <td><b>Time:</b> O(N log(Sum-Max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Impossible:</b> If m > n, return -1.</td>
+      <td><b>Explanation:</b> Binary search on max pages from `max(arr)` to `sum(arr)`. For a `mid` value, count how many students are needed. If `students > m`, we need to increase limit `low = mid + 1`. Else, `high = mid - 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPages(arr: List[int], n: int, m: int) -&gt; int:&#10;    if m &gt; n: return -1&#10;    def count_students(pages):&#10;        students, pages_student = 1, 0&#10;        for p in arr:&#10;            if pages_student + p &lt;= pages:&#10;                pages_student += p&#10;            else:&#10;                students += 1&#10;                pages_student = p&#10;        return students&#10;    low, high = max(arr), sum(arr)&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if count_students(mid) &gt; m: low = mid + 1&#10;        else: high = mid - 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">27</td>
+      <td rowspan="1">Bs 31 Split Array Largest Sum<br><br></b> <a href='https://leetcode.com/problems/split-array-largest-sum/' target='_blank'>LeetCode 410</a></td>
+      <td rowspan="1"><b>Example 1:</b> Equivalent to allocate books.</td>
+      <td><b>Time:</b> O(N log(Sum-Max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Identical logic to Allocate Books. Binary search from `max(nums)` to `sum(nums)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def splitArray(nums: List[int], k: int) -&gt; int:&#10;    def count_partitions(max_sum):&#10;        partitions, subarray_sum = 1, 0&#10;        for num in nums:&#10;            if subarray_sum + num &lt;= max_sum:&#10;                subarray_sum += num&#10;            else:&#10;                partitions += 1&#10;                subarray_sum = num&#10;        return partitions&#10;    low, high = max(nums), sum(nums)&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if count_partitions(mid) &gt; k: low = mid + 1&#10;        else: high = mid - 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">28</td>
+      <td rowspan="1">Bs 32 Painters Partition Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/the-painters-partition-problem1535/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Minimax identical to book allocation.</td>
+      <td><b>Time:</b> O(N log(Sum-Max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Identical to Allocate Books and Split Array Largest Sum. Binary search `max(boards)` to `sum(boards)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findLargestMinDistance(boards: List[int], k: int) -&gt; int:&#10;    def count_painters(time):&#10;        painters, boards_painter = 1, 0&#10;        for b in boards:&#10;            if boards_painter + b &lt;= time:&#10;                boards_painter += b&#10;            else:&#10;                painters += 1&#10;                boards_painter = b&#10;        return painters&#10;    low, high = max(boards), sum(boards)&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        if count_painters(mid) &gt; k: low = mid + 1&#10;        else: high = mid - 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">29</td>
+      <td rowspan="1">Bs 33 Minimize Max Distance To Gas Station<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimize-max-distance-to-gas-station/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Double binary search.</td>
+      <td><b>Time:</b> O(N log(MaxDist / 1e-6))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Binary search on the real answer (distance) with a precision (e.g., 1e-6). For a given `mid` distance, count how many gas stations need to be inserted in each gap: `ceil((stations[i+1] - stations[i]) / mid) - 1`. If total needed > k, `low = mid`, else `high = mid`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findSmallestMaxDist(stations: List[int], k: int) -&gt; float:&#10;    def num_required(dist):&#10;        cnt = 0&#10;        for i in range(1, len(stations)):&#10;            number_in_between = int((stations[i] - stations[i-1]) / dist)&#10;            if (stations[i] - stations[i-1]) == (dist * number_in_between):&#10;                number_in_between -= 1&#10;            cnt += number_in_between&#10;        return cnt&#10;    low, high = 0, 0&#10;    for i in range(len(stations) - 1):&#10;        high = max(high, float(stations[i+1] - stations[i]))&#10;    diff = 1e-6&#10;    while high - low &gt; diff:&#10;        mid = low + (high - low) / 2.0&#10;        if num_required(mid) &gt; k: low = mid&#10;        else: high = mid&#10;    return high</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">30</td>
+      <td rowspan="1">Bs 34 Median Of Two Sorted Arrays<br><br></b> <a href='https://leetcode.com/problems/median-of-two-sorted-arrays/' target='_blank'>LeetCode 4</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums1 = [1,3], nums2 = [2], Output: 2.0</td>
+      <td><b>Time:</b> O(log(min(N, M)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Odd/Even Length:</b> Handle average for even total length.</td>
+      <td><b>Explanation:</b> Binary search on the smaller array to find a partition such that left halves of both arrays contain half of total elements, and `maxLeft <= minRight`. Use `INT_MIN` and `INT_MAX` for out-of-bound partitions.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findMedianSortedArrays(nums1: List[int], nums2: List[int]) -&gt; float:&#10;    if len(nums1) &gt; len(nums2): return findMedianSortedArrays(nums2, nums1)&#10;    n1, n2 = len(nums1), len(nums2)&#10;    low, high = 0, n1&#10;    while low &lt;= high:&#10;        cut1 = (low + high) // 2&#10;        cut2 = (n1 + n2 + 1) // 2 - cut1&#10;        left1 = float(&#x27;-inf&#x27;) if cut1 == 0 else nums1[cut1-1]&#10;        left2 = float(&#x27;-inf&#x27;) if cut2 == 0 else nums2[cut2-1]&#10;        right1 = float(&#x27;inf&#x27;) if cut1 == n1 else nums1[cut1]&#10;        right2 = float(&#x27;inf&#x27;) if cut2 == n2 else nums2[cut2]&#10;        if left1 &lt;= right2 and left2 &lt;= right1:&#10;            if (n1 + n2) % 2 == 0:&#10;                return (max(left1, left2) + min(right1, right2)) / 2.0&#10;            else:&#10;                return max(left1, left2)&#10;        elif left1 &gt; right2:&#10;            high = cut1 - 1&#10;        else:&#10;            low = cut1 + 1&#10;    return 0.0</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

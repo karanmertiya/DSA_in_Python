@@ -187,5 +187,23 @@
       <td><b>Subsumed Intervals:</b> `[1,4]` and `[2,3]` -> using `max()` prevents shrinking the end time to `3`.</td>
       <td><b>Explanation:</b> Sort the intervals based on the start time. Iterate and merge: if current start <= previous end, update previous end to `max(prev_end, curr_end)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def merge(intervals: list[list[int]]) -&gt; list[list[int]]:&#10;    if not intervals: return []&#10;    intervals.sort(key=lambda x: x[0])&#10;    merged = [intervals[0]]&#10;    for i in range(1, len(intervals)):&#10;        if intervals[i][0] &lt;= merged[-1][1]:&#10;            merged[-1][1] = max(merged[-1][1], intervals[i][1])&#10;        else:&#10;            merged.append(intervals[i])&#10;    return merged</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">20</td>
+      <td rowspan="1">Array 11 Merge Intervals<br><br></b> <a href='https://leetcode.com/problems/merge-intervals/' target='_blank'>LeetCode 56</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: [[1,3],[2,6],[8,10],[15,18]], Output: [[1,6],[8,10],[15,18]]</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include &lt;algorithm&gt;</code></td>
+      <td><b>Empty List:</b> Return empty list immediately.</td>
+      <td><b>Explanation:</b> Sort the intervals based on the starting time. Then iterate and merge if the current interval's start is <= the last merged interval's end.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def merge(intervals: List[List[int]]) -&gt; List[List[int]]:&#10;    if not intervals: return []&#10;    intervals.sort(key=lambda x: x[0])&#10;    merged = [intervals[0]]&#10;    for interval in intervals[1:]:&#10;        if merged[-1][1] &gt;= interval[0]:&#10;            merged[-1][1] = max(merged[-1][1], interval[1])&#10;        else:&#10;            merged.append(interval)&#10;    return merged</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">21</td>
+      <td rowspan="1">Array 12 Next Permutation<br><br></b> <a href='https://leetcode.com/problems/next-permutation/' target='_blank'>LeetCode 31</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [1,2,3], Output: [1,3,2]</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td><code>#include &lt;algorithm&gt;</code></td>
+      <td><b>Last Permutation:</b> Dip not found, reverse the whole array.</td>
+      <td><b>Explanation:</b> Find first dip from right (i). Find element just larger than nums[i] from right (j). Swap them and reverse the array from i+1 to end.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def nextPermutation(nums: List[int]) -&gt; None:&#10;    i = len(nums) - 2&#10;    while i &gt;= 0 and nums[i] &gt;= nums[i+1]: i -= 1&#10;    if i &gt;= 0:&#10;        j = len(nums) - 1&#10;        while nums[j] &lt;= nums[i]: j -= 1&#10;        nums[i], nums[j] = nums[j], nums[i]&#10;    nums[i+1:] = reversed(nums[i+1:])</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

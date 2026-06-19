@@ -79,5 +79,23 @@
       <td><b>Memory Heavy:</b> Fails optimal space constraint due to dynamic hash mapping allocation.</td>
       <td><b>Explanation:</b> Use a Hash Map to count occurrences. Return the element with count 1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def single_number_brute(nums: list[int]) -&gt; int:&#10;    freq = {}&#10;    for num in nums:&#10;        freq[num] = freq.get(num, 0) + 1&#10;    for num, count in freq.items():&#10;        if count == 1:&#10;            return num&#10;    return -1</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">8</td>
+      <td rowspan="1">Bit 08 Power Set<br><br></b> <a href='https://leetcode.com/problems/subsets/' target='_blank'>LeetCode 78</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [1,2,3], Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]</td>
+      <td><b>Time:</b> O(N * 2^N)<br><b>Space:</b> O(N * 2^N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Bit manipulation technique. For N elements, there are 2^N subsets. Count from 0 to 2^N - 1. For each number, its binary representation indicates which elements to include.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def subsets(nums: List[int]) -&gt; List[List[int]]:&#10;    n = len(nums)&#10;    subsets_count = 1 &lt;&lt; n&#10;    ans = []&#10;    for i in range(subsets_count):&#10;        subset = []&#10;        for j in range(n):&#10;            if i &amp; (1 &lt;&lt; j):&#10;                subset.append(nums[j])&#10;        ans.append(subset)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">9</td>
+      <td rowspan="1">Bit 09 Two Odd Occurring Numbers<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/two-numbers-with-odd-occurrences5846/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: Arr = {4, 2, 4, 5, 2, 3, 3, 1}, Output: {5, 1}</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> 1) XOR all elements. Result is XOR of the two odd numbers. 2) Find the rightmost set bit in the result. 3) Divide array elements into two buckets based on this set bit. 4) XORing the two buckets individually yields the two numbers.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def twoOddNum(Arr: List[int], N: int) -&gt; List[int]:&#10;    xor_all = 0&#10;    for num in Arr: xor_all ^= num&#10;    right_set_bit = xor_all &amp; ~(xor_all - 1)&#10;    x, y = 0, 0&#10;    for num in Arr:&#10;        if num &amp; right_set_bit: x ^= num&#10;        else: y ^= num&#10;    if x &lt; y: x, y = y, x&#10;    return [x, y]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

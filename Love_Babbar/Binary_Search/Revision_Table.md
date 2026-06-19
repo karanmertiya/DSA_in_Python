@@ -556,5 +556,32 @@
       <td>-</td>
       <td><b>Explanation:</b> Sort the array. Use two nested loops for the first two elements. Then use two pointers for the remaining two elements to find the target sum. Skip duplicates at all levels.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def fourSum(arr, k):&#10;    ans = []&#10;    n = len(arr)&#10;    arr.sort()&#10;    for i in range(n):&#10;        if i &gt; 0 and arr[i] == arr[i-1]: continue&#10;        for j in range(i + 1, n):&#10;            if j &gt; i + 1 and arr[j] == arr[j-1]: continue&#10;            left, right = j + 1, n - 1&#10;            while left &lt; right:&#10;                total = arr[i] + arr[j] + arr[left] + arr[right]&#10;                if total == k:&#10;                    ans.append([arr[i], arr[j], arr[left], arr[right]])&#10;                    left += 1; right -= 1&#10;                    while left &lt; right and arr[left] == arr[left-1]: left += 1&#10;                    while left &lt; right and arr[right] == arr[right+1]: right -= 1&#10;                elif total &lt; k: left += 1&#10;                else: right -= 1&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td>61</td>
+      <td>Bs 19 Median Of Two Sorted Arrays<br><br></b> <a href='https://leetcode.com/problems/median-of-two-sorted-arrays/' target='_blank'>LeetCode 4</a></td>
+      <td><b>Example 1:</b> Binary Search on smaller array.</td>
+      <td><b>Time:</b> O(log(min(M, N)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Ensure `nums1` is the smaller array. Do binary search on `nums1` to find a partition such that the left half has `(m+n+1)/2` elements. Calculate the maximums of left halves and minimums of right halves. If `maxLeft1 <= minRight2` and `maxLeft2 <= minRight1`, the partition is correct. The median depends on whether `m+n` is even or odd.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findMedianSortedArrays(nums1, nums2):&#10;    if len(nums1) &gt; len(nums2): return findMedianSortedArrays(nums2, nums1)&#10;    n1, n2 = len(nums1), len(nums2)&#10;    low, high = 0, n1&#10;    while low &lt;= high:&#10;        cut1 = (low + high) // 2&#10;        cut2 = (n1 + n2 + 1) // 2 - cut1&#10;        left1 = float(&#x27;-inf&#x27;) if cut1 == 0 else nums1[cut1 - 1]&#10;        left2 = float(&#x27;-inf&#x27;) if cut2 == 0 else nums2[cut2 - 1]&#10;        right1 = float(&#x27;inf&#x27;) if cut1 == n1 else nums1[cut1]&#10;        right2 = float(&#x27;inf&#x27;) if cut2 == n2 else nums2[cut2]&#10;        if left1 &lt;= right2 and left2 &lt;= right1:&#10;            if (n1 + n2) % 2 == 0:&#10;                return (max(left1, left2) + min(right1, right2)) / 2.0&#10;            else:&#10;                return max(left1, left2)&#10;        elif left1 &gt; right2:&#10;            high = cut1 - 1&#10;        else:&#10;            low = cut1 + 1&#10;    return 0.0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>62</td>
+      <td>Bs 22 Koko Eating Bananas<br><br></b> <a href='https://leetcode.com/problems/koko-eating-bananas/' target='_blank'>LeetCode 875</a></td>
+      <td><b>Example 1:</b> Binary Search on answer.</td>
+      <td><b>Time:</b> O(N log(max(piles)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space for speed `k` is `[1, max(piles)]`. For a chosen `mid` speed, calculate the total hours needed. If `total_hours <= h`, this `mid` is a possible answer, search left for smaller speed. Else search right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def minEatingSpeed(piles, h):&#10;    def calculateTotalHours(hourly):&#10;        return sum(math.ceil(p / hourly) for p in piles)&#10;    low, high = 1, max(piles)&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if calculateTotalHours(mid) &lt;= h:&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>63</td>
+      <td>Bs 28 Row With Max 1S<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/row-with-max-1s0023/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Lower Bound per row.</td>
+      <td><b>Time:</b> O(N log M)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Since rows are sorted, use binary search (`lower_bound` of 1) to find the first index of 1 in each row. The number of 1s is `m - index`. Keep track of the row with the maximum 1s.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def rowWithMax1s(arr, n, m):&#10;    def lowerBound(a, m, x):&#10;        low, high, ans = 0, m - 1, m&#10;        while low &lt;= high:&#10;            mid = (low + high) // 2&#10;            if a[mid] &gt;= x:&#10;                ans = mid&#10;                high = mid - 1&#10;            else:&#10;                low = mid + 1&#10;        return ans&#10;    max_cnt = 0&#10;    index = -1&#10;    for i in range(n):&#10;        cnt_ones = m - lowerBound(arr[i], m, 1)&#10;        if cnt_ones &gt; max_cnt:&#10;            max_cnt = cnt_ones&#10;            index = i&#10;    return index</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

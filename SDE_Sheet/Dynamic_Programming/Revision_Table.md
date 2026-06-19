@@ -142,5 +142,14 @@
       <td>-</td>
       <td><b>Explanation:</b> 1D DP array. `dp[i]` is true if string up to index `i` can be broken. Loop `i` from 1 to N, loop `j` from 0 to i. If `dp[j]` is true and `s[j...i]` is in dict, then `dp[i] = true`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; bool:&#10;    wordSet = set(wordDict)&#10;    dp = [False] * (len(s) + 1)&#10;    dp[0] = True&#10;    for i in range(1, len(s) + 1):&#10;        for j in range(i):&#10;            if dp[j] and s[j:i] in wordSet:&#10;                dp[i] = True&#10;                break&#10;    return dp[len(s)]</code></pre></details></td>
     </tr>
+    <tr>
+      <td>15</td>
+      <td>Dp 35 Longest Increasing Subsequence<br><br></b> <a href='https://leetcode.com/problems/longest-increasing-subsequence/' target='_blank'>LeetCode 300</a></td>
+      <td><b>Example 1:</b> Binary Search approach.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain an array `temp` storing the smallest tail of all increasing subsequences of length i+1 in `temp[i]`. For each num, use binary search to find its position in `temp`. If num is larger than all, append it. Otherwise, replace the element.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import bisect&#10;def lengthOfLIS(nums):&#10;    temp = []&#10;    for num in nums:&#10;        idx = bisect.bisect_left(temp, num)&#10;        if idx == len(temp): temp.append(num)&#10;        else: temp[idx] = num&#10;    return len(temp)</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

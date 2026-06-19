@@ -781,5 +781,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use DFS. Keep track of the maximum length and the maximum sum. At each node, check if the current length is greater than max length. If so, update max length and max sum. If lengths are equal, update max sum if current sum is greater.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def sumOfLongRootToLeafPath(root):&#10;    maxLen = [0]&#10;    maxSum = [float(&#x27;-inf&#x27;)]&#10;    def solve(node, sum_val, length):&#10;        if not node:&#10;            if length &gt; maxLen[0]:&#10;                maxLen[0] = length&#10;                maxSum[0] = sum_val&#10;            elif length == maxLen[0]:&#10;                maxSum[0] = max(sum_val, maxSum[0])&#10;            return&#10;        sum_val += node.data&#10;        solve(node.left, sum_val, length + 1)&#10;        solve(node.right, sum_val, length + 1)&#10;    solve(root, 0, 0)&#10;    return maxSum[0] if maxSum[0] != float(&#x27;-inf&#x27;) else 0</code></pre></details></td>
     </tr>
+    <tr>
+      <td>86</td>
+      <td>Tree 36 Minimum Distance Between Two Given Nodes Of A Binary Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/min-distance-between-two-given-nodes-of-a-binary-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> LCA + Distance calculation.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Find the Lowest Common Ancestor (LCA) of the two nodes. Then find the distance from LCA to the first node and the distance from LCA to the second node. The total distance is the sum of these two distances.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lca(root, n1, n2):&#10;    if not root or root.data == n1 or root.data == n2: return root&#10;    left = lca(root.left, n1, n2)&#10;    right = lca(root.right, n1, n2)&#10;    if left and right: return root&#10;    return left if left else right&#10;def findDist(root, val, dist):&#10;    if not root: return -1&#10;    if root.data == val: return dist&#10;    left = findDist(root.left, val, dist + 1)&#10;    if left != -1: return left&#10;    return findDist(root.right, val, dist + 1)&#10;def findDistMain(root, a, b):&#10;    lca_node = lca(root, a, b)&#10;    return findDist(lca_node, a, 0) + findDist(lca_node, b, 0)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>87</td>
+      <td>Tree 37 Kth Ancestor In A Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/kth-ancestor-in-a-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursive backtracking.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>k > depth</td>
+      <td><b>Explanation:</b> Use a recursive function. If the target node is found, return it. As you return back up the call stack, decrement `k`. When `k` becomes 0, the current node is the kth ancestor.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kthAncestor(root, k, node):&#10;    ans_node = None&#10;    def solve(root):&#10;        nonlocal k, ans_node&#10;        if not root: return False&#10;        if root.data == node: return True&#10;        left = solve(root.left)&#10;        right = solve(root.right)&#10;        if left or right:&#10;            k -= 1&#10;            if k == 0:&#10;                ans_node = root&#10;                return False&#10;            return True&#10;        return False&#10;    solve(root)&#10;    return ans_node.data if ans_node else -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>88</td>
+      <td>Tree 38 Find All Duplicate Subtrees In A Binary Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/duplicate-subtrees/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Serialization + Hash Map.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Serialize each subtree into a string (e.g., using preorder traversal). Use a hash map to count the frequencies of these serialized strings. If a string appears exactly twice, add the root of that subtree to the result list.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def printAllDups(root):&#10;    m = {}&#10;    ans = []&#10;    def solve(node):&#10;        if not node: return &quot;N&quot;&#10;        s = str(node.data) + &quot;,&quot; + solve(node.left) + &quot;,&quot; + solve(node.right)&#10;        m[s] = m.get(s, 0) + 1&#10;        if m[s] == 2: ans.append(node)&#10;        return s&#10;    solve(root)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>89</td>
+      <td>Tree 39 Maximum Depth Of Binary Tree<br><br></b> <a href='https://leetcode.com/problems/maximum-depth-of-binary-tree/' target='_blank'>LeetCode 104</a></td>
+      <td><b>Example 1:</b> Recursive DFS.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Recursively find the maximum depth of the left subtree and the right subtree. The maximum depth of the tree is `1 + max(left_depth, right_depth)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxDepth(root):&#10;    if not root: return 0&#10;    return 1 + max(maxDepth(root.left), maxDepth(root.right))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>90</td>
+      <td>Tree 40 Balanced Binary Tree<br><br></b> <a href='https://leetcode.com/problems/balanced-binary-tree/' target='_blank'>LeetCode 110</a></td>
+      <td><b>Example 1:</b> Modified depth function.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Modify the function that calculates the height of the tree. If at any node, the difference between the left and right subtree heights is greater than 1, or if any subtree is unbalanced, return -1. Otherwise, return the height.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isBalanced(root):&#10;    def checkHeight(node):&#10;        if not node: return 0&#10;        leftHeight = checkHeight(node.left)&#10;        if leftHeight == -1: return -1&#10;        rightHeight = checkHeight(node.right)&#10;        if rightHeight == -1: return -1&#10;        if abs(leftHeight - rightHeight) &gt; 1: return -1&#10;        return max(leftHeight, rightHeight) + 1&#10;    return checkHeight(root) != -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>91</td>
+      <td>Tree 41 Binary Tree Maximum Path Sum<br><br></b> <a href='https://leetcode.com/problems/binary-tree-maximum-path-sum/' target='_blank'>LeetCode 124</a></td>
+      <td><b>Example 1:</b> Postorder Traversal.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a recursive postorder function. For each node, calculate the maximum path sum in its left and right subtrees (ignoring negative sums by taking max(0, sum)). Update the global `max_sum` with `node.val + left_sum + right_sum`. Return `node.val + max(left_sum, right_sum)` to be used by the parent.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxPathSum(root):&#10;    maxi = float(&#x27;-inf&#x27;)&#10;    def maxPathDown(node):&#10;        nonlocal maxi&#10;        if not node: return 0&#10;        left = max(0, maxPathDown(node.left))&#10;        right = max(0, maxPathDown(node.right))&#10;        maxi = max(maxi, node.val + left + right)&#10;        return node.val + max(left, right)&#10;    maxPathDown(root)&#10;    return maxi</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>92</td>
+      <td>Tree 42 Binary Tree Zigzag Level Order Traversal<br><br></b> <a href='https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/' target='_blank'>LeetCode 103</a></td>
+      <td><b>Example 1:</b> BFS with level flag.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Perform standard BFS using a queue. Maintain a boolean flag `leftToRight`. After processing a level, if `leftToRight` is false, reverse the current level's vector before adding it to the result. Toggle the flag for the next level.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def zigzagLevelOrder(root):&#10;    ans = []&#10;    if not root: return ans&#10;    q = deque([root])&#10;    leftToRight = True&#10;    while q:&#10;        size = len(q)&#10;        level = [0] * size&#10;        for i in range(size):&#10;            node = q.popleft()&#10;            index = i if leftToRight else size - 1 - i&#10;            level[index] = node.val&#10;            if node.left: q.append(node.left)&#10;            if node.right: q.append(node.right)&#10;        leftToRight = not leftToRight&#10;        ans.append(level)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>93</td>
+      <td>Tree 43 Vertical Order Traversal Of A Binary Tree<br><br></b> <a href='https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/' target='_blank'>LeetCode 987</a></td>
+      <td><b>Example 1:</b> BFS with coordinate map.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>Queue, Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use BFS to traverse the tree. Store coordinates `(x, y)` along with nodes in a queue. Use a nested map `map<int, map<int, multiset<int>>> nodes` to store nodes grouped by `x` (vertical level), then by `y` (horizontal level). `multiset` handles sorting when multiple nodes share the same coordinates.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque, defaultdict&#10;def verticalTraversal(root):&#10;    nodes = defaultdict(lambda: defaultdict(list))&#10;    q = deque([(root, 0, 0)])&#10;    while q:&#10;        node, x, y = q.popleft()&#10;        nodes[x][y].append(node.val)&#10;        if node.left: q.append((node.left, x - 1, y + 1))&#10;        if node.right: q.append((node.right, x + 1, y + 1))&#10;    ans = []&#10;    for x in sorted(nodes.keys()):&#10;        col = []&#10;        for y in sorted(nodes[x].keys()):&#10;            col.extend(sorted(nodes[x][y]))&#10;        ans.append(col)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>94</td>
+      <td>Tree 44 Symmetric Tree<br><br></b> <a href='https://leetcode.com/problems/symmetric-tree/' target='_blank'>LeetCode 101</a></td>
+      <td><b>Example 1:</b> Recursive.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a helper function `isMirror(left, right)`. The tree is symmetric if `root->left` and `root->right` are mirrors. Two trees are mirrors if their roots are equal and `left1->left` is mirror of `right1->right`, and `left1->right` is mirror of `right1->left`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isSymmetric(root):&#10;    def isMirror(n1, n2):&#10;        if not n1 and not n2: return True&#10;        if not n1 or not n2: return False&#10;        return (n1.val == n2.val) and isMirror(n1.left, n2.right) and isMirror(n1.right, n2.left)&#10;    if not root: return True&#10;    return isMirror(root.left, root.right)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>95</td>
+      <td>Tree 45 Root To Node Path In Binary Tree<br><br></b> <a href='https://www.interviewbit.com/problems/path-to-given-node/' target='_blank'>InterviewBit</a></td>
+      <td><b>Example 1:</b> Recursive backtracking.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use recursion. Push current node to the path array. If it's the target node, return true. Recursively search left and right subtrees. If either returns true, return true. If not found in either, pop the current node from the path array and return false.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solve(A, B):&#10;    arr = []&#10;    def getPath(node, x):&#10;        if not node: return False&#10;        arr.append(node.val)&#10;        if node.val == x: return True&#10;        if getPath(node.left, x) or getPath(node.right, x): return True&#10;        arr.pop()&#10;        return False&#10;    if not A: return arr&#10;    getPath(A, B)&#10;    return arr</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

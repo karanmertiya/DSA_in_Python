@@ -772,5 +772,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use a 3D DP array `dp[i][j][isTrue]` representing the number of ways to evaluate the substring from `i` to `j` to `isTrue`. Iterate over all possible split points `k` with an operator. Combine the True and False counts from left and right halves based on the operator.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countWays(N, S):&#10;    dp = [[[0] * 2 for _ in range(N)] for _ in range(N)]&#10;    for i in range(0, N, 2):&#10;        dp[i][i][1] = 1 if S[i] == &#x27;T&#x27; else 0&#10;        dp[i][i][0] = 1 if S[i] == &#x27;F&#x27; else 0&#10;    for length in range(3, N + 1, 2):&#10;        for i in range(0, N - length + 1, 2):&#10;            j = i + length - 1&#10;            for k in range(i + 1, j, 2):&#10;                lt, lf = dp[i][k-1][1], dp[i][k-1][0]&#10;                rt, rf = dp[k+1][j][1], dp[k+1][j][0]&#10;                if S[k] == &#x27;&amp;&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lt * rf + lf * rt + lf * rf) % 1003&#10;                elif S[k] == &#x27;|&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rt + lt * rf + lf * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lf * rf) % 1003&#10;                elif S[k] == &#x27;^&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lt * rf + lf * rt) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lt * rt + lf * rf) % 1003&#10;    return dp[0][N-1][1]</code></pre></details></td>
     </tr>
+    <tr>
+      <td>85</td>
+      <td>Dp 35 Longest Increasing Subsequence<br><br></b> <a href='https://leetcode.com/problems/longest-increasing-subsequence/' target='_blank'>LeetCode 300</a></td>
+      <td><b>Example 1:</b> Binary Search approach.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain an array `temp` storing the smallest tail of all increasing subsequences of length i+1 in `temp[i]`. For each num, use binary search to find its position in `temp`. If num is larger than all, append it. Otherwise, replace the element.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import bisect&#10;def lengthOfLIS(nums):&#10;    temp = []&#10;    for num in nums:&#10;        idx = bisect.bisect_left(temp, num)&#10;        if idx == len(temp): temp.append(num)&#10;        else: temp[idx] = num&#10;    return len(temp)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>86</td>
+      <td>Dp 36 Minimum Insertions To Make String Palindrome<br><br></b> <a href='https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/' target='_blank'>LeetCode 1312</a></td>
+      <td><b>Example 1:</b> Longest Palindromic Subsequence.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Find the Longest Palindromic Subsequence (LPS). The minimum insertions required will be `string_length - LPS_length`. LPS is just LCS(s, reverse(s)).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minInsertions(s):&#10;    n = len(s)&#10;    t = s[::-1]&#10;    dp = [[0] * (n + 1) for _ in range(n + 1)]&#10;    for i in range(1, n + 1):&#10;        for j in range(1, n + 1):&#10;            if s[i-1] == t[j-1]: dp[i][j] = 1 + dp[i-1][j-1]&#10;            else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])&#10;    return n - dp[n][n]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>87</td>
+      <td>Dp 37 Print Longest Common Subsequence<br><br></b> <a href='https://www.geeksforgeeks.org/printing-longest-common-subsequence/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP table backtracking.</td>
+      <td><b>Time:</b> O(M * N)<br><b>Space:</b> O(M * N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Build the LCS DP table. Start from `dp[m][n]`. If `s1[i-1] == s2[j-1]`, include this character in the result and move diagonally to `dp[i-1][j-1]`. Otherwise, move to the maximum of `dp[i-1][j]` or `dp[i][j-1]`. Reverse the string at the end.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def printLCS(s1, s2):&#10;    m, n = len(s1), len(s2)&#10;    dp = [[0] * (n + 1) for _ in range(m + 1)]&#10;    for i in range(1, m + 1):&#10;        for j in range(1, n + 1):&#10;            if s1[i-1] == s2[j-1]: dp[i][j] = 1 + dp[i-1][j-1]&#10;            else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])&#10;    i, j = m, n&#10;    res = &quot;&quot;&#10;    while i &gt; 0 and j &gt; 0:&#10;        if s1[i-1] == s2[j-1]:&#10;            res += s1[i-1]&#10;            i -= 1; j -= 1&#10;        elif dp[i-1][j] &gt; dp[i][j-1]: i -= 1&#10;        else: j -= 1&#10;    return res[::-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>88</td>
+      <td>Dp 38 Wildcard Matching<br><br></b> <a href='https://leetcode.com/problems/wildcard-matching/' target='_blank'>LeetCode 44</a></td>
+      <td><b>Example 1:</b> 2D DP.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N * M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> DP state `dp[i][j]` is true if `s[0..i-1]` matches `p[0..j-1]`. Base cases: empty pattern only matches empty string. `p[0..j-1]` can match empty string if all chars are '*'. Transitions: If `s[i-1] == p[j-1]` or `p[j-1] == '?'`, `dp[i][j] = dp[i-1][j-1]`. If `p[j-1] == '*'`, it can match empty string (`dp[i][j-1]`) or one/more characters (`dp[i-1][j]`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isMatch(s, p):&#10;    m, n = len(s), len(p)&#10;    dp = [[False] * (n + 1) for _ in range(m + 1)]&#10;    dp[0][0] = True&#10;    for j in range(1, n + 1):&#10;        if p[j-1] == &#x27;*&#x27;: dp[0][j] = dp[0][j-1]&#10;    for i in range(1, m + 1):&#10;        for j in range(1, n + 1):&#10;            if p[j-1] == &#x27;?&#x27; or s[i-1] == p[j-1]: dp[i][j] = dp[i-1][j-1]&#10;            elif p[j-1] == &#x27;*&#x27;: dp[i][j] = dp[i-1][j] or dp[i][j-1]&#10;    return dp[m][n]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>89</td>
+      <td>Dp 39 Burst Balloons<br><br></b> <a href='https://leetcode.com/problems/burst-balloons/' target='_blank'>LeetCode 312</a></td>
+      <td><b>Example 1:</b> MCM DP pattern.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Add 1 to both ends of the array. Let `dp[i][j]` be the max coins collected by bursting balloons in `nums[i..j]`. Iterate length `L` from 1 to N. For each window `[i, j]`, try every `k` from `i` to `j` as the LAST balloon to burst in this window. Cost is `nums[i-1] * nums[k] * nums[j+1] + dp[i][k-1] + dp[k+1][j]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxCoins(nums):&#10;    n = len(nums)&#10;    arr = [1] + nums + [1]&#10;    dp = [[0] * (n + 2) for _ in range(n + 2)]&#10;    for L in range(1, n + 1):&#10;        for i in range(1, n - L + 2):&#10;            j = i + L - 1&#10;            for k in range(i, j + 1):&#10;                cost = arr[i-1] * arr[k] * arr[j+1] + dp[i][k-1] + dp[k+1][j]&#10;                dp[i][j] = max(dp[i][j], cost)&#10;    return dp[1][n]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>90</td>
+      <td>Dp 40 Evaluate Boolean Expression To True<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/boolean-parenthesization5610/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DP Partitioning.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2 * 2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> MCM variant. `dp[i][j][isTrue]` stores the number of ways to evaluate the expression from `i` to `j` to `isTrue`. Partition at every operator `k`. Calculate `leftTrue`, `leftFalse`, `rightTrue`, `rightFalse`. Combine these based on the operator `S[k]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countWays(N, S):&#10;    mod = 1003&#10;    dp = [[[-1] * 2 for _ in range(N)] for _ in range(N)]&#10;    def solve(i, j, isTrue):&#10;        if i &gt; j: return 0&#10;        if i == j:&#10;            if isTrue: return 1 if S[i] == &#x27;T&#x27; else 0&#10;            else: return 1 if S[i] == &#x27;F&#x27; else 0&#10;        if dp[i][j][isTrue] != -1: return dp[i][j][isTrue]&#10;        ways = 0&#10;        for k in range(i + 1, j, 2):&#10;            lT = solve(i, k - 1, 1)&#10;            lF = solve(i, k - 1, 0)&#10;            rT = solve(k + 1, j, 1)&#10;            rF = solve(k + 1, j, 0)&#10;            if S[k] == &#x27;&amp;&#x27;:&#10;                if isTrue: ways = (ways + lT * rT) % mod&#10;                else: ways = (ways + lT * rF + lF * rT + lF * rF) % mod&#10;            elif S[k] == &#x27;|&#x27;:&#10;                if isTrue: ways = (ways + lT * rT + lT * rF + lF * rT) % mod&#10;                else: ways = (ways + lF * rF) % mod&#10;            elif S[k] == &#x27;^&#x27;:&#10;                if isTrue: ways = (ways + lT * rF + lF * rT) % mod&#10;                else: ways = (ways + lT * rT + lF * rF) % mod&#10;        dp[i][j][isTrue] = ways&#10;        return ways&#10;    return solve(0, N - 1, 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>91</td>
+      <td>Dp 41 Palindrome Partitioning Ii<br><br></b> <a href='https://leetcode.com/problems/palindrome-partitioning-ii/' target='_blank'>LeetCode 132</a></td>
+      <td><b>Example 1:</b> Precompute palindromes + 1D DP.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> First, precompute a 2D boolean array `isPal[i][j]` to quickly check if `s[i..j]` is a palindrome. Then, use a 1D DP array where `dp[i]` represents the minimum cuts for `s[0..i]`. For each `i`, iterate `j` from `0` to `i`. If `s[j..i]` is a palindrome, then `dp[i] = min(dp[i], dp[j-1] + 1)`. If `s[0..i]` is a palindrome, `dp[i] = 0`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minCut(s):&#10;    n = len(s)&#10;    isPal = [[False] * n for _ in range(n)]&#10;    for i in range(n):&#10;        isPal[i][i] = True&#10;        if i &lt; n - 1 and s[i] == s[i+1]: isPal[i][i+1] = True&#10;    for length in range(3, n + 1):&#10;        for i in range(n - length + 1):&#10;            j = i + length - 1&#10;            if s[i] == s[j] and isPal[i+1][j-1]: isPal[i][j] = True&#10;    dp = [0] * n&#10;    for i in range(n):&#10;        if isPal[0][i]:&#10;            dp[i] = 0&#10;            continue&#10;        min_cuts = i&#10;        for j in range(1, i + 1):&#10;            if isPal[j][i]: min_cuts = min(min_cuts, dp[j-1] + 1)&#10;        dp[i] = min_cuts&#10;    return dp[n-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>92</td>
+      <td>Dp 42 Partition Array For Maximum Sum<br><br></b> <a href='https://leetcode.com/problems/partition-array-for-maximum-sum/' target='_blank'>LeetCode 1043</a></td>
+      <td><b>Example 1:</b> 1D DP.</td>
+      <td><b>Time:</b> O(N * K)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Let `dp[i]` be the maximum sum for `arr[0..i-1]`. To compute `dp[i]`, iterate back `j` from 1 to `k`. Keep track of the maximum element in `arr[i-j..i-1]`. The sum is `max_val * j + dp[i-j]`. Maximize this over all valid `j`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSumAfterPartitioning(arr, k):&#10;    n = len(arr)&#10;    dp = [0] * (n + 1)&#10;    for i in range(1, n + 1):&#10;        cur_max = 0&#10;        best = 0&#10;        for j in range(1, min(k, i) + 1):&#10;            cur_max = max(cur_max, arr[i-j])&#10;            best = max(best, dp[i-j] + cur_max * j)&#10;        dp[i] = best&#10;    return dp[n]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>93</td>
+      <td>Dp 43 Maximum Rectangle With All 1S<br><br></b> <a href='https://leetcode.com/problems/maximal-rectangle/' target='_blank'>LeetCode 85</a></td>
+      <td><b>Example 1:</b> Histogram method.</td>
+      <td><b>Time:</b> O(R * C)<br><b>Space:</b> O(C)</td>
+      <td>Stack</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Treat each row as the base of a histogram. The height is the number of consecutive 1s going upwards. If a cell is 0, height is 0. For each row, after updating the heights, find the Largest Rectangle in Histogram (using a stack) and keep track of the maximum area overall.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maximalRectangle(matrix):&#10;    if not matrix: return 0&#10;    r, c = len(matrix), len(matrix[0])&#10;    heights = [0] * c&#10;    max_area = 0&#10;    def largestRectangleArea(h):&#10;        st = []&#10;        area = 0&#10;        h.append(0)&#10;        for i in range(len(h)):&#10;            while st and h[st[-1]] &gt;= h[i]:&#10;                height = h[st.pop()]&#10;                w = i if not st else i - st[-1] - 1&#10;                area = max(area, height * w)&#10;            st.append(i)&#10;        h.pop()&#10;        return area&#10;    for i in range(r):&#10;        for j in range(c):&#10;            if matrix[i][j] == &#x27;1&#x27;: heights[j] += 1&#10;            else: heights[j] = 0&#10;        max_area = max(max_area, largestRectangleArea(heights))&#10;    return max_area</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>94</td>
+      <td>Dp 44 Count Square Submatrices With All Ones<br><br></b> <a href='https://leetcode.com/problems/count-square-submatrices-with-all-ones/' target='_blank'>LeetCode 1277</a></td>
+      <td><b>Example 1:</b> 2D DP.</td>
+      <td><b>Time:</b> O(R * C)<br><b>Space:</b> O(R * C)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Let `dp[i][j]` be the size of the largest square ending at `(i, j)`. If `matrix[i][j] == 1`, then `dp[i][j] = 1 + min({dp[i-1][j], dp[i][j-1], dp[i-1][j-1]})`. The total number of squares is the sum of all elements in the `dp` matrix.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countSquares(matrix):&#10;    r, c = len(matrix), len(matrix[0])&#10;    dp = [[0] * c for _ in range(r)]&#10;    ans = 0&#10;    for i in range(r):&#10;        for j in range(c):&#10;            if matrix[i][j] == 1:&#10;                if i == 0 or j == 0: dp[i][j] = 1&#10;                else: dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])&#10;                ans += dp[i][j]&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

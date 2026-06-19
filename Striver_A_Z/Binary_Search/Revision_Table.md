@@ -421,5 +421,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Sort the array. Use two nested loops for the first two elements. Then use two pointers for the remaining two elements to find the target sum. Skip duplicates at all levels.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def fourSum(arr, k):&#10;    ans = []&#10;    n = len(arr)&#10;    arr.sort()&#10;    for i in range(n):&#10;        if i &gt; 0 and arr[i] == arr[i-1]: continue&#10;        for j in range(i + 1, n):&#10;            if j &gt; i + 1 and arr[j] == arr[j-1]: continue&#10;            left, right = j + 1, n - 1&#10;            while left &lt; right:&#10;                total = arr[i] + arr[j] + arr[left] + arr[right]&#10;                if total == k:&#10;                    ans.append([arr[i], arr[j], arr[left], arr[right]])&#10;                    left += 1; right -= 1&#10;                    while left &lt; right and arr[left] == arr[left-1]: left += 1&#10;                    while left &lt; right and arr[right] == arr[right+1]: right -= 1&#10;                elif total &lt; k: left += 1&#10;                else: right -= 1&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td>46</td>
+      <td>Bs 19 Median Of Two Sorted Arrays<br><br></b> <a href='https://leetcode.com/problems/median-of-two-sorted-arrays/' target='_blank'>LeetCode 4</a></td>
+      <td><b>Example 1:</b> Binary Search on smaller array.</td>
+      <td><b>Time:</b> O(log(min(M, N)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Ensure `nums1` is the smaller array. Do binary search on `nums1` to find a partition such that the left half has `(m+n+1)/2` elements. Calculate the maximums of left halves and minimums of right halves. If `maxLeft1 <= minRight2` and `maxLeft2 <= minRight1`, the partition is correct. The median depends on whether `m+n` is even or odd.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findMedianSortedArrays(nums1, nums2):&#10;    if len(nums1) &gt; len(nums2): return findMedianSortedArrays(nums2, nums1)&#10;    n1, n2 = len(nums1), len(nums2)&#10;    low, high = 0, n1&#10;    while low &lt;= high:&#10;        cut1 = (low + high) // 2&#10;        cut2 = (n1 + n2 + 1) // 2 - cut1&#10;        left1 = float(&#x27;-inf&#x27;) if cut1 == 0 else nums1[cut1 - 1]&#10;        left2 = float(&#x27;-inf&#x27;) if cut2 == 0 else nums2[cut2 - 1]&#10;        right1 = float(&#x27;inf&#x27;) if cut1 == n1 else nums1[cut1]&#10;        right2 = float(&#x27;inf&#x27;) if cut2 == n2 else nums2[cut2]&#10;        if left1 &lt;= right2 and left2 &lt;= right1:&#10;            if (n1 + n2) % 2 == 0:&#10;                return (max(left1, left2) + min(right1, right2)) / 2.0&#10;            else:&#10;                return max(left1, left2)&#10;        elif left1 &gt; right2:&#10;            high = cut1 - 1&#10;        else:&#10;            low = cut1 + 1&#10;    return 0.0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>47</td>
+      <td>Bs 20 Kth Element Of Two Sorted Arrays<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Binary Search on smaller array.</td>
+      <td><b>Time:</b> O(log(min(N, M)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Similar to median of two sorted arrays. Do binary search on the smaller array for a partition such that the total number of elements on the left side is `k`. Ensure `cut1` is between `max(0, k-m)` and `min(k, n)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kthElement(arr1, arr2, n, m, k):&#10;    if n &gt; m: return kthElement(arr2, arr1, m, n, k)&#10;    low = max(0, k - m)&#10;    high = min(k, n)&#10;    while low &lt;= high:&#10;        cut1 = (low + high) // 2&#10;        cut2 = k - cut1&#10;        l1 = float(&#x27;-inf&#x27;) if cut1 == 0 else arr1[cut1 - 1]&#10;        l2 = float(&#x27;-inf&#x27;) if cut2 == 0 else arr2[cut2 - 1]&#10;        r1 = float(&#x27;inf&#x27;) if cut1 == n else arr1[cut1]&#10;        r2 = float(&#x27;inf&#x27;) if cut2 == m else arr2[cut2]&#10;        if l1 &lt;= r2 and l2 &lt;= r1:&#10;            return max(l1, l2)&#10;        elif l1 &gt; r2:&#10;            high = cut1 - 1&#10;        else:&#10;            low = cut1 + 1&#10;    return 1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>48</td>
+      <td>Bs 21 Find Nth Root Of M<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-nth-root-of-m5843/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Binary Search.</td>
+      <td><b>Time:</b> O(N * log M)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space is `[1, m]`. Check `mid^n`. Since `mid^n` can overflow, use a custom power function that returns 1 if `mid^n == m`, 0 if `< m`, and 2 if `> m`. Adjust `low` and `high` accordingly.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def NthRoot(n, m):&#10;    def func(mid, n, m):&#10;        ans = 1&#10;        for _ in range(n):&#10;            ans *= mid&#10;            if ans &gt; m: return 2&#10;        if ans == m: return 1&#10;        return 0&#10;    low, high = 1, m&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        midN = func(mid, n, m)&#10;        if midN == 1: return mid&#10;        elif midN == 0: low = mid + 1&#10;        else: high = mid - 1&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>49</td>
+      <td>Bs 22 Koko Eating Bananas<br><br></b> <a href='https://leetcode.com/problems/koko-eating-bananas/' target='_blank'>LeetCode 875</a></td>
+      <td><b>Example 1:</b> Binary Search on answer.</td>
+      <td><b>Time:</b> O(N log(max(piles)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space for speed `k` is `[1, max(piles)]`. For a chosen `mid` speed, calculate the total hours needed. If `total_hours <= h`, this `mid` is a possible answer, search left for smaller speed. Else search right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def minEatingSpeed(piles, h):&#10;    def calculateTotalHours(hourly):&#10;        return sum(math.ceil(p / hourly) for p in piles)&#10;    low, high = 1, max(piles)&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if calculateTotalHours(mid) &lt;= h:&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>50</td>
+      <td>Bs 23 Minimum Days To Make M Bouquets<br><br></b> <a href='https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/' target='_blank'>LeetCode 1482</a></td>
+      <td><b>Example 1:</b> Binary Search on answer.</td>
+      <td><b>Time:</b> O(N log(max-min))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If `m * k > n`, return -1. Search space for days is `[min(bloomDay), max(bloomDay)]`. For a `mid` day, count consecutive flowers that have bloomed (`bloomDay[i] <= mid`). If consecutive count reaches `k`, increment bouquet count. If `bouquets >= m`, move `high = mid - 1`, else `low = mid + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minDays(bloomDay, m, k):&#10;    n = len(bloomDay)&#10;    if m * k &gt; n: return -1&#10;    def possible(day):&#10;        cnt = 0&#10;        noOfB = 0&#10;        for bd in bloomDay:&#10;            if bd &lt;= day: cnt += 1&#10;            else:&#10;                noOfB += cnt // k&#10;                cnt = 0&#10;        noOfB += cnt // k&#10;        return noOfB &gt;= m&#10;    low, high = min(bloomDay), max(bloomDay)&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if possible(mid): high = mid - 1&#10;        else: low = mid + 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td>Bs 24 Find The Smallest Divisor Given A Threshold<br><br></b> <a href='https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/' target='_blank'>LeetCode 1283</a></td>
+      <td><b>Example 1:</b> Binary Search on answer.</td>
+      <td><b>Time:</b> O(N log(max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space for divisor is `[1, max(nums)]`. For a `mid` divisor, compute the sum of `ceil(nums[i] / mid)`. If sum is `<= threshold`, search left (`high = mid - 1`). Else, search right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def smallestDivisor(nums, threshold):&#10;    def sumByD(div):&#10;        return sum(math.ceil(num / div) for num in nums)&#10;    low, high = 1, max(nums)&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if sumByD(mid) &lt;= threshold: high = mid - 1&#10;        else: low = mid + 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td>Bs 25 Capacity To Ship Packages Within D Days<br><br></b> <a href='https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/' target='_blank'>LeetCode 1011</a></td>
+      <td><b>Example 1:</b> Binary Search on answer.</td>
+      <td><b>Time:</b> O(N log(sum - max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space is `[max(weights), sum(weights)]`. For a `mid` capacity, simulate loading the ship. If day count exceeds `days`, capacity is too small (`low = mid + 1`). Otherwise, try for a smaller capacity (`high = mid - 1`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def shipWithinDays(weights, days):&#10;    def findDays(cap):&#10;        d, load = 1, 0&#10;        for w in weights:&#10;            if load + w &gt; cap:&#10;                d += 1&#10;                load = w&#10;            else:&#10;                load += w&#10;        return d&#10;    low, high = max(weights), sum(weights)&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if findDays(mid) &lt;= days: high = mid - 1&#10;        else: low = mid + 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>53</td>
+      <td>Bs 26 Kth Missing Positive Number<br><br></b> <a href='https://leetcode.com/problems/kth-missing-positive-number/' target='_blank'>LeetCode 1539</a></td>
+      <td><b>Example 1:</b> Binary Search.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> At any index `i`, the number of missing elements before `arr[i]` is `arr[i] - (i + 1)`. Use binary search to find the index where the number of missing elements becomes `>= k`. The answer will be `low + k`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findKthPositive(arr, k):&#10;    low, high = 0, len(arr) - 1&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        missing = arr[mid] - (mid + 1)&#10;        if missing &lt; k: low = mid + 1&#10;        else: high = mid - 1&#10;    return low + k</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>54</td>
+      <td>Bs 27 Split Array Largest Sum<br><br></b> <a href='https://leetcode.com/problems/split-array-largest-sum/' target='_blank'>LeetCode 410</a></td>
+      <td><b>Example 1:</b> Binary Search on answer.</td>
+      <td><b>Time:</b> O(N log(sum - max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space is `[max(nums), sum(nums)]`. For a `mid` maximum sum, count the subarrays needed. If `count <= k`, `mid` is possible, search left. Else, search right. This is identical to the Painter's Partition or Book Allocation problem.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def splitArray(nums, k):&#10;    def countSubarrays(maxSum):&#10;        partitions, currentSum = 1, 0&#10;        for num in nums:&#10;            if currentSum + num &lt;= maxSum:&#10;                currentSum += num&#10;            else:&#10;                partitions += 1&#10;                currentSum = num&#10;        return partitions&#10;    low, high = max(nums), sum(nums)&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if countSubarrays(mid) &gt; k: low = mid + 1&#10;        else: high = mid - 1&#10;    return low</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>55</td>
+      <td>Bs 28 Row With Max 1S<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/row-with-max-1s0023/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Lower Bound per row.</td>
+      <td><b>Time:</b> O(N log M)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Since rows are sorted, use binary search (`lower_bound` of 1) to find the first index of 1 in each row. The number of 1s is `m - index`. Keep track of the row with the maximum 1s.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def rowWithMax1s(arr, n, m):&#10;    def lowerBound(a, m, x):&#10;        low, high, ans = 0, m - 1, m&#10;        while low &lt;= high:&#10;            mid = (low + high) // 2&#10;            if a[mid] &gt;= x:&#10;                ans = mid&#10;                high = mid - 1&#10;            else:&#10;                low = mid + 1&#10;        return ans&#10;    max_cnt = 0&#10;    index = -1&#10;    for i in range(n):&#10;        cnt_ones = m - lowerBound(arr[i], m, 1)&#10;        if cnt_ones &gt; max_cnt:&#10;            max_cnt = cnt_ones&#10;            index = i&#10;    return index</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

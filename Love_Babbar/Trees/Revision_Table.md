@@ -781,5 +781,32 @@
       <td>-</td>
       <td><b>Explanation:</b> Use DFS. Keep track of the maximum length and the maximum sum. At each node, check if the current length is greater than max length. If so, update max length and max sum. If lengths are equal, update max sum if current sum is greater.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def sumOfLongRootToLeafPath(root):&#10;    maxLen = [0]&#10;    maxSum = [float(&#x27;-inf&#x27;)]&#10;    def solve(node, sum_val, length):&#10;        if not node:&#10;            if length &gt; maxLen[0]:&#10;                maxLen[0] = length&#10;                maxSum[0] = sum_val&#10;            elif length == maxLen[0]:&#10;                maxSum[0] = max(sum_val, maxSum[0])&#10;            return&#10;        sum_val += node.data&#10;        solve(node.left, sum_val, length + 1)&#10;        solve(node.right, sum_val, length + 1)&#10;    solve(root, 0, 0)&#10;    return maxSum[0] if maxSum[0] != float(&#x27;-inf&#x27;) else 0</code></pre></details></td>
     </tr>
+    <tr>
+      <td>86</td>
+      <td>Tree 36 Minimum Distance Between Two Given Nodes Of A Binary Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/min-distance-between-two-given-nodes-of-a-binary-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> LCA + Distance calculation.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Find the Lowest Common Ancestor (LCA) of the two nodes. Then find the distance from LCA to the first node and the distance from LCA to the second node. The total distance is the sum of these two distances.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lca(root, n1, n2):&#10;    if not root or root.data == n1 or root.data == n2: return root&#10;    left = lca(root.left, n1, n2)&#10;    right = lca(root.right, n1, n2)&#10;    if left and right: return root&#10;    return left if left else right&#10;def findDist(root, val, dist):&#10;    if not root: return -1&#10;    if root.data == val: return dist&#10;    left = findDist(root.left, val, dist + 1)&#10;    if left != -1: return left&#10;    return findDist(root.right, val, dist + 1)&#10;def findDistMain(root, a, b):&#10;    lca_node = lca(root, a, b)&#10;    return findDist(lca_node, a, 0) + findDist(lca_node, b, 0)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>87</td>
+      <td>Tree 37 Kth Ancestor In A Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/kth-ancestor-in-a-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursive backtracking.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>k > depth</td>
+      <td><b>Explanation:</b> Use a recursive function. If the target node is found, return it. As you return back up the call stack, decrement `k`. When `k` becomes 0, the current node is the kth ancestor.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kthAncestor(root, k, node):&#10;    ans_node = None&#10;    def solve(root):&#10;        nonlocal k, ans_node&#10;        if not root: return False&#10;        if root.data == node: return True&#10;        left = solve(root.left)&#10;        right = solve(root.right)&#10;        if left or right:&#10;            k -= 1&#10;            if k == 0:&#10;                ans_node = root&#10;                return False&#10;            return True&#10;        return False&#10;    solve(root)&#10;    return ans_node.data if ans_node else -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>88</td>
+      <td>Tree 38 Find All Duplicate Subtrees In A Binary Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/duplicate-subtrees/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Serialization + Hash Map.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Serialize each subtree into a string (e.g., using preorder traversal). Use a hash map to count the frequencies of these serialized strings. If a string appears exactly twice, add the root of that subtree to the result list.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def printAllDups(root):&#10;    m = {}&#10;    ans = []&#10;    def solve(node):&#10;        if not node: return &quot;N&quot;&#10;        s = str(node.data) + &quot;,&quot; + solve(node.left) + &quot;,&quot; + solve(node.right)&#10;        m[s] = m.get(s, 0) + 1&#10;        if m[s] == 2: ans.append(node)&#10;        return s&#10;    solve(root)&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

@@ -70,5 +70,23 @@
       <td><b>Cycles:</b> If cycle exists, result will not contain all V elements.</td>
       <td><b>Explanation:</b> Kahn's Algorithm (BFS) using in-degrees. Add nodes with 0 in-degree to a queue. Pop, append to result, and decrement in-degrees of neighbors.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def topoSort(V: int, adj: List[List[int]]) -&gt; List[int]:&#10;    from collections import deque&#10;    indegree = [0] * V&#10;    for i in range(V):&#10;        for nxt in adj[i]: indegree[nxt] += 1&#10;    q = deque([i for i in range(V) if indegree[i] == 0])&#10;    topo = []&#10;    while q:&#10;        node = q.popleft()&#10;        topo.append(node)&#10;        for nxt in adj[node]:&#10;            indegree[nxt] -= 1&#10;            if indegree[nxt] == 0: q.append(nxt)&#10;    return topo</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">7</td>
+      <td rowspan="1">Graph 08 Number Of Islands<br><br></b> <a href='https://leetcode.com/problems/number-of-islands/' target='_blank'>LeetCode 200</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: grid=[['1','1','0','0','0'],...], Output: 1</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N * M) auxiliary</td>
+      <td>-</td>
+      <td><b>Empty Grid:</b> Returns 0.</td>
+      <td><b>Explanation:</b> Traverse grid. Whenever a '1' is found, increment counter and trigger BFS/DFS to sink the island (mark '0').<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numIslands(grid: List[List[str]]) -&gt; int:&#10;    if not grid: return 0&#10;    def dfs(r, c):&#10;        if r&lt;0 or c&lt;0 or r&gt;=len(grid) or c&gt;=len(grid[0]) or grid[r][c] == &#x27;0&#x27;: return&#10;        grid[r][c] = &#x27;0&#x27;&#10;        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)&#10;    count = 0&#10;    for i in range(len(grid)):&#10;        for j in range(len(grid[0])):&#10;            if grid[i][j] == &#x27;1&#x27;:&#10;                count += 1&#10;                dfs(i, j)&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">8</td>
+      <td rowspan="1">Graph 09 Course Schedule<br><br></b> <a href='https://leetcode.com/problems/course-schedule/' target='_blank'>LeetCode 207</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: numCourses = 2, prerequisites = [[1,0]], Output: true</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td><b>Multiple components:</b> Still works because we enqueue all 0-indegree nodes.</td>
+      <td><b>Explanation:</b> Kahn's BFS or DFS cycle detection. Here Kahn's BFS is used. If topological sort contains all V vertices, then true.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def canFinish(numCourses: int, prerequisites: List[List[int]]) -&gt; bool:&#10;    from collections import deque&#10;    adj = [[] for _ in range(numCourses)]&#10;    indegree = [0]*numCourses&#10;    for dest, src in prerequisites:&#10;        adj[src].append(dest)&#10;        indegree[dest] += 1&#10;    q = deque([i for i in range(numCourses) if indegree[i] == 0])&#10;    count = 0&#10;    while q:&#10;        node = q.popleft()&#10;        count += 1&#10;        for nxt in adj[node]:&#10;            indegree[nxt] -= 1&#10;            if indegree[nxt] == 0: q.append(nxt)&#10;    return count == numCourses</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

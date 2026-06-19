@@ -205,5 +205,14 @@
       <td><b>Last Permutation:</b> Dip not found, reverse the whole array.</td>
       <td><b>Explanation:</b> Find first dip from right (i). Find element just larger than nums[i] from right (j). Swap them and reverse the array from i+1 to end.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def nextPermutation(nums: List[int]) -&gt; None:&#10;    i = len(nums) - 2&#10;    while i &gt;= 0 and nums[i] &gt;= nums[i+1]: i -= 1&#10;    if i &gt;= 0:&#10;        j = len(nums) - 1&#10;        while nums[j] &lt;= nums[i]: j -= 1&#10;        nums[i], nums[j] = nums[j], nums[i]&#10;    nums[i+1:] = reversed(nums[i+1:])</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">22</td>
+      <td rowspan="1">Array 13 Pascals Triangle<br><br></b> <a href='https://leetcode.com/problems/pascals-triangle/' target='_blank'>LeetCode 118</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: numRows = 5, Output: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterative approach. Construct each row from the previous row. First and last elements are 1. Middle elements are sum of elements right above them.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def generate(numRows: int) -&gt; List[List[int]]:&#10;    res = [[1]]&#10;    for i in range(1, numRows):&#10;        row = [1]&#10;        for j in range(1, i):&#10;            row.append(res[i-1][j-1] + res[i-1][j])&#10;        row.append(1)&#10;        res.append(row)&#10;    return res</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

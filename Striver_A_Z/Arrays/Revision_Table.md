@@ -295,5 +295,95 @@
       <td><b>Integer Overflow:</b> Use long long when doubling nums[j].</td>
       <td><b>Explanation:</b> Modified Merge Sort. Before merging, loop through left and right halves. If left[i] > 2 * right[j], increment j. Number of pairs is (j - (mid+1)).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reversePairs(nums: List[int]) -&gt; int:&#10;    def merge(low, mid, high):&#10;        temp, left, right = [], low, mid + 1&#10;        while left &lt;= mid and right &lt;= high:&#10;            if nums[left] &lt;= nums[right]:&#10;                temp.append(nums[left]); left += 1&#10;            else: temp.append(nums[right]); right += 1&#10;        while left &lt;= mid: temp.append(nums[left]); left += 1&#10;        while right &lt;= high: temp.append(nums[right]); right += 1&#10;        for i in range(low, high + 1): nums[i] = temp[i - low]&#10;    def countPairs(low, mid, high):&#10;        right, cnt = mid + 1, 0&#10;        for i in range(low, mid + 1):&#10;            while right &lt;= high and nums[i] &gt; 2 * nums[right]: right += 1&#10;            cnt += (right - (mid + 1))&#10;        return cnt&#10;    def mergeSort(low, high):&#10;        cnt = 0&#10;        if low &gt;= high: return cnt&#10;        mid = (low + high) // 2&#10;        cnt += mergeSort(low, mid)&#10;        cnt += mergeSort(mid + 1, high)&#10;        cnt += countPairs(low, mid, high)&#10;        merge(low, mid, high)&#10;        return cnt&#10;    return mergeSort(0, len(nums) - 1)</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">32</td>
+      <td rowspan="1">Arr 21 Merge Intervals<br><br></b> <a href='https://leetcode.com/problems/merge-intervals/' target='_blank'>LeetCode 56</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: intervals = [[1,3],[2,6],[8,10],[15,18]], Output: [[1,6],[8,10],[15,18]]</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td><b>Empty Array:</b> Return empty array.</td>
+      <td><b>Explanation:</b> Sort the intervals based on the starting times. Iterate through the intervals, if the current interval overlaps with the last merged interval, update the end time of the last merged interval.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def merge(intervals: List[List[int]]) -&gt; List[List[int]]:&#10;    if not intervals: return []&#10;    intervals.sort(key=lambda x: x[0])&#10;    merged = []&#10;    for interval in intervals:&#10;        if not merged or merged[-1][1] &lt; interval[0]:&#10;            merged.append(interval)&#10;        else:&#10;            merged[-1][1] = max(merged[-1][1], interval[1])&#10;    return merged</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">33</td>
+      <td rowspan="1">Arr 22 Next Permutation<br><br></b> <a href='https://leetcode.com/problems/next-permutation/' target='_blank'>LeetCode 31</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [1,2,3], Output: [1,3,2]</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Array is sorted in descending order:</b> Step 1 fails. Simply reverse the entire array.</td>
+      <td><b>Explanation:</b> 1. Find the largest index k such that nums[k] < nums[k + 1]. 2. Find the largest index l greater than k such that nums[k] < nums[l]. 3. Swap nums[k] and nums[l]. 4. Reverse the sub-array nums[k + 1:].<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def nextPermutation(nums: List[int]) -&gt; None:&#10;    n = len(nums)&#10;    k = -1&#10;    for i in range(n - 2, -1, -1):&#10;        if nums[i] &lt; nums[i + 1]:&#10;            k = i; break&#10;    if k &lt; 0: nums.reverse(); return&#10;    for i in range(n - 1, k, -1):&#10;        if nums[i] &gt; nums[k]:&#10;            nums[k], nums[i] = nums[i], nums[k]&#10;            break&#10;    nums[k + 1:] = reversed(nums[k + 1:])</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">34</td>
+      <td rowspan="1">Arr 23 Count Inversions<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: N = 5, arr[] = {2, 4, 1, 3, 5}, Output: 3</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Merge Sort. While merging two sorted halves, if `left[i] > right[j]`, then all elements from `left[i]` to `left[mid]` will form inversions with `right[j]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def inversionCount(arr, n):&#10;    temp = [0]*n&#10;    def merge(left, mid, right):&#10;        i, j, k, inv_count = left, mid, left, 0&#10;        while i &lt;= mid - 1 and j &lt;= right:&#10;            if arr[i] &lt;= arr[j]:&#10;                temp[k] = arr[i]; i += 1&#10;            else:&#10;                temp[k] = arr[j]; j += 1&#10;                inv_count += (mid - i)&#10;            k += 1&#10;        while i &lt;= mid - 1:&#10;            temp[k] = arr[i]; i += 1; k += 1&#10;        while j &lt;= right:&#10;            temp[k] = arr[j]; j += 1; k += 1&#10;        for i in range(left, right + 1):&#10;            arr[i] = temp[i]&#10;        return inv_count&#10;    def mergeSort(left, right):&#10;        inv_count = 0&#10;        if right &gt; left:&#10;            mid = (right + left) // 2&#10;            inv_count += mergeSort(left, mid)&#10;            inv_count += mergeSort(mid + 1, right)&#10;            inv_count += merge(left, mid + 1, right)&#10;        return inv_count&#10;    return mergeSort(0, n - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">35</td>
+      <td rowspan="1">Arr 24 Reverse Pairs<br><br></b> <a href='https://leetcode.com/problems/reverse-pairs/' target='_blank'>LeetCode 493</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [1,3,2,3,1], Output: 2</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Merge Sort. Before merging, iterate through the left half and right half. For each element in left, find the number of elements in right such that `left[i] > 2 * right[j]`. Add this count.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reversePairs(nums: List[int]) -&gt; int:&#10;    def merge(low, mid, high):&#10;        count = 0&#10;        j = mid + 1&#10;        for i in range(low, mid + 1):&#10;            while j &lt;= high and nums[i] &gt; 2 * nums[j]:&#10;                j += 1&#10;            count += (j - (mid + 1))&#10;        temp = []&#10;        left, right = low, mid + 1&#10;        while left &lt;= mid and right &lt;= high:&#10;            if nums[left] &lt;= nums[right]:&#10;                temp.append(nums[left]); left += 1&#10;            else:&#10;                temp.append(nums[right]); right += 1&#10;        while left &lt;= mid:&#10;            temp.append(nums[left]); left += 1&#10;        while right &lt;= high:&#10;            temp.append(nums[right]); right += 1&#10;        for i in range(len(temp)):&#10;            nums[low + i] = temp[i]&#10;        return count&#10;    def mergeSort(low, high):&#10;        if low &gt;= high: return 0&#10;        mid = (low + high) // 2&#10;        inv = mergeSort(low, mid)&#10;        inv += mergeSort(mid + 1, high)&#10;        inv += merge(low, mid, high)&#10;        return inv&#10;    return mergeSort(0, len(nums) - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">36</td>
+      <td rowspan="1">Arr 25 Maximum Product Subarray<br><br></b> <a href='https://leetcode.com/problems/maximum-product-subarray/' target='_blank'>LeetCode 152</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [2,3,-2,4], Output: 6</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Zeroes in array:</b> When 0 is encountered, reset running product.</td>
+      <td><b>Explanation:</b> Maintain the prefix product and suffix product. If a zero is encountered, reset the product to 1. The maximum product will be the maximum of all prefix and suffix products.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProduct(nums: List[int]) -&gt; int:&#10;    n = len(nums)&#10;    pre, suff = 1, 1&#10;    ans = float(&#x27;-inf&#x27;)&#10;    for i in range(n):&#10;        if pre == 0: pre = 1&#10;        if suff == 0: suff = 1&#10;        pre *= nums[i]&#10;        suff *= nums[n - i - 1]&#10;        ans = max(ans, pre, suff)&#10;    return int(ans)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">37</td>
+      <td rowspan="1">Arr 26 Majority Element Ii<br><br></b> <a href='https://leetcode.com/problems/majority-element-ii/' target='_blank'>LeetCode 229</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [3,2,3], Output: [3]</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Extended Boyer-Moore Voting Algorithm. There can be at most 2 elements appearing more than n/3 times. Maintain two candidate elements and their counts.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def majorityElement(nums: List[int]) -&gt; List[int]:&#10;    num1, num2, c1, c2 = -1, -1, 0, 0&#10;    for el in nums:&#10;        if el == num1: c1 += 1&#10;        elif el == num2: c2 += 1&#10;        elif c1 == 0: num1, c1 = el, 1&#10;        elif c2 == 0: num2, c2 = el, 1&#10;        else: c1 -= 1; c2 -= 1&#10;    c1, c2 = 0, 0&#10;    for el in nums:&#10;        if el == num1: c1 += 1&#10;        elif el == num2: c2 += 1&#10;    ans = []&#10;    if c1 &gt; len(nums) // 3: ans.append(num1)&#10;    if c2 &gt; len(nums) // 3: ans.append(num2)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">38</td>
+      <td rowspan="1">Arr 27 Grid Unique Paths<br><br></b> <a href='https://leetcode.com/problems/unique-paths/' target='_blank'>LeetCode 62</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: m = 3, n = 7, Output: 28</td>
+      <td><b>Time:</b> O(m-1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Combinatorics approach. The total number of steps to reach the bottom-right corner is (m - 1) + (n - 1) = m + n - 2. Out of these steps, we need to choose (m - 1) downward steps (or n - 1 rightward steps). The number of paths is (m + n - 2) C (m - 1).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def uniquePaths(m: int, n: int) -&gt; int:&#10;    N = n + m - 2&#10;    r = m - 1&#10;    res = 1&#10;    for i in range(1, r + 1):&#10;        res = res * (N - r + i) // i&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">39</td>
+      <td rowspan="1">Arr 28 Search A 2D Matrix<br><br></b> <a href='https://leetcode.com/problems/search-a-2d-matrix/' target='_blank'>LeetCode 74</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3, Output: true</td>
+      <td><b>Time:</b> O(log(m * n))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Empty Matrix:</b> Return false.</td>
+      <td><b>Explanation:</b> Treat the 2D matrix as a 1D array and apply binary search. The element at `mid` can be accessed using `matrix[mid / cols][mid % cols]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def searchMatrix(matrix: List[List[int]], target: int) -&gt; bool:&#10;    if not matrix: return False&#10;    m, n = len(matrix), len(matrix[0])&#10;    low, high = 0, (m * n) - 1&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if matrix[mid // n][mid % n] == target: return True&#10;        if matrix[mid // n][mid % n] &lt; target: low = mid + 1&#10;        else: high = mid - 1&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">40</td>
+      <td rowspan="1">Arr 29 Pow X N<br><br></b> <a href='https://leetcode.com/problems/powx-n/' target='_blank'>LeetCode 50</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: x = 2.00000, n = 10, Output: 1024.00000</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>n = INT_MIN:</b> Cast n to long long before making it positive to avoid overflow.</td>
+      <td><b>Explanation:</b> Binary Exponentiation. If n is even, `x^n = (x*x)^(n/2)`. If n is odd, `x^n = x * x^(n-1)`. Handles negative powers by computing `1 / pow(x, -n)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def myPow(x: float, n: int) -&gt; float:&#10;    ans = 1.0&#10;    nn = abs(n)&#10;    while nn &gt; 0:&#10;        if nn % 2 == 1:&#10;            ans = ans * x&#10;            nn -= 1&#10;        else:&#10;            x = x * x&#10;            nn //= 2&#10;    if n &lt; 0: ans = 1.0 / ans&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">41</td>
+      <td rowspan="1">Arr 30 Find The Duplicate Number<br><br></b> <a href='https://leetcode.com/problems/find-the-duplicate-number/' target='_blank'>LeetCode 287</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [1,3,4,2,2], Output: 2</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Floyd's Tortoise and Hare (Cycle Detection). Treat the array values as pointers to the next index. Since there's a duplicate, a cycle must exist. Find the intersection point of slow and fast pointers, then find the entrance to the cycle.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findDuplicate(nums: List[int]) -&gt; int:&#10;    slow, fast = nums[0], nums[0]&#10;    while True:&#10;        slow = nums[slow]&#10;        fast = nums[nums[fast]]&#10;        if slow == fast: break&#10;    fast = nums[0]&#10;    while slow != fast:&#10;        slow = nums[slow]&#10;        fast = nums[fast]&#10;    return slow</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

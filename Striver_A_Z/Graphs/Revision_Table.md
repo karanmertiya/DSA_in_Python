@@ -124,5 +124,50 @@
       <td>-</td>
       <td><b>Explanation:</b> Kosaraju's Algo: 1) Sort nodes by finish time (Topo Sort DFS). 2) Transpose the graph (reverse edges). 3) DFS on transposed graph in order of finish time.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kosaraju(V: int, adj: List[List[int]]) -&gt; int:&#10;    vis = [0] * V&#10;    st = []&#10;    def dfs(node):&#10;        vis[node] = 1&#10;        for it in adj[node]:&#10;            if not vis[it]: dfs(it)&#10;        st.append(node)&#10;    for i in range(V):&#10;        if not vis[i]: dfs(i)&#10;    adjT = [[] for _ in range(V)]&#10;    for i in range(V):&#10;        vis[i] = 0&#10;        for it in adj[i]: adjT[it].append(i)&#10;    def dfs3(node):&#10;        vis[node] = 1&#10;        for it in adjT[node]:&#10;            if not vis[it]: dfs3(it)&#10;    scc = 0&#10;    while st:&#10;        node = st.pop()&#10;        if not vis[node]:&#10;            scc += 1; dfs3(node)&#10;    return scc</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">13</td>
+      <td rowspan="1">Graph 14 Topological Sort Dfs<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/topological-sort/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Return array.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td><code>#include <stack></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DFS. Maintain a visited array. Once all adjacent nodes of a vertex are visited, push the vertex to a stack. Print the stack for the topological order.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def topoSort(V: int, adj: List[List[int]]) -&gt; List[int]:&#10;    vis = [0] * V&#10;    st = []&#10;    def dfs(node):&#10;        vis[node] = 1&#10;        for it in adj[node]:&#10;            if not vis[it]: dfs(it)&#10;        st.append(node)&#10;    for i in range(V):&#10;        if not vis[i]: dfs(i)&#10;    return st[::-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">14</td>
+      <td rowspan="1">Graph 15 Kahn Algorithm Bfs<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/topological-sort/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Kahn's.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Compute in-degrees for all nodes. Push nodes with 0 in-degree to a queue. Pop, add to answer, and reduce in-degrees of neighbors. If a neighbor reaches 0, push it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def topoSort(V: int, adj: List[List[int]]) -&gt; List[int]:&#10;    indegree = [0] * V&#10;    for i in range(V):&#10;        for it in adj[i]: indegree[it] += 1&#10;    q = [i for i in range(V) if indegree[i] == 0]&#10;    topo = []&#10;    while q:&#10;        node = q.pop(0)&#10;        topo.append(node)&#10;        for it in adj[node]:&#10;            indegree[it] -= 1&#10;            if indegree[it] == 0: q.append(it)&#10;    return topo</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">15</td>
+      <td rowspan="1">Graph 16 Detect Cycle Directed Bfs<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Return true if cycle exists.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> A DAG has a topological sort of exactly V elements. Use Kahn's BFS. If the number of elements pulled from the queue is < V, there's a cycle.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isCyclic(V: int, adj: List[List[int]]) -&gt; bool:&#10;    indegree = [0] * V&#10;    for i in range(V):&#10;        for it in adj[i]: indegree[it] += 1&#10;    q = [i for i in range(V) if indegree[i] == 0]&#10;    cnt = 0&#10;    while q:&#10;        node = q.pop(0)&#10;        cnt += 1&#10;        for it in adj[node]:&#10;            indegree[it] -= 1&#10;            if indegree[it] == 0: q.append(it)&#10;    return cnt != V</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">16</td>
+      <td rowspan="1">Graph 17 Bipartite Graph Dfs<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/bipartite-graph/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Return true/false.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> DFS. Color nodes with 0 and 1. If an adjacent node is uncolored, assign the opposite color and recurse. If it's colored and has the same color, it's not bipartite.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isBipartite(V: int, adj: List[List[int]]) -&gt; bool:&#10;    color = [-1] * V&#10;    def dfs(node, col):&#10;        color[node] = col&#10;        for it in adj[node]:&#10;            if color[it] == -1:&#10;                if not dfs(it, 1 - col): return False&#10;            elif color[it] == col:&#10;                return False&#10;        return True&#10;    for i in range(V):&#10;        if color[i] == -1:&#10;            if not dfs(i, 0): return False&#10;    return True</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">17</td>
+      <td rowspan="1">Graph 18 Alien Dictionary<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/alien-dictionary/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> words = ['baa', 'abcd', 'abca', 'cab', 'cad'], K = 4, Output: 'bdac'</td>
+      <td><b>Time:</b> O(N * Len + K + E)<br><b>Space:</b> O(K + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a DAG based on mismatching characters between adjacent words. Use Kahn's algorithm (Topological Sort BFS) to find the character order.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findOrder(dict: List[str], N: int, K: int) -&gt; str:&#10;    adj = [[] for _ in range(K)]&#10;    for i in range(N - 1):&#10;        s1, s2 = dict[i], dict[i+1]&#10;        for j in range(min(len(s1), len(s2))):&#10;            if s1[j] != s2[j]:&#10;                adj[ord(s1[j]) - ord(&#x27;a&#x27;)].append(ord(s2[j]) - ord(&#x27;a&#x27;))&#10;                break&#10;    indegree = [0] * K&#10;    for i in range(K):&#10;        for it in adj[i]: indegree[it] += 1&#10;    q = [i for i in range(K) if indegree[i] == 0]&#10;    topo = []&#10;    while q:&#10;        node = q.pop(0)&#10;        topo.append(chr(node + ord(&#x27;a&#x27;)))&#10;        for it in adj[node]:&#10;            indegree[it] -= 1&#10;            if indegree[it] == 0: q.append(it)&#10;    return &#x27;&#x27;.join(topo)</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

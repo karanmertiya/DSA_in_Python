@@ -88,5 +88,23 @@
       <td>-</td>
       <td><b>Explanation:</b> Treat the 2D matrix as a 1D flattened array. The element at `index` is at `matrix[index / cols][index % cols]`. Perform standard binary search.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def searchMatrix(matrix: List[List[int]], target: int) -&gt; bool:&#10;    if not matrix or not matrix[0]: return False&#10;    m, n = len(matrix), len(matrix[0])&#10;    left, right = 0, m * n - 1&#10;    while left &lt;= right:&#10;        mid = left + (right - left) // 2&#10;        val = matrix[mid // n][mid % n]&#10;        if val == target: return True&#10;        if val &lt; target: left = mid + 1&#10;        else: right = mid - 1&#10;    return False</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">9</td>
+      <td rowspan="1">Bs 07 Median Of Two Sorted Arrays<br><br></b> <a href='https://leetcode.com/problems/median-of-two-sorted-arrays/' target='_blank'>LeetCode 4</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums1 = [1,3], nums2 = [2], Output: 2.00000</td>
+      <td><b>Time:</b> O(log(min(m, n)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>Different sizes / One empty:</b> Always binary search on the smaller array to avoid out-of-bounds.</td>
+      <td><b>Explanation:</b> Binary Search on the smaller array. Partition both arrays such that the left half has `(m+n+1)/2` elements. Find the valid partition where `max(left1) <= min(right2)` and `max(left2) <= min(right1)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findMedianSortedArrays(nums1: List[int], nums2: List[int]) -&gt; float:&#10;    if len(nums1) &gt; len(nums2): return self.findMedianSortedArrays(nums2, nums1)&#10;    n1, n2 = len(nums1), len(nums2)&#10;    low, high = 0, n1&#10;    while low &lt;= high:&#10;        cut1 = (low + high) // 2&#10;        cut2 = (n1 + n2 + 1) // 2 - cut1&#10;        left1 = float(&#x27;-inf&#x27;) if cut1 == 0 else nums1[cut1 - 1]&#10;        left2 = float(&#x27;-inf&#x27;) if cut2 == 0 else nums2[cut2 - 1]&#10;        right1 = float(&#x27;inf&#x27;) if cut1 == n1 else nums1[cut1]&#10;        right2 = float(&#x27;inf&#x27;) if cut2 == n2 else nums2[cut2]&#10;        if left1 &lt;= right2 and left2 &lt;= right1:&#10;            if (n1 + n2) % 2 == 0:&#10;                return (max(left1, left2) + min(right1, right2)) / 2.0&#10;            else:&#10;                return max(left1, left2)&#10;        elif left1 &gt; right2:&#10;            high = cut1 - 1&#10;        else:&#10;            low = cut1 + 1&#10;    return 0.0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">10</td>
+      <td rowspan="1">Bs 08 Allocate Minimum Number Of Pages<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: N=4, A=[12,34,67,90], M=2, Output: 113</td>
+      <td><b>Time:</b> O(N * log(sum(A) - max(A)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td><b>M > N:</b> Impossible to allocate at least one book to each student, return -1.</td>
+      <td><b>Explanation:</b> Binary Search on Answer. The search space for pages is from `max(A)` to `sum(A)`. For a given `mid`, check if books can be allocated to `<= M` students without any student exceeding `mid` pages.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPages(A: List[int], N: int, M: int) -&gt; int:&#10;    if M &gt; N: return -1&#10;    def isPossible(maxPages):&#10;        students, currentPages = 1, 0&#10;        for pages in A:&#10;            if pages &gt; maxPages: return False&#10;            if currentPages + pages &gt; maxPages:&#10;                students += 1&#10;                currentPages = pages&#10;            else:&#10;                currentPages += pages&#10;        return students &lt;= M&#10;    low, high = max(A), sum(A)&#10;    ans = -1&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if isPossible(mid):&#10;            ans = mid; high = mid - 1&#10;        else: low = mid + 1&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

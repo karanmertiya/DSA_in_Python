@@ -439,5 +439,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Create a DSU of size N (number of accounts). Map each email to its first seen account ID. If an email is seen again, union the current account ID with the mapped account ID. Then group emails by the ultimate parent of their account ID. Sort emails in each group and format the result.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def accountsMerge(accounts: List[List[str]]) -&gt; List[List[str]]:&#10;    n = len(accounts)&#10;    ds = DisjointSet(n)&#10;    mailNode = {}&#10;    for i in range(n):&#10;        for j in range(1, len(accounts[i])):&#10;            mail = accounts[i][j]&#10;            if mail not in mailNode:&#10;                mailNode[mail] = i&#10;            else:&#10;                ds.union(i, mailNode[mail])&#10;    mergedMails = collections.defaultdict(list)&#10;    for mail, node in mailNode.items():&#10;        root = ds.find(node)&#10;        mergedMails[root].append(mail)&#10;    ans = []&#10;    for i in range(n):&#10;        if i not in mergedMails: continue&#10;        ans.append([accounts[i][0]] + sorted(mergedMails[i]))&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">48</td>
+      <td rowspan="1">Graph 49 Network Delay Time<br><br></b> <a href='https://leetcode.com/problems/network-delay-time/' target='_blank'>LeetCode 743</a></td>
+      <td rowspan="1"><b>Example 1:</b> Dijkstra's Algorithm.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(N + E)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Find shortest path from source node `k` to all other nodes using Dijkstra's algorithm. The answer is the maximum distance among all nodes. If any node is unreachable (distance is infinity), return -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections, heapq&#10;def networkDelayTime(times: List[List[int]], n: int, k: int) -&gt; int:&#10;    adj = collections.defaultdict(list)&#10;    for u, v, w in times:&#10;        adj[u].append((v, w))&#10;    dist = [float(&#x27;inf&#x27;)] * (n + 1)&#10;    dist[k] = 0&#10;    pq = [(0, k)]&#10;    while pq:&#10;        d, node = heapq.heappop(pq)&#10;        if d &gt; dist[node]: continue&#10;        for nxt, wt in adj[node]:&#10;            if d + wt &lt; dist[nxt]:&#10;                dist[nxt] = d + wt&#10;                heapq.heappush(pq, (dist[nxt], nxt))&#10;    ans = max(dist[1:])&#10;    return ans if ans != float(&#x27;inf&#x27;) else -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">49</td>
+      <td rowspan="1">Graph 50 Find Eventual Safe States<br><br></b> <a href='https://leetcode.com/problems/find-eventual-safe-states/' target='_blank'>LeetCode 802</a></td>
+      <td rowspan="1"><b>Example 1:</b> Topological Sort using Kahn's Algorithm on reversed graph.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Reverse all edges in the graph. Terminal nodes become sources (indegree 0). Run Kahn's algorithm (BFS topological sort). Any node processed is part of a path that only leads to terminal nodes (safe node). Sort the resulting nodes.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def eventualSafeNodes(graph: List[List[int]]) -&gt; List[int]:&#10;    V = len(graph)&#10;    adjRev = [[] for _ in range(V)]&#10;    indegree = [0] * V&#10;    for i in range(V):&#10;        for neighbor in graph[i]:&#10;            adjRev[neighbor].append(i)&#10;            indegree[i] += 1&#10;    q = collections.deque([i for i in range(V) if indegree[i] == 0])&#10;    safeNodes = []&#10;    while q:&#10;        node = q.popleft()&#10;        safeNodes.append(node)&#10;        for neighbor in adjRev[node]:&#10;            indegree[neighbor] -= 1&#10;            if indegree[neighbor] == 0:&#10;                q.append(neighbor)&#10;    return sorted(safeNodes)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">50</td>
+      <td rowspan="1">Graph 51 Word Ladder<br><br></b> <a href='https://leetcode.com/problems/word-ladder/' target='_blank'>LeetCode 127</a></td>
+      <td rowspan="1"><b>Example 1:</b> BFS Shortest Path.</td>
+      <td><b>Time:</b> O(N * L * 26) where L is word length<br><b>Space:</b> O(N)</td>
+      <td><code>#include <queue>\n#include <unordered_set></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use BFS. Insert words from `wordList` into a hash set for O(1) lookup. Push `{beginWord, 1}` to a queue and remove it from the set. Pop a word, change each character one by one to 'a'-'z'. If the new word is in the set, push `{newWord, steps+1}` and remove from set. If `newWord == endWord`, return `steps+1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def ladderLength(beginWord: str, endWord: str, wordList: List[str]) -&gt; int:&#10;    wordSet = set(wordList)&#10;    q = collections.deque([(beginWord, 1)])&#10;    if beginWord in wordSet: wordSet.remove(beginWord)&#10;    while q:&#10;        word, steps = q.popleft()&#10;        if word == endWord: return steps&#10;        for i in range(len(word)):&#10;            for c in &#x27;abcdefghijklmnopqrstuvwxyz&#x27;:&#10;                newWord = word[:i] + c + word[i+1:]&#10;                if newWord in wordSet:&#10;                    wordSet.remove(newWord)&#10;                    q.append((newWord, steps + 1))&#10;    return 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">51</td>
+      <td rowspan="1">Graph 52 Word Ladder Ii<br><br></b> <a href='https://leetcode.com/problems/word-ladder-ii/' target='_blank'>LeetCode 126</a></td>
+      <td rowspan="1"><b>Example 1:</b> BFS to find shortest path map + DFS to backtrack paths.</td>
+      <td><b>Time:</b> O(N * L * 26 + Paths)<br><b>Space:</b> O(N * L)</td>
+      <td><code>#include <queue>\n#include <unordered_set>\n#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> First, use BFS to build a map storing the shortest distance from `beginWord` to every reachable word. Then use DFS starting from `endWord` backwards to `beginWord` to reconstruct the paths. In DFS, only traverse to words whose distance is exactly 1 less than the current word's distance.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def findLadders(beginWord: str, endWord: str, wordList: List[str]) -&gt; List[List[str]]:&#10;    wordSet = set(wordList)&#10;    mpp = {beginWord: 1}&#10;    q = collections.deque([beginWord])&#10;    if beginWord in wordSet: wordSet.remove(beginWord)&#10;    while q:&#10;        word = q.popleft()&#10;        steps = mpp[word]&#10;        if word == endWord: break&#10;        for i in range(len(word)):&#10;            for c in &#x27;abcdefghijklmnopqrstuvwxyz&#x27;:&#10;                newWord = word[:i] + c + word[i+1:]&#10;                if newWord in wordSet:&#10;                    wordSet.remove(newWord)&#10;                    q.append(newWord)&#10;                    mpp[newWord] = steps + 1&#10;    ans = []&#10;    if endWord in mpp:&#10;        def dfs(word, seq):&#10;            if word == beginWord:&#10;                ans.append(seq[::-1])&#10;                return&#10;            steps = mpp[word]&#10;            for i in range(len(word)):&#10;                for c in &#x27;abcdefghijklmnopqrstuvwxyz&#x27;:&#10;                    newWord = word[:i] + c + word[i+1:]&#10;                    if newWord in mpp and mpp[newWord] == steps - 1:&#10;                        dfs(newWord, seq + [newWord])&#10;        dfs(endWord, [endWord])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">52</td>
+      <td rowspan="1">Graph 53 Making A Large Island<br><br></b> <a href='https://leetcode.com/problems/making-a-large-island/' target='_blank'>LeetCode 827</a></td>
+      <td rowspan="1"><b>Example 1:</b> Disjoint Set / Union Find.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Step 1: Traverse the grid. For each `1`, union it with its `1` neighbors. Calculate the size of each component using DSU. Step 2: Traverse again. For each `0`, check its 4 neighbors. Find unique ultimate parents among neighbors, sum their sizes, and add 1 (for the flipped `0`). Keep track of the maximum size found.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># Uses DSU with rank/size&#10;def largestIsland(grid: List[List[int]]) -&gt; int:&#10;    n = len(grid)&#10;    ds = DisjointSet(n * n)&#10;    dr, dc = [-1, 0, 1, 0], [0, 1, 0, -1]&#10;    for r in range(n):&#10;        for c in range(n):&#10;            if grid[r][c] == 0: continue&#10;            for i in range(4):&#10;                nr, nc = r + dr[i], c + dc[i]&#10;                if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and grid[nr][nc] == 1:&#10;                    ds.union(r * n + c, nr * n + nc)&#10;    mx = 0&#10;    for r in range(n):&#10;        for c in range(n):&#10;            if grid[r][c] == 1: continue&#10;            components = set()&#10;            for i in range(4):&#10;                nr, nc = r + dr[i], c + dc[i]&#10;                if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and grid[nr][nc] == 1:&#10;                    components.add(ds.find(nr * n + nc))&#10;            sizeTotal = sum(ds.size[root] for root in components)&#10;            mx = max(mx, sizeTotal + 1)&#10;    for cell in range(n * n):&#10;        mx = max(mx, ds.size[ds.find(cell)])&#10;    return mx</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">53</td>
+      <td rowspan="1">Graph 54 Swim In Rising Water<br><br></b> <a href='https://leetcode.com/problems/swim-in-rising-water/' target='_blank'>LeetCode 778</a></td>
+      <td rowspan="1"><b>Example 1:</b> Dijkstra's Algorithm with Max Path Edge.</td>
+      <td><b>Time:</b> O(N^2 log N)<br><b>Space:</b> O(N^2)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a priority queue to always process the cell with the minimum maximum-elevation so far. `pq` stores `(max_elev_in_path, r, c)`. Push `(grid[0][0], 0, 0)`. While pq is not empty, pop the minimum. If we reach `(n-1, n-1)`, return the `max_elev`. For each neighbor, the new max elevation is `max(max_elev, grid[nr][nc])`. Push to pq if not visited.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def swimInWater(grid: List[List[int]]) -&gt; int:&#10;    n = len(grid)&#10;    pq = [(grid[0][0], 0, 0)]&#10;    vis = [[0] * n for _ in range(n)]&#10;    vis[0][0] = 1&#10;    dr, dc = [-1, 0, 1, 0], [0, 1, 0, -1]&#10;    while pq:&#10;        t, r, c = heapq.heappop(pq)&#10;        if r == n - 1 and c == n - 1: return t&#10;        for i in range(4):&#10;            nr, nc = r + dr[i], c + dc[i]&#10;            if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and not vis[nr][nc]:&#10;                vis[nr][nc] = 1&#10;                heapq.heappush(pq, (max(t, grid[nr][nc]), nr, nc))&#10;    return 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">54</td>
+      <td rowspan="1">Graph 55 As Far From Land As Possible<br><br></b> <a href='https://leetcode.com/problems/as-far-from-land-as-possible/' target='_blank'>LeetCode 1162</a></td>
+      <td rowspan="1"><b>Example 1:</b> Multi-source BFS.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Push all land cells (1s) into a queue and mark them as visited. Perform BFS outward. The last water cell processed gives the maximum distance. Track layers/steps during BFS.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def maxDistance(grid: List[List[int]]) -&gt; int:&#10;    n = len(grid)&#10;    q = collections.deque()&#10;    for i in range(n):&#10;        for j in range(n):&#10;            if grid[i][j] == 1: q.append((i, j))&#10;    if not q or len(q) == n * n: return -1&#10;    dist = -1&#10;    dr, dc = [-1, 0, 1, 0], [0, 1, 0, -1]&#10;    while q:&#10;        for _ in range(len(q)):&#10;            r, c = q.popleft()&#10;            for i in range(4):&#10;                nr, nc = r + dr[i], c + dc[i]&#10;                if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and grid[nr][nc] == 0:&#10;                    grid[nr][nc] = 1&#10;                    q.append((nr, nc))&#10;        dist += 1&#10;    return dist</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">55</td>
+      <td rowspan="1">Graph 56 Find Closest Node To Given Two Nodes<br><br></b> <a href='https://leetcode.com/problems/find-closest-node-to-given-two-nodes/' target='_blank'>LeetCode 2359</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two BFS traversals.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Run BFS from `node1` to get `dist1` array, and BFS from `node2` to get `dist2` array. Then iterate through all nodes `0` to `n-1`. For nodes reachable from both, compute `max(dist1[i], dist2[i])`. Return the node that minimizes this maximum distance. On tie, return the smallest index.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def closestMeetingNode(edges: List[int], node1: int, node2: int) -&gt; int:&#10;    def bfs(start):&#10;        dist = [float(&#x27;inf&#x27;)] * len(edges)&#10;        q = collections.deque([start])&#10;        dist[start] = 0&#10;        while q:&#10;            node = q.popleft()&#10;            nxt = edges[node]&#10;            if nxt != -1 and dist[nxt] == float(&#x27;inf&#x27;):&#10;                dist[nxt] = dist[node] + 1&#10;                q.append(nxt)&#10;        return dist&#10;    d1, d2 = bfs(node1), bfs(node2)&#10;    min_dist, ans = float(&#x27;inf&#x27;), -1&#10;    for i in range(len(edges)):&#10;        if d1[i] != float(&#x27;inf&#x27;) and d2[i] != float(&#x27;inf&#x27;):&#10;            mx = max(d1[i], d2[i])&#10;            if mx &lt; min_dist:&#10;                min_dist = mx&#10;                ans = i&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">56</td>
+      <td rowspan="1">Graph 57 Minimum Score Of A Path Between Two Cities<br><br></b> <a href='https://leetcode.com/problems/minimum-score-of-a-path-between-two-cities/' target='_blank'>LeetCode 2492</a></td>
+      <td rowspan="1"><b>Example 1:</b> BFS / DSU to find min edge in component.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Since a path can revisit nodes and edges, the minimum score path from 1 to `n` is simply the minimum weight edge in the connected component containing node 1 and `n`. Perform BFS/DFS from node 1 and find the minimum edge weight in the entire component.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def minScore(n: int, roads: List[List[int]]) -&gt; int:&#10;    adj = collections.defaultdict(list)&#10;    for u, v, w in roads:&#10;        adj[u].append((v, w))&#10;        adj[v].append((u, w))&#10;    q = collections.deque([1])&#10;    vis = set([1])&#10;    min_score = float(&#x27;inf&#x27;)&#10;    while q:&#10;        node = q.popleft()&#10;        for nxt, wt in adj[node]:&#10;            min_score = min(min_score, wt)&#10;            if nxt not in vis:&#10;                vis.add(nxt)&#10;                q.append(nxt)&#10;    return min_score</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">57</td>
+      <td rowspan="1">Graph 58 Shortest Bridge<br><br></b> <a href='https://leetcode.com/problems/shortest-bridge/' target='_blank'>LeetCode 934</a></td>
+      <td rowspan="1"><b>Example 1:</b> DFS + BFS.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Step 1: Use DFS to find the first island. Mark all its cells (e.g., set to 2) and push them into a queue for BFS. Step 2: Perform multi-source BFS from the queue. Expand the island level by level. The first time we hit a `1` (which belongs to the second island), the number of layers expanded is the shortest bridge.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def shortestBridge(grid: List[List[int]]) -&gt; int:&#10;    n = len(grid)&#10;    q = collections.deque()&#10;    def dfs(r, c):&#10;        grid[r][c] = 2&#10;        q.append((r, c))&#10;        for nr, nc in [(r-1, c), (r+1, c), (r, c-1), (r, c+1)]:&#10;            if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and grid[nr][nc] == 1:&#10;                dfs(nr, nc)&#10;    found = False&#10;    for i in range(n):&#10;        if found: break&#10;        for j in range(n):&#10;            if grid[i][j] == 1:&#10;                dfs(i, j)&#10;                found = True&#10;                break&#10;    steps = 0&#10;    while q:&#10;        for _ in range(len(q)):&#10;            r, c = q.popleft()&#10;            for nr, nc in [(r-1, c), (r+1, c), (r, c-1), (r, c+1)]:&#10;                if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n:&#10;                    if grid[nr][nc] == 1: return steps&#10;                    if grid[nr][nc] == 0:&#10;                        grid[nr][nc] = 2&#10;                        q.append((nr, nc))&#10;        steps += 1&#10;    return steps</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

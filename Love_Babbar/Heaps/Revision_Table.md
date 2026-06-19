@@ -223,5 +223,95 @@
       <td>-</td>
       <td><b>Explanation:</b> See greedy_38_reorganize_string.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># Implementation provided in greedy chapter.</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">24</td>
+      <td rowspan="1">Heap 25 Smallest Range In K Lists<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-smallest-range-containing-elements-from-k-lists/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-Heap.</td>
+      <td><b>Time:</b> O(N * K * log K)<br><b>Space:</b> O(K)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a min-heap of size K, storing the first element of each list along with its list index and element index. Keep track of the `max_val` currently in the heap. The current range is `[heap_min, max_val]`. Extract the min, update the smallest range if needed, and insert the next element from the extracted element's list. Update `max_val` with the new element.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def findSmallestRange(KSortedArray: List[List[int]], n: int, k: int) -&gt; List[int]:&#10;    pq = []&#10;    mx = float(&#x27;-inf&#x27;)&#10;    for i in range(k):&#10;        heapq.heappush(pq, (KSortedArray[i][0], i, 0))&#10;        mx = max(mx, KSortedArray[i][0])&#10;    ans_range = float(&#x27;inf&#x27;)&#10;    start, end = -1, -1&#10;    while pq:&#10;        mn, row, col = heapq.heappop(pq)&#10;        if mx - mn &lt; ans_range:&#10;            ans_range = mx - mn&#10;            start, end = mn, mx&#10;        if col + 1 &lt; n:&#10;            next_val = KSortedArray[row][col+1]&#10;            heapq.heappush(pq, (next_val, row, col+1))&#10;            mx = max(mx, next_val)&#10;        else:&#10;            break&#10;    return [start, end]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">25</td>
+      <td rowspan="1">Heap 26 Merge K Sorted Linked Lists<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/merge-k-sorted-linked-lists/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-Heap.</td>
+      <td><b>Time:</b> O(N * K * log K)<br><b>Space:</b> O(K)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a min-heap and push the head of each linked list into it. Pop the minimum element, append it to the result list, and if the popped node has a next node, push the next node into the heap. Continue until the heap is empty.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def mergeKLists(arr: List[Node], K: int) -&gt; Node:&#10;    pq = []&#10;    for i in range(K):&#10;        if arr[i]:&#10;            heapq.heappush(pq, (arr[i].data, i, arr[i]))&#10;    dummy = Node(0)&#10;    tail = dummy&#10;    while pq:&#10;        val, idx, curr = heapq.heappop(pq)&#10;        tail.next = curr&#10;        tail = tail.next&#10;        if curr.next:&#10;            heapq.heappush(pq, (curr.next.data, idx, curr.next))&#10;    return dummy.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">26</td>
+      <td rowspan="1">Heap 27 Reorganize String<br><br></b> <a href='https://leetcode.com/problems/reorganize-string/' target='_blank'>LeetCode 767</a></td>
+      <td rowspan="1"><b>Example 1:</b> Max-Heap.</td>
+      <td><b>Time:</b> O(N log(26))<br><b>Space:</b> O(26)</td>
+      <td><code>#include <queue>\n#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Count character frequencies. Push pairs `(freq, char)` to a max-heap. Pop two most frequent distinct characters, append to result, decrement frequencies, and push back if frequency > 0. If at the end one character remains with freq > 1, return empty string.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;import heapq&#10;def reorganizeString(s: str) -&gt; str:&#10;    count = collections.Counter(s)&#10;    pq = [[-freq, char] for char, freq in count.items()]&#10;    heapq.heapify(pq)&#10;    res = []&#10;    while len(pq) &gt;= 2:&#10;        freq1, char1 = heapq.heappop(pq)&#10;        freq2, char2 = heapq.heappop(pq)&#10;        res.extend([char1, char2])&#10;        if freq1 &lt; -1: heapq.heappush(pq, [freq1 + 1, char1])&#10;        if freq2 &lt; -1: heapq.heappush(pq, [freq2 + 1, char2])&#10;    if pq:&#10;        freq, char = pq[0]&#10;        if freq &lt; -1: return &quot;&quot;&#10;        res.append(char)&#10;    return &quot;&quot;.join(res)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">27</td>
+      <td rowspan="1">Heap 28 Kth Largest Sum Contiguous Subarray<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/k-th-largest-sum-contiguous-subarray/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-Heap.</td>
+      <td><b>Time:</b> O(N^2 log K)<br><b>Space:</b> O(K)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate all subarrays using two nested loops. Maintain a min-heap of size K to store the top K sums. If the heap size < K, push the current sum. If the heap size == K and current sum > heap top, pop and push current sum. The top of the heap is the Kth largest sum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kthLargest(Arr: List[int], N: int, K: int) -&gt; int:&#10;    pq = []&#10;    for i in range(N):&#10;        s = 0&#10;        for j in range(i, N):&#10;            s += Arr[j]&#10;            if len(pq) &lt; K:&#10;                heapq.heappush(pq, s)&#10;            elif s &gt; pq[0]:&#10;                heapq.heappop(pq)&#10;                heapq.heappush(pq, s)&#10;    return pq[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">28</td>
+      <td rowspan="1">Heap 29 Minimum Sum Of Two Numbers Formed From Digits Of An Array<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-sum4058/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Sort or Min-Heap.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort the array. Build two strings representing the two numbers by picking digits alternately from the sorted array. Add the two large numbers as strings or build the result dynamically.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solve(arr: List[int], n: int) -&gt; str:&#10;    arr.sort()&#10;    a, b = &quot;&quot;, &quot;&quot;&#10;    for i in range(n):&#10;        if i % 2 == 0:&#10;            a += str(arr[i])&#10;        else:&#10;            b += str(arr[i])&#10;    res = str(int(a) + int(b)) if a and b else str(int(a or &#x27;0&#x27;) + int(b or &#x27;0&#x27;))&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">29</td>
+      <td rowspan="1">Heap 30 K Th Smallest Element In A 2D Array Sorted Row Wise And Column Wise<br><br></b> <a href='https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/' target='_blank'>LeetCode 378</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search or Min-Heap.</td>
+      <td><b>Time:</b> O(K log N) or O(N log(max-min))<br><b>Space:</b> O(N) or O(1)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Min-heap: Push the first element of each row. Pop `K-1` times, pushing the next element in the row of the popped element. The `K`th popped element is the answer. Binary search: search space `matrix[0][0]` to `matrix[n-1][n-1]`. Count elements <= `mid` using two pointers.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kthSmallest(matrix: List[List[int]], k: int) -&gt; int:&#10;    n = len(matrix)&#10;    pq = []&#10;    for i in range(min(n, k)):&#10;        heapq.heappush(pq, (matrix[i][0], i, 0))&#10;    for _ in range(k - 1):&#10;        val, r, c = heapq.heappop(pq)&#10;        if c + 1 &lt; n:&#10;            heapq.heappush(pq, (matrix[r][c+1], r, c+1))&#10;    return pq[0][0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">30</td>
+      <td rowspan="1">Heap 31 Is Binary Tree Heap<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/is-binary-tree-heap/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Tree Traversal.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> First, check if the tree is complete by counting nodes and ensuring no node's index `i > count`. Then check if every node satisfies the max-heap property (`node.val >= left.val` and `node.val >= right.val`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isHeap(tree: Node) -&gt; bool:&#10;    def countNodes(node):&#10;        if not node: return 0&#10;        return 1 + countNodes(node.left) + countNodes(node.right)&#10;    def isCBT(node, index, count):&#10;        if not node: return True&#10;        if index &gt;= count: return False&#10;        return isCBT(node.left, 2 * index + 1, count) and isCBT(node.right, 2 * index + 2, count)&#10;    def isMaxOrder(node):&#10;        if not node.left and not node.right: return True&#10;        if not node.right: return node.data &gt;= node.left.data&#10;        return (node.data &gt;= node.left.data and node.data &gt;= node.right.data and&#10;                isMaxOrder(node.left) and isMaxOrder(node.right))&#10;    count = countNodes(tree)&#10;    return isCBT(tree, 0, count) and isMaxOrder(tree)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">31</td>
+      <td rowspan="1">Heap 32 Convert Min Heap To Max Heap<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/convert-min-heap-to-max-heap-1666738710/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Heapify.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(log N) for recursion</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Apply the standard max-heapify process starting from the last non-leaf node `(N/2 - 1)` down to the root. This takes O(N) time.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def convertMinToMaxHeap(arr: List[int], N: int):&#10;    def maxHeapify(i):&#10;        largest, left, right = i, 2 * i + 1, 2 * i + 2&#10;        if left &lt; N and arr[left] &gt; arr[largest]: largest = left&#10;        if right &lt; N and arr[right] &gt; arr[largest]: largest = right&#10;        if largest != i:&#10;            arr[i], arr[largest] = arr[largest], arr[i]&#10;            maxHeapify(largest)&#10;    for i in range((N - 2) // 2, -1, -1):&#10;        maxHeapify(i)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">32</td>
+      <td rowspan="1">Heap 33 Minimum Cost Of Ropes<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-cost-of-ropes-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-Heap Greedy.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a min-heap. Pop two minimum length ropes, add them up, add sum to total cost, and push the merged rope back to the heap. Repeat until one rope remains.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def minCost(arr: List[int], n: int) -&gt; int:&#10;    pq = list(arr)&#10;    heapq.heapify(pq)&#10;    cost = 0&#10;    while len(pq) &gt; 1:&#10;        a = heapq.heappop(pq)&#10;        b = heapq.heappop(pq)&#10;        cost += a + b&#10;        heapq.heappush(pq, a + b)&#10;    return cost</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">33</td>
+      <td rowspan="1">Heap 34 K Th Largest Element In A Stream<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/kth-largest-element-in-a-stream2220/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-Heap of size K.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(K)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a min-heap of size K. While processing the stream, if heap size is < K, push current element. If heap size == K and current element is > heap top, pop and push current element. Append heap top to result if size is K, else append -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kthLargest(k: int, arr: List[int], n: int) -&gt; List[int]:&#10;    res = []&#10;    pq = []&#10;    for i in range(n):&#10;        if len(pq) &lt; k:&#10;            heapq.heappush(pq, arr[i])&#10;        elif arr[i] &gt; pq[0]:&#10;            heapq.heappop(pq)&#10;            heapq.heappush(pq, arr[i])&#10;        if len(pq) &lt; k:&#10;            res.append(-1)&#10;        else:&#10;            res.append(pq[0])&#10;    return res</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

@@ -349,5 +349,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use an array to track visited numbers. Iterate from index 1 to n. For the current index, try placing an unvisited number. Check if the condition `(num % idx == 0 || idx % num == 0)` is met. If so, mark as visited, recurse to `idx + 1`, then backtrack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countArrangement(n: int) -&gt; int:&#10;    count = 0&#10;    visited = [0] * (n + 1)&#10;    def solve(idx):&#10;        nonlocal count&#10;        if idx &gt; n:&#10;            count += 1&#10;            return&#10;        for i in range(1, n + 1):&#10;            if not visited[i] and (i % idx == 0 or idx % i == 0):&#10;                visited[i] = 1&#10;                solve(idx + 1)&#10;                visited[i] = 0&#10;    solve(1)&#10;    return count</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">38</td>
+      <td rowspan="1">Rec 38 Print All Permutations Of A String<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive Backtracking.</td>
+      <td><b>Time:</b> O(N! * N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Convert string to char array and sort it. Use backtracking: pass a boolean visited array and a temporary string. If temporary string length equals original length, add to answer. Else, iterate through characters. To avoid duplicates, if `i > 0` and `s[i] == s[i-1]` and `!vis[i-1]`, skip. Otherwise, mark visited, append, recurse, unmark, pop.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def find_permutation(S: str) -&gt; List[str]:&#10;    S = sorted(list(S))&#10;    ans = []&#10;    vis = [False] * len(S)&#10;    def solve(curr):&#10;        if len(curr) == len(S):&#10;            ans.append(&quot;&quot;.join(curr))&#10;            return&#10;        for i in range(len(S)):&#10;            if vis[i] or (i &gt; 0 and S[i] == S[i-1] and not vis[i-1]):&#10;                continue&#10;            vis[i] = True&#10;            curr.append(S[i])&#10;            solve(curr)&#10;            curr.pop()&#10;            vis[i] = False&#10;    solve([])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">39</td>
+      <td rowspan="1">Rec 39 Word Break Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/word-break1352/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive with Memoization.</td>
+      <td><b>Time:</b> O(N^2 * L)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_set></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a helper function `solve(index)` that returns true if substring `s[index...]` can be segmented. Try all possible prefixes from `index`. If `s[index...i]` is in dict, recursively call `solve(i+1)`. Use memoization.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(A: str, B: List[str]) -&gt; int:&#10;    word_set = set(B)&#10;    memo = {}&#10;    def solve(ind):&#10;        if ind == len(A): return 1&#10;        if ind in memo: return memo[ind]&#10;        for i in range(ind, len(A)):&#10;            if A[ind:i+1] in word_set:&#10;                if solve(i + 1):&#10;                    memo[ind] = 1&#10;                    return 1&#10;        memo[ind] = 0&#10;        return 0&#10;    return solve(0)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">40</td>
+      <td rowspan="1">Rec 40 Remove Invalid Parentheses<br><br></b> <a href='https://leetcode.com/problems/remove-invalid-parentheses/' target='_blank'>LeetCode 301</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursion and Backtracking.</td>
+      <td><b>Time:</b> O(2^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> First find the number of misplaced left (`rm_l`) and right (`rm_r`) parentheses. Then use backtracking to try removing `rm_l` and `rm_r` parentheses. To avoid duplicates, skip identical adjacent characters. Finally, check if the resulting string is valid.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def removeInvalidParentheses(s: str) -&gt; List[str]:&#10;    def is_valid(s):&#10;        count = 0&#10;        for c in s:&#10;            if c == &#x27;(&#x27;: count += 1&#10;            elif c == &#x27;)&#x27;: count -= 1&#10;            if count &lt; 0: return False&#10;        return count == 0&#10;    rm_l, rm_r = 0, 0&#10;    for c in s:&#10;        if c == &#x27;(&#x27;: rm_l += 1&#10;        elif c == &#x27;)&#x27;:&#10;            if rm_l &gt; 0: rm_l -= 1&#10;            else: rm_r += 1&#10;    ans = []&#10;    def solve(s, start, rm_l, rm_r):&#10;        if rm_l == 0 and rm_r == 0:&#10;            if is_valid(s): ans.append(s)&#10;            return&#10;        for i in range(start, len(s)):&#10;            if i != start and s[i] == s[i-1]: continue&#10;            if s[i] == &#x27;(&#x27; and rm_l &gt; 0:&#10;                solve(s[:i] + s[i+1:], i, rm_l - 1, rm_r)&#10;            elif s[i] == &#x27;)&#x27; and rm_r &gt; 0:&#10;                solve(s[:i] + s[i+1:], i, rm_l, rm_r - 1)&#10;    solve(s, 0, rm_l, rm_r)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">41</td>
+      <td rowspan="1">Rec 41 Matchsticks To Square<br><br></b> <a href='https://leetcode.com/problems/matchsticks-to-square/' target='_blank'>LeetCode 473</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking to 4 subsets.</td>
+      <td><b>Time:</b> O(4^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Calculate sum. If sum % 4 != 0, return false. Target side length is sum / 4. Sort matchsticks in descending order to optimize. Create an array `sides` of size 4. For each matchstick, try adding it to one of the 4 sides. If a side equals the target or is less, recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def makesquare(matchsticks: List[int]) -&gt; bool:&#10;    total = sum(matchsticks)&#10;    if total % 4 != 0 or len(matchsticks) &lt; 4: return False&#10;    target = total // 4&#10;    matchsticks.sort(reverse=True)&#10;    sides = [0] * 4&#10;    def solve(ind):&#10;        if ind == len(matchsticks):&#10;            return sides[0] == sides[1] == sides[2] == target&#10;        for i in range(4):&#10;            if sides[i] + matchsticks[ind] &lt;= target:&#10;                sides[i] += matchsticks[ind]&#10;                if solve(ind + 1): return True&#10;                sides[i] -= matchsticks[ind]&#10;            if sides[i] == 0: break&#10;        return False&#10;    return solve(0)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">42</td>
+      <td rowspan="1">Rec 42 Tug Of War<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/tug-of-war/0' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive Backtracking.</td>
+      <td><b>Time:</b> O(2^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Keep track of the number of elements included in subset 1 and their sum. Recurse by including the current element in subset 1 or subset 2. Base case: if we reach end, check if subset 1 has `n/2` elements. If so, compute difference and update global minimum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def tugOfWar(arr: List[int]) -&gt; int:&#10;    n = len(arr)&#10;    totalSum = sum(arr)&#10;    minDiff = [float(&#x27;inf&#x27;)]&#10;    def solve(ind, cnt, sum1):&#10;        if ind == n:&#10;            if cnt == n // 2:&#10;                sum2 = totalSum - sum1&#10;                minDiff[0] = min(minDiff[0], abs(sum1 - sum2))&#10;            return&#10;        if cnt &lt; n // 2:&#10;            solve(ind + 1, cnt + 1, sum1 + arr[ind])&#10;        solve(ind + 1, cnt, sum1)&#10;    solve(0, 0, 0)&#10;    return minDiff[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">43</td>
+      <td rowspan="1">Rec 43 Find Paths From Corner Cell To Middle Cell<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/paths-from-corner-to-middle/0' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> BFS / DFS for path finding.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Perform BFS or DFS starting from all 4 corners simultaneously or individually. At each cell `(r, c)`, the jump size is `val = grid[r][c]`. We can move to `(r+val, c)`, `(r-val, c)`, `(r, c+val)`, `(r, c-val)`. Target is `(N/2, N/2)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def solve(grid: List[List[int]]):&#10;    n = len(grid)&#10;    q = collections.deque([(0,0), (0,n-1), (n-1,0), (n-1,n-1)])&#10;    vis = set(q)&#10;    dr, dc = [-1, 1, 0, 0], [0, 0, -1, 1]&#10;    while q:&#10;        r, c = q.popleft()&#10;        if r == n // 2 and c == n // 2: return True&#10;        val = grid[r][c]&#10;        if val == 0: continue&#10;        for i in range(4):&#10;            nr, nc = r + dr[i] * val, c + dc[i] * val&#10;            if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and (nr, nc) not in vis:&#10;                vis.add((nr, nc))&#10;                q.append((nr, nc))&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">44</td>
+      <td rowspan="1">Rec 44 Arithmetic Expressions<br><br></b> <a href='https://www.hackerrank.com/challenges/arithmetic-expressions/problem' target='_blank'>HackerRank</a></td>
+      <td rowspan="1"><b>Example 1:</b> DP with path reconstruction.</td>
+      <td><b>Time:</b> O(N * 101)<br><b>Space:</b> O(N * 101)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a DP table `dp[i][mod]` to store the operator used to reach remainder `mod` at index `i`. Iterate through the array, for each reachable mod from previous step, try `(mod + arr[i]) % 101`, `(mod - arr[i]) % 101`, `(mod * arr[i]) % 101`. Then backtrack from `dp[N-1][0]` to find the operators.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def arithmeticExpressions(arr: List[int]) -&gt; str:&#10;    n = len(arr)&#10;    dp = [[None] * 101 for _ in range(n)]&#10;    dp[0][arr[0] % 101] = (&#x27;&#x27;, 0)&#10;    for i in range(1, n):&#10;        for j in range(101):&#10;            if dp[i-1][j] is not None:&#10;                dp[i][(j + arr[i]) % 101] = (&#x27;+&#x27;, j)&#10;                dp[i][(j - arr[i] % 101 + 101) % 101] = (&#x27;-&#x27;, j)&#10;                dp[i][(j * arr[i]) % 101] = (&#x27;*&#x27;, j)&#10;    res = []&#10;    curr = 0&#10;    for i in range(n - 1, 0, -1):&#10;        op, prev_mod = dp[i][curr]&#10;        res.append(str(arr[i]))&#10;        res.append(op)&#10;        curr = prev_mod&#10;    res.append(str(arr[0]))&#10;    return &quot;&quot;.join(reversed(res))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">45</td>
+      <td rowspan="1">Rec 45 Find All Possible Palindromic Partitions Of A String<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-all-possible-palindromic-partitions-of-a-string/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive Backtracking.</td>
+      <td><b>Time:</b> O(N * 2^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the string. Extract substring `S[ind..i]`. If it is a palindrome, add it to the current partition list and recursively call for `i+1`. When `ind == length`, push the partition list to the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def allPalindromicPerms(S: str) -&gt; List[List[str]]:&#10;    ans = []&#10;    def is_pal(s): return s == s[::-1]&#10;    def solve(ind, curr):&#10;        if ind == len(S):&#10;            ans.append(curr[:])&#10;            return&#10;        for i in range(ind, len(S)):&#10;            sub = S[ind:i+1]&#10;            if is_pal(sub):&#10;                curr.append(sub)&#10;                solve(i + 1, curr)&#10;                curr.pop()&#10;    solve(0, [])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">46</td>
+      <td rowspan="1">Rec 46 Partition Array To K Subsets<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/partition-array-to-k-subsets/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive Backtracking.</td>
+      <td><b>Time:</b> O(K * 2^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If total sum is not divisible by K, return false. Sort array in descending order. Use a boolean array `vis`. Helper function `solve(ind, currentSum, k)`: if `k == 1` return true. If `currentSum == target`, `solve(0, 0, k-1)`. Otherwise, iterate from `ind` to `N`, if `!vis[i]` and `currentSum + arr[i] <= target`, mark `vis[i] = true`, recurse, unmark.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isKPartitionPossible(a: List[int], n: int, k: int) -&gt; bool:&#10;    total = sum(a)&#10;    if total % k != 0 or n &lt; k: return False&#10;    target = total // k&#10;    vis = [False] * n&#10;    def solve(ind, currSum, k):&#10;        if k == 1: return True&#10;        if currSum == target: return solve(0, 0, k - 1)&#10;        for i in range(ind, n):&#10;            if not vis[i] and currSum + a[i] &lt;= target:&#10;                vis[i] = True&#10;                if solve(i + 1, currSum + a[i], k): return True&#10;                vis[i] = False&#10;        return False&#10;    return solve(0, 0, k)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">47</td>
+      <td rowspan="1">Rec 47 Longest Possible Route In A Matrix With Hurdles<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/longest-possible-route-in-a-matrix-with-hurdles/0' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive Backtracking.</td>
+      <td><b>Time:</b> O(4^(N*M))<br><b>Space:</b> O(N*M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a global `max_dist` or pass it by reference. In `solve(r, c, dist)`, if `(r, c) == (dest_r, dest_c)`, `max_dist = max(max_dist, dist)` and return. Mark `(r, c)` as visited. Explore 4 directions. Unmark `(r, c)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestPath(mat: List[List[int]], xs: int, ys: int, xd: int, yd: int) -&gt; int:&#10;    if mat[xs][ys] == 0 or mat[xd][yd] == 0: return -1&#10;    maxDist = [-1]&#10;    n, m = len(mat), len(mat[0])&#10;    def solve(r, c, dist):&#10;        if r == xd and c == yd:&#10;            maxDist[0] = max(maxDist[0], dist)&#10;            return&#10;        mat[r][c] = 0&#10;        for nr, nc in [(r-1, c), (r+1, c), (r, c-1), (r, c+1)]:&#10;            if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; m and mat[nr][nc] == 1:&#10;                solve(nr, nc, dist + 1)&#10;        mat[r][c] = 1&#10;    solve(xs, ys, 0)&#10;    return maxDist[0]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

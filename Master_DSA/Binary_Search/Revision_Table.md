@@ -376,5 +376,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Binary search on capacity `[max(weights), sum(weights)]`. For a `mid` capacity, greedily load packages. If a package makes sum > capacity, increment days and start new load. If `days <= D`, search left. Else search right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def shipWithinDays(weights: List[int], days: int) -&gt; int:&#10;    low, high = max(weights), sum(weights)&#10;    while low &lt;= high:&#10;        mid = low + (high - low) // 2&#10;        d, load = 1, 0&#10;        for w in weights:&#10;            if load + w &gt; mid:&#10;                d += 1&#10;                load = w&#10;            else:&#10;                load += w&#10;        if d &lt;= days:&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return low</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">41</td>
+      <td rowspan="1">Bs 41 Book Allocation Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search on Answer.</td>
+      <td><b>Time:</b> O(N log(sum - max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space for max pages is `max(arr)` to `sum(arr)`. Use binary search. For a `mid` value, count how many students are needed. If `students > M`, we need to increase max pages (`low = mid + 1`), else we can try to decrease (`high = mid - 1`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPages(A: List[int], N: int, M: int) -&gt; int:&#10;    if M &gt; N: return -1&#10;    def isPossible(mid):&#10;        students, curr_sum = 1, 0&#10;        for x in A:&#10;            if curr_sum + x &gt; mid:&#10;                students += 1&#10;                curr_sum = x&#10;                if students &gt; M or x &gt; mid: return False&#10;            else:&#10;                curr_sum += x&#10;        return True&#10;    low, high = max(A), sum(A)&#10;    ans = -1&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if isPossible(mid):&#10;            ans = mid&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">42</td>
+      <td rowspan="1">Bs 42 Painters Partition Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/the-painters-partition-problem1535/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search on Answer.</td>
+      <td><b>Time:</b> O(N log(sum - max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Similar to Book Allocation. Find if it's possible to paint all boards within `mid` time using at most `K` painters. Search space from `max(arr)` to `sum(arr)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minTime(arr: List[int], n: int, k: int) -&gt; int:&#10;    def isPossible(mid):&#10;        painters, curr_sum = 1, 0&#10;        for x in arr:&#10;            if curr_sum + x &gt; mid:&#10;                painters += 1&#10;                curr_sum = x&#10;                if painters &gt; k or x &gt; mid: return False&#10;            else:&#10;                curr_sum += x&#10;        return True&#10;    low, high = max(arr), sum(arr)&#10;    ans = -1&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if isPossible(mid):&#10;            ans = mid&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">43</td>
+      <td rowspan="1">Bs 43 Aggressive Cows<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/aggressive-cows/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search on Answer.</td>
+      <td><b>Time:</b> O(N log N + N log(max_val))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort array. Maximize the minimum distance. Search space from `1` to `max(arr) - min(arr)`. Function `isPossible(mid)` checks if we can place `K` cows such that distance between any two is at least `mid`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solve(n: int, k: int, stalls: List[int]) -&gt; int:&#10;    stalls.sort()&#10;    def isPossible(mid):&#10;        cows, lastPos = 1, stalls[0]&#10;        for i in range(1, n):&#10;            if stalls[i] - lastPos &gt;= mid:&#10;                cows += 1&#10;                lastPos = stalls[i]&#10;                if cows == k: return True&#10;        return False&#10;    low, high = 1, stalls[-1] - stalls[0]&#10;    ans = -1&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if isPossible(mid):&#10;            ans = mid&#10;            low = mid + 1&#10;        else:&#10;            high = mid - 1&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">44</td>
+      <td rowspan="1">Bs 44 Roti Prata Spoj<br><br></b> <a href='https://www.spoj.com/problems/PRATA/' target='_blank'>SPOJ</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search on Answer.</td>
+      <td><b>Time:</b> O(L * log(max_time))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space is `0` to `max_time`, where `max_time` is the time taken by the fastest cook to make all `P` pratas alone. `isPossible(mid)` checks if the total pratas made by all cooks in `mid` time is at least `P`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minTime(p: int, rank: List[int]) -&gt; int:&#10;    def isPossible(mid):&#10;        count = 0&#10;        for r in rank:&#10;            time, j = 0, 1&#10;            while time + r * j &lt;= mid:&#10;                count += 1&#10;                time += r * j&#10;                j += 1&#10;            if count &gt;= p: return True&#10;        return count &gt;= p&#10;    low, high = 0, 10**8&#10;    ans = -1&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if isPossible(mid):&#10;            ans = mid&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">45</td>
+      <td rowspan="1">Bs 45 Double Helix Spoj<br><br></b> <a href='https://www.spoj.com/problems/ANARC05B/' target='_blank'>SPOJ</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two Pointers / Binary Search.</td>
+      <td><b>Time:</b> O(N + M)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use two pointers to traverse both sorted arrays simultaneously. Accumulate sums `sum1` and `sum2`. When elements match (intersection), add `max(sum1, sum2) + element` to the total answer and reset `sum1` and `sum2`. After the loop, add the remaining max sum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxPathSum(arr1: List[int], arr2: List[int]) -&gt; int:&#10;    sum1 = sum2 = ans = 0&#10;    i = j = 0&#10;    n, m = len(arr1), len(arr2)&#10;    while i &lt; n and j &lt; m:&#10;        if arr1[i] &lt; arr2[j]:&#10;            sum1 += arr1[i]&#10;            i += 1&#10;        elif arr1[i] &gt; arr2[j]:&#10;            sum2 += arr2[j]&#10;            j += 1&#10;        else:&#10;            ans += max(sum1, sum2) + arr1[i]&#10;            sum1, sum2 = 0, 0&#10;            i += 1; j += 1&#10;    while i &lt; n:&#10;        sum1 += arr1[i]&#10;        i += 1&#10;    while j &lt; m:&#10;        sum2 += arr2[j]&#10;        j += 1&#10;    ans += max(sum1, sum2)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">46</td>
+      <td rowspan="1">Bs 46 Subset Sums Spoj<br><br></b> <a href='https://www.spoj.com/problems/SUBSUMS/' target='_blank'>SPOJ</a></td>
+      <td rowspan="1"><b>Example 1:</b> Meet in the Middle.</td>
+      <td><b>Time:</b> O(2^(N/2) * log(2^(N/2)))<br><b>Space:</b> O(2^(N/2))</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Divide the array into two halves. Find all possible subset sums for both halves (`sum1` and `sum2`). Sort `sum2`. For each sum in `sum1`, we need to find the number of elements in `sum2` that satisfy `A - sum <= x <= B - sum`. This can be done using Binary Search (`upper_bound` - `lower_bound`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import bisect&#10;def solve(arr: List[int], A: int, B: int) -&gt; int:&#10;    n = len(arr)&#10;    def get_sums(arr_slice):&#10;        sums = [0]&#10;        for x in arr_slice:&#10;            sums += [s + x for s in sums]&#10;        return sums&#10;    left = get_sums(arr[:n//2])&#10;    right = sorted(get_sums(arr[n//2:]))&#10;    count = 0&#10;    for x in left:&#10;        low = bisect.bisect_left(right, A - x)&#10;        high = bisect.bisect_right(right, B - x)&#10;        count += (high - low)&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">47</td>
+      <td rowspan="1">Bs 47 Inversion Count<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Merge Sort.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Modify Merge Sort. While merging two sorted halves, if `left[i] > right[j]`, then there are `mid - i + 1` inversions.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def inversionCount(arr: List[int], N: int) -&gt; int:&#10;    def mergeSort(arr, temp, left, right):&#10;        inv_count = 0&#10;        if right &gt; left:&#10;            mid = (left + right) // 2&#10;            inv_count += mergeSort(arr, temp, left, mid)&#10;            inv_count += mergeSort(arr, temp, mid + 1, right)&#10;            inv_count += merge(arr, temp, left, mid + 1, right)&#10;        return inv_count&#10;    def merge(arr, temp, left, mid, right):&#10;        inv_count = 0&#10;        i, j, k = left, mid, left&#10;        while i &lt;= mid - 1 and j &lt;= right:&#10;            if arr[i] &lt;= arr[j]:&#10;                temp[k] = arr[i]&#10;                i += 1&#10;            else:&#10;                temp[k] = arr[j]&#10;                inv_count += (mid - i)&#10;                j += 1&#10;            k += 1&#10;        while i &lt;= mid - 1:&#10;            temp[k] = arr[i]&#10;            i += 1; k += 1&#10;        while j &lt;= right:&#10;            temp[k] = arr[j]&#10;            j += 1; k += 1&#10;        for i in range(left, right + 1):&#10;            arr[i] = temp[i]&#10;        return inv_count&#10;    temp = [0] * N&#10;    return mergeSort(arr, temp, 0, N - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">48</td>
+      <td rowspan="1">Bs 48 Allocate Minimum Number Of Pages<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search on Answer.</td>
+      <td><b>Time:</b> O(N log(sum - max))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Search space for max pages is `max(arr)` to `sum(arr)`. Use binary search. For a `mid` value, count how many students are needed. If `students > M`, we need to increase max pages (`low = mid + 1`), else we can try to decrease (`high = mid - 1`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPages(A: List[int], N: int, M: int) -&gt; int:&#10;    if M &gt; N: return -1&#10;    def isPossible(mid):&#10;        students, curr_sum = 1, 0&#10;        for x in A:&#10;            if curr_sum + x &gt; mid:&#10;                students += 1&#10;                curr_sum = x&#10;                if students &gt; M or x &gt; mid: return False&#10;            else:&#10;                curr_sum += x&#10;        return True&#10;    low, high = max(A), sum(A)&#10;    ans = -1&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if isPossible(mid):&#10;            ans = mid&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">49</td>
+      <td rowspan="1">Bs 49 Smallest Factorial Number<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/smallest-factorial-number5929/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search.</td>
+      <td><b>Time:</b> O(log_5(N) * log(5*N))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Trailing zeros depend on number of 5s. Find count of 5s in `mid!`. Use binary search on the number. Low = 0, high = 5*N. If `check(mid) >= n`, `ans = mid` and `high = mid - 1`. Else `low = mid + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findNum(n: int) -&gt; int:&#10;    if n == 1: return 5&#10;    def check(p):&#10;        count, f = 0, 5&#10;        while f &lt;= p:&#10;            count += p // f&#10;            f *= 5&#10;        return count &gt;= n&#10;    low, high = 0, 5 * n&#10;    ans = 0&#10;    while low &lt;= high:&#10;        mid = (low + high) // 2&#10;        if check(mid):&#10;            ans = mid&#10;            high = mid - 1&#10;        else:&#10;            low = mid + 1&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">50</td>
+      <td rowspan="1">Bs 50 K Th Element Of Two Sorted Arrays<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search.</td>
+      <td><b>Time:</b> O(log(min(N, M)))<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Ensure arr1 is smaller. Binary search on arr1. `cut1` is between `max(0, k-m)` and `min(k, n)`. `cut2 = k - cut1`. Compare `l1 <= r2` and `l2 <= r1`. If so, return `max(l1, l2)`. Else adjust `low` and `high`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kthElement(arr1: List[int], arr2: List[int], n: int, m: int, k: int) -&gt; int:&#10;    if n &gt; m: return kthElement(arr2, arr1, m, n, k)&#10;    low, high = max(0, k - m), min(k, n)&#10;    while low &lt;= high:&#10;        cut1 = (low + high) // 2&#10;        cut2 = k - cut1&#10;        l1 = float(&#x27;-inf&#x27;) if cut1 == 0 else arr1[cut1 - 1]&#10;        l2 = float(&#x27;-inf&#x27;) if cut2 == 0 else arr2[cut2 - 1]&#10;        r1 = float(&#x27;inf&#x27;) if cut1 == n else arr1[cut1]&#10;        r2 = float(&#x27;inf&#x27;) if cut2 == m else arr2[cut2]&#10;        if l1 &lt;= r2 and l2 &lt;= r1: return max(l1, l2)&#10;        elif l1 &gt; r2: high = cut1 - 1&#10;        else: low = cut1 + 1&#10;    return 1</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

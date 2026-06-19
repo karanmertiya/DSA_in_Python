@@ -502,5 +502,95 @@
       <td>-</td>
       <td><b>Explanation:</b> `dp[i]` is true if `s[0..i-1]` can be segmented. For each `i` from 1 to `N`, try each word in dictionary. If `s[i-len(word)..i-1] == word` and `dp[i-len(word)]` is true, then `dp[i] = true`. Or iterate `j` from 0 to `i` and check if `dp[j]` is true and `s[j..i-1]` is in dict.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; bool:&#10;    dict_set = set(wordDict)&#10;    dp = [False] * (len(s) + 1)&#10;    dp[0] = True&#10;    for i in range(1, len(s) + 1):&#10;        for j in range(i):&#10;            if dp[j] and s[j:i] in dict_set:&#10;                dp[i] = True&#10;                break&#10;    return dp[len(s)]</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">55</td>
+      <td rowspan="1">Dp 54 Count Palindromic Subsequences<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/count-palindromic-subsequences/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> 2D Interval DP.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If `s[i] == s[j]`, `dp[i][j] = dp[i+1][j] + dp[i][j-1] + 1`. If `s[i] != s[j]`, `dp[i][j] = dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countPS(string: str) -&gt; int:&#10;    n = len(string)&#10;    mod = 10**9 + 7&#10;    dp = [[0] * n for _ in range(n)]&#10;    for i in range(n): dp[i][i] = 1&#10;    for length in range(2, n + 1):&#10;        for i in range(n - length + 1):&#10;            j = i + length - 1&#10;            if string[i] == string[j]:&#10;                dp[i][j] = (dp[i+1][j] + dp[i][j-1] + 1) % mod&#10;            else:&#10;                dp[i][j] = (dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1]) % mod&#10;    return dp[0][n-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">56</td>
+      <td rowspan="1">Dp 55 Longest Alternating Subsequence<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/longest-alternating-subsequence5951/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two state DP.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain two lengths: `up` (ending with ascending) and `down` (ending with descending). Iterate array: if `arr[i] > arr[i-1]`, `up = down + 1`. If `arr[i] < arr[i-1]`, `down = up + 1`. Return `max(up, down)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def AlternatingaMaxLength(nums: List[int]) -&gt; int:&#10;    if not nums: return 0&#10;    up = down = 1&#10;    for i in range(1, len(nums)):&#10;        if nums[i] &gt; nums[i-1]: up = down + 1&#10;        elif nums[i] &lt; nums[i-1]: down = up + 1&#10;    return max(up, down)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">57</td>
+      <td rowspan="1">Dp 56 Largest Square Formed In A Matrix<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/largest-square-formed-in-a-matrix0806/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Bottom-up DP.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N * M) or O(M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i][j]` is side of max square ending at `(i, j)`. If `mat[i][j] == 1`, `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1`. Result is max over all `dp[i][j]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSquare(n: int, m: int, mat: List[List[int]]) -&gt; int:&#10;    dp = [[0] * m for _ in range(n)]&#10;    ans = 0&#10;    for i in range(n):&#10;        for j in range(m):&#10;            if mat[i][j] == 1:&#10;                if i == 0 or j == 0:&#10;                    dp[i][j] = 1&#10;                else:&#10;                    dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1&#10;                ans = max(ans, dp[i][j])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">58</td>
+      <td rowspan="1">Dp 57 Pairs With Specific Difference<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/pairs-with-specific-difference1533/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Sort and DP or Greedy.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort array. Iterate from end. If `arr[i] - arr[i-1] < K`, we pair them, add sum to answer, and `i -= 2`. Else, `i -= 1`. Greedy approach works because pairing larger numbers gives a larger sum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSumPairWithDifferenceLessThanK(arr: List[int], N: int, K: int) -&gt; int:&#10;    arr.sort()&#10;    ans = 0&#10;    i = N - 1&#10;    while i &gt; 0:&#10;        if arr[i] - arr[i-1] &lt; K:&#10;            ans += arr[i] + arr[i-1]&#10;            i -= 2&#10;        else:&#10;            i -= 1&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">59</td>
+      <td rowspan="1">Dp 58 Maximum Path Sum In Matrix<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/path-in-matrix3805/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> 2D DP.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Start from bottom row up. `dp[i][j] = matrix[i][j] + max(dp[i+1][j], dp[i+1][j-1], dp[i+1][j+1])`. The answer is max value in `dp[0]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maximumPath(N: int, Matrix: List[List[int]]) -&gt; int:&#10;    prev = Matrix[-1][:]&#10;    for i in range(N - 2, -1, -1):&#10;        curr = [0] * N&#10;        for j in range(N):&#10;            up = Matrix[i][j] + prev[j]&#10;            ld = Matrix[i][j] + prev[j-1] if j &gt; 0 else 0&#10;            rd = Matrix[i][j] + prev[j+1] if j &lt; N - 1 else 0&#10;            curr[j] = max(up, ld, rd)&#10;        prev = curr&#10;    return max(prev)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">60</td>
+      <td rowspan="1">Dp 59 Maximum Difference Of Zeros And Ones In Binary String<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/maximum-difference-of-zeros-and-ones-in-binary-string4111/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Kadane's Algorithm.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Convert '0' to 1 and '1' to -1. Find the maximum subarray sum using Kadane's algorithm. If max sum is negative, it means string has all 1s, return -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSubstring(S: str) -&gt; int:&#10;    mx, curr = float(&#x27;-inf&#x27;), 0&#10;    for c in S:&#10;        val = 1 if c == &#x27;0&#x27; else -1&#10;        curr = max(val, curr + val)&#10;        mx = max(mx, curr)&#10;    return mx</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">61</td>
+      <td rowspan="1">Dp 60 Minimum Number Of Jumps<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-number-of-jumps-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Greedy tracking bounds.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain `maxReach`, `steps`, and `jumps`. At each step `i`, `maxReach = max(maxReach, i + arr[i])`. Decrement `steps`. If `steps == 0`, `jumps++` and `steps = maxReach - i`. If `i >= maxReach`, return -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minJumps(arr: List[int], n: int) -&gt; int:&#10;    if n &lt;= 1: return 0&#10;    if arr[0] == 0: return -1&#10;    maxReach = steps = arr[0]&#10;    jumps = 1&#10;    for i in range(1, n):&#10;        if i == n - 1: return jumps&#10;        maxReach = max(maxReach, i + arr[i])&#10;        steps -= 1&#10;        if steps == 0:&#10;            jumps += 1&#10;            if i &gt;= maxReach: return -1&#10;            steps = maxReach - i&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">62</td>
+      <td rowspan="1">Dp 61 Minimum Removals From Array To Make Max Min K<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-removals3851/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> DP after sorting.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort array. We want to find the longest subarray `arr[i..j]` such that `arr[j] - arr[i] <= K`. `dp[i]` could store the max `j` for index `i`. Or use Binary Search (`upper_bound`) for each `i` to find the valid `j`, maximizing `j - i + 1`. Total removed = `N - max_length`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import bisect&#10;def removals(arr: List[int], k: int) -&gt; int:&#10;    n = len(arr)&#10;    arr.sort()&#10;    maxLen = 0&#10;    for i in range(n):&#10;        j = bisect.bisect_right(arr, arr[i] + k) - 1&#10;        maxLen = max(maxLen, j - i + 1)&#10;    return n - maxLen</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">63</td>
+      <td rowspan="1">Dp 62 Longest Common Substring<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/longest-common-substring1452/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> 2D DP.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i][j]` is the length of longest common suffix of `S1[0..i-1]` and `S2[0..j-1]`. If `S1[i-1] == S2[j-1]`, `dp[i][j] = dp[i-1][j-1] + 1`. Else, `dp[i][j] = 0`. Max value in `dp` table is answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestCommonSubstr(S1: str, S2: str, n: int, m: int) -&gt; int:&#10;    prev = [0] * (m + 1)&#10;    ans = 0&#10;    for i in range(1, n + 1):&#10;        curr = [0] * (m + 1)&#10;        for j in range(1, m + 1):&#10;            if S1[i-1] == S2[j-1]:&#10;                curr[j] = prev[j-1] + 1&#10;                ans = max(ans, curr[j])&#10;            else:&#10;                curr[j] = 0&#10;        prev = curr&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">64</td>
+      <td rowspan="1">Dp 63 Reach A Given Score<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/reach-a-given-score-1587115621/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Unbounded Knapsack.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i]` represents number of ways to reach score `i`. Init `dp[0] = 1`. For each score option (3, 5, 10), iterate from option to `n`, `dp[i] += dp[i - option]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def count(n: int) -&gt; int:&#10;    dp = [0] * (n + 1)&#10;    dp[0] = 1&#10;    scores = [3, 5, 10]&#10;    for s in scores:&#10;        for i in range(s, n + 1):&#10;            dp[i] += dp[i - s]&#10;    return dp[n]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

@@ -169,5 +169,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use a stack to find Next Smaller Element (NSE) and Previous Smaller Element (PSE) for each bar. Then, the width of the rectangle with bar `i` as the minimum height is `NSE[i] - PSE[i] - 1`. The area is `height[i] * width`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def getMaxArea(arr: List[int], n: int) -&gt; int:&#10;    st = []&#10;    max_area = 0&#10;    for i in range(n + 1):&#10;        while st and (i == n or arr[st[-1]] &gt;= arr[i]):&#10;            height = arr[st.pop()]&#10;            width = i if not st else i - st[-1] - 1&#10;            max_area = max(max_area, height * width)&#10;        st.append(i)&#10;    return max_area</code></pre></details></td>
     </tr>
+    <tr>
+      <td>18</td>
+      <td>Sq 18 Next Smaller Element<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/fab3281cefac7140ca15e21505beddf7e4323e08/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Monotonic Stack.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Stack</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate from right to left. Use a monotonic stack. Pop elements from the stack that are greater than or equal to the current element. The top of the stack is the next smaller element. Push the current element to the stack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def help_classmate(arr, n):&#10;    ans = [-1] * n&#10;    s = []&#10;    for i in range(n - 1, -1, -1):&#10;        while s and s[-1] &gt;= arr[i]: s.pop()&#10;        if s: ans[i] = s[-1]&#10;        s.append(arr[i])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>Sq 19 Lru Cache<br><br></b> <a href='https://leetcode.com/problems/lru-cache/' target='_blank'>LeetCode 146</a></td>
+      <td><b>Example 1:</b> Doubly Linked List + Hash Map.</td>
+      <td><b>Time:</b> O(1) for get and put<br><b>Space:</b> O(Capacity)</td>
+      <td>Hash Map, Doubly Linked List</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a hash map to store keys to Node pointers. Use a doubly linked list to track the usage history. The head of the DLL represents the most recently used, and the tail represents the least recently used. On `get` or `put`, move the accessed node to the head. If capacity is exceeded, remove the node before the tail.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self, key, val):&#10;        self.key, self.val = key, val&#10;        self.prev = self.next = None&#10;class LRUCache:&#10;    def __init__(self, capacity: int):&#10;        self.cap = capacity&#10;        self.m = {}&#10;        self.head, self.tail = Node(-1, -1), Node(-1, -1)&#10;        self.head.next, self.tail.prev = self.tail, self.head&#10;    def addNode(self, newnode):&#10;        temp = self.head.next&#10;        newnode.next, newnode.prev = temp, self.head&#10;        self.head.next, temp.prev = newnode, newnode&#10;    def deleteNode(self, delnode):&#10;        delprev, delnext = delnode.prev, delnode.next&#10;        delprev.next, delnext.prev = delnext, delprev&#10;    def get(self, key: int) -&gt; int:&#10;        if key in self.m:&#10;            resnode = self.m[key]&#10;            ans = resnode.val&#10;            del self.m[key]&#10;            self.deleteNode(resnode)&#10;            self.addNode(resnode)&#10;            self.m[key] = self.head.next&#10;            return ans&#10;        return -1&#10;    def put(self, key: int, value: int) -&gt; None:&#10;        if key in self.m:&#10;            existingnode = self.m[key]&#10;            del self.m[key]&#10;            self.deleteNode(existingnode)&#10;        if len(self.m) == self.cap:&#10;            del self.m[self.tail.prev.key]&#10;            self.deleteNode(self.tail.prev)&#10;        self.addNode(Node(key, value))&#10;        self.m[key] = self.head.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>Sq 20 Lfu Cache<br><br></b> <a href='https://leetcode.com/problems/lfu-cache/' target='_blank'>LeetCode 460</a></td>
+      <td><b>Example 1:</b> Hash Maps + Doubly Linked Lists.</td>
+      <td><b>Time:</b> O(1) for get and put<br><b>Space:</b> O(Capacity)</td>
+      <td>Hash Maps, Doubly Linked List</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a `minFreq` variable. Use one hash map to map `key` to its Node. Use another hash map to map `frequency` to a Doubly Linked List of Nodes with that frequency. When accessing an element, increase its frequency and move it to the corresponding DLL. If capacity is reached, remove the least recently used element from the DLL at `minFreq`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self, key, value):&#10;        self.key, self.value, self.cnt = key, value, 1&#10;        self.prev = self.next = None&#10;class DLinkedList:&#10;    def __init__(self):&#10;        self.head, self.tail = Node(0, 0), Node(0, 0)&#10;        self.head.next, self.tail.prev = self.tail, self.head&#10;        self.size = 0&#10;    def add_node(self, node):&#10;        node.next, node.prev = self.head.next, self.head&#10;        self.head.next.prev, self.head.next = node, node&#10;        self.size += 1&#10;    def remove_node(self, node):&#10;        node.prev.next, node.next.prev = node.next, node.prev&#10;        self.size -= 1&#10;class LFUCache:&#10;    def __init__(self, capacity: int):&#10;        self.cap, self.size, self.min_freq = capacity, 0, 0&#10;        self.node_map, self.freq_map = {}, {}&#10;    def update(self, node):&#10;        freq = node.cnt&#10;        self.freq_map[freq].remove_node(node)&#10;        if self.min_freq == freq and not self.freq_map[freq].size:&#10;            self.min_freq += 1&#10;        node.cnt += 1&#10;        if node.cnt not in self.freq_map:&#10;            self.freq_map[node.cnt] = DLinkedList()&#10;        self.freq_map[node.cnt].add_node(node)&#10;    def get(self, key: int) -&gt; int:&#10;        if key not in self.node_map: return -1&#10;        node = self.node_map[key]&#10;        self.update(node)&#10;        return node.value&#10;    def put(self, key: int, value: int) -&gt; None:&#10;        if self.cap == 0: return&#10;        if key in self.node_map:&#10;            node = self.node_map[key]&#10;            node.value = value&#10;            self.update(node)&#10;        else:&#10;            if self.size == self.cap:&#10;                node_to_remove = self.freq_map[self.min_freq].tail.prev&#10;                self.freq_map[self.min_freq].remove_node(node_to_remove)&#10;                del self.node_map[node_to_remove.key]&#10;                self.size -= 1&#10;            new_node = Node(key, value)&#10;            self.node_map[key] = new_node&#10;            if 1 not in self.freq_map: self.freq_map[1] = DLinkedList()&#10;            self.freq_map[1].add_node(new_node)&#10;            self.min_freq = 1&#10;            self.size += 1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td>Sq 21 Largest Rectangle In Histogram<br><br></b> <a href='https://leetcode.com/problems/largest-rectangle-in-histogram/' target='_blank'>LeetCode 84</a></td>
+      <td><b>Example 1:</b> Monotonic Stack.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Stack</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a stack to keep track of the indices of the bars in increasing order of height. If the current bar is shorter than the top of the stack, pop bars and calculate the area for each popped bar as the shortest bar. The width is `i - stack.top() - 1`. If stack is empty, width is `i`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def largestRectangleArea(heights):&#10;    s, maxArea = [], 0&#10;    for i, h in enumerate(heights + [0]):&#10;        while s and heights[s[-1]] &gt;= h:&#10;            height = heights[s.pop()]&#10;            width = i if not s else i - s[-1] - 1&#10;            maxArea = max(maxArea, height * width)&#10;        s.append(i)&#10;    return maxArea</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td>Sq 22 Maximal Rectangle<br><br></b> <a href='https://leetcode.com/problems/maximal-rectangle/' target='_blank'>LeetCode 85</a></td>
+      <td><b>Example 1:</b> Largest Rectangle in Histogram reduction.</td>
+      <td><b>Time:</b> O(rows * cols)<br><b>Space:</b> O(cols)</td>
+      <td>Stack</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Treat each row as the base of a histogram. The height of each bar is the number of consecutive 1s above it. Apply the Largest Rectangle in Histogram algorithm for each row and maintain the maximum area.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maximalRectangle(matrix):&#10;    if not matrix: return 0&#10;    rows, cols = len(matrix), len(matrix[0])&#10;    heights = [0] * cols&#10;    maxArea = 0&#10;    def largestRectangleArea(h):&#10;        s, max_a = [], 0&#10;        for i, val in enumerate(h + [0]):&#10;            while s and h[s[-1]] &gt;= val:&#10;                height = h[s.pop()]&#10;                width = i if not s else i - s[-1] - 1&#10;                max_a = max(max_a, height * width)&#10;            s.append(i)&#10;        return max_a&#10;    for row in matrix:&#10;        for j in range(cols):&#10;            heights[j] = heights[j] + 1 if row[j] == &#x27;1&#x27; else 0&#10;        maxArea = max(maxArea, largestRectangleArea(heights))&#10;    return maxArea</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td>Sq 23 Online Stock Span<br><br></b> <a href='https://leetcode.com/problems/online-stock-span/' target='_blank'>LeetCode 901</a></td>
+      <td><b>Example 1:</b> Monotonic Stack.</td>
+      <td><b>Time:</b> O(1) amortized<br><b>Space:</b> O(N)</td>
+      <td>Stack</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a stack of pairs `(price, span)`. When a new price comes in, initialize its span to 1. Pop elements from the stack while the top element's price is `<= price`, adding their spans to the current span. Push `(price, span)` to the stack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class StockSpanner:&#10;    def __init__(self):&#10;        self.s = []&#10;    def next(self, price: int) -&gt; int:&#10;        span = 1&#10;        while self.s and self.s[-1][0] &lt;= price:&#10;            span += self.s.pop()[1]&#10;        self.s.append((price, span))&#10;        return span</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>24</td>
+      <td>Sq 24 Celebrity Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/the-celebrity-problem/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Two Pointers / Stack.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a stack or two pointers. If using two pointers: `left = 0`, `right = N - 1`. If `knows(left, right)`, then `left` cannot be the celebrity, so `left++`. Else, `right` cannot be the celebrity, so `right--`. The remaining person `left` is a potential candidate. Verify by checking if `left` knows no one and everyone knows `left`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def celebrity(M, n):&#10;    left, right = 0, n - 1&#10;    while left &lt; right:&#10;        if M[left][right] == 1: left += 1&#10;        else: right -= 1&#10;    for i in range(n):&#10;        if i != left and (M[left][i] == 1 or M[i][left] == 0): return -1&#10;    return left</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td>Sq 25 Rotten Oranges<br><br></b> <a href='https://leetcode.com/problems/rotting-oranges/' target='_blank'>LeetCode 994</a></td>
+      <td><b>Example 1:</b> BFS.</td>
+      <td><b>Time:</b> O(rows * cols)<br><b>Space:</b> O(rows * cols)</td>
+      <td>Queue</td>
+      <td>Grid without fresh oranges</td>
+      <td><b>Explanation:</b> Use a Queue for BFS. Find all initially rotten oranges and push them into the queue with time 0. Count total fresh oranges. Pop an orange, rot its adjacent fresh oranges, push them to the queue with `time + 1`, and decrement fresh count. Return the max time if fresh count is 0, else -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def orangesRotting(grid):&#10;    rows, cols = len(grid), len(grid[0])&#10;    q = deque()&#10;    fresh_cnt = 0&#10;    for i in range(rows):&#10;        for j in range(cols):&#10;            if grid[i][j] == 2: q.append((i, j, 0))&#10;            elif grid[i][j] == 1: fresh_cnt += 1&#10;    tm, cnt = 0, 0&#10;    while q:&#10;        r, c, t = q.popleft()&#10;        tm = max(tm, t)&#10;        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:&#10;            nr, nc = r + dr, c + dc&#10;            if 0 &lt;= nr &lt; rows and 0 &lt;= nc &lt; cols and grid[nr][nc] == 1:&#10;                grid[nr][nc] = 2&#10;                q.append((nr, nc, t + 1))&#10;                cnt += 1&#10;    return tm if cnt == fresh_cnt else -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td>Sq 26 Sliding Window Maximum<br><br></b> <a href='https://leetcode.com/problems/sliding-window-maximum/' target='_blank'>LeetCode 239</a></td>
+      <td><b>Example 1:</b> Deque.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(K)</td>
+      <td>Deque</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a double-ended queue (deque) to store indices. Maintain indices in the deque such that the elements they correspond to are in decreasing order. The front of the deque will always be the maximum for the current window. Remove indices from the front if they are out of the window (`i - k`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def maxSlidingWindow(nums, k):&#10;    dq = deque()&#10;    ans = []&#10;    for i in range(len(nums)):&#10;        if dq and dq[0] == i - k: dq.popleft()&#10;        while dq and nums[dq[-1]] &lt; nums[i]: dq.pop()&#10;        dq.append(i)&#10;        if i &gt;= k - 1: ans.append(nums[dq[0]])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td>Sq 27 First Non Repeating Character In A Stream<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/first-non-repeating-character-in-a-stream1216/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Queue and Frequency Array.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a frequency array or hash map to count character occurrences. Use a queue to maintain the order of characters. When a character arrives, increment its count and push to queue. While the queue is not empty and the front element's count > 1, pop it. The front is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def FirstNonRepeating(A):&#10;    count = {}&#10;    q = deque()&#10;    ans = []&#10;    for char in A:&#10;        count[char] = count.get(char, 0) + 1&#10;        q.append(char)&#10;        while q:&#10;            if count[q[0]] &gt; 1: q.popleft()&#10;            else:&#10;                ans.append(q[0])&#10;                break&#10;        if not q: ans.append(&#x27;#&#x27;)&#10;    return &quot;&quot;.join(ans)</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

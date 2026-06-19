@@ -115,5 +115,59 @@
       <td><b>Duplicate Elements:</b> Handled automatically by the Set.</td>
       <td><b>Explanation:</b> Insert all elements into a Hash Set. Iterate through elements. If `num - 1` is NOT in the set, it's the start of a sequence. Count forwards.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestConsecutive(nums: list[int]) -&gt; int:&#10;    num_set = set(nums)&#10;    max_len = 0&#10;    for num in num_set:&#10;        if num - 1 not in num_set:&#10;            curr_num = num&#10;            curr_len = 1&#10;            while curr_num + 1 in num_set:&#10;                curr_num += 1&#10;                curr_len += 1&#10;            max_len = max(max_len, curr_len)&#10;    return max_len</code></pre></details></td>
     </tr>
+    <tr>
+      <td>12</td>
+      <td>Hash 12 Subarray With 0 Sum<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/subarray-with-0-sum-1587115621/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Hash Set.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Set</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain the prefix sum. If the current prefix sum is 0, or if it has been seen before (stored in a Hash Set), then a subarray with 0 sum exists.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def subArrayExists(arr, n):&#10;    s = set()&#10;    sum_val = 0&#10;    for num in arr:&#10;        sum_val += num&#10;        if sum_val == 0 or sum_val in s: return True&#10;        s.add(sum_val)&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>Hash 13 Longest Subarray With 0 Sum<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/largest-subarray-with-0-sum/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Hash Map.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain the prefix sum and a hash map storing the first occurrence index of each prefix sum. If sum is 0, length is `i+1`. If sum is in the map, length is `i - map[sum]`. Update max length.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxLen(n, arr):&#10;    m = {}&#10;    maxi, sum_val = 0, 0&#10;    for i in range(n):&#10;        sum_val += arr[i]&#10;        if sum_val == 0: maxi = i + 1&#10;        else:&#10;            if sum_val in m:&#10;                maxi = max(maxi, i - m[sum_val])&#10;            else:&#10;                m[sum_val] = i&#10;    return maxi</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>Hash 14 Two Sum<br><br></b> <a href='https://leetcode.com/problems/two-sum/' target='_blank'>LeetCode 1</a></td>
+      <td><b>Example 1:</b> Hash Map.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a hash map to store `value -> index`. Iterate through array, check if `target - nums[i]` exists in map. If yes, return current index and mapped index. Else, store current value and index.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def twoSum(nums, target):&#10;    m = {}&#10;    for i, num in enumerate(nums):&#10;        if target - num in m:&#10;            return [m[target - num], i]&#10;        m[num] = i&#10;    return []</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>Hash 15 Count Subarrays With Given Xor<br><br></b> <a href='https://www.interviewbit.com/problems/subarray-with-given-xor/' target='_blank'>InterviewBit</a></td>
+      <td><b>Example 1:</b> Hash Map.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain prefix XOR. Use hash map to store prefix XOR frequencies. If current XOR is `xr`, we need a previous XOR `xr ^ B`. Add its frequency to count. Insert `xr` to map.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solve(A, B):&#10;    m = {}&#10;    xr, count = 0, 0&#10;    for num in A:&#10;        xr ^= num&#10;        if xr == B: count += 1&#10;        if xr ^ B in m:&#10;            count += m[xr ^ B]&#10;        m[xr] = m.get(xr, 0) + 1&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>Hash 16 Longest Consecutive Sequence<br><br></b> <a href='https://leetcode.com/problems/longest-consecutive-sequence/' target='_blank'>LeetCode 128</a></td>
+      <td><b>Example 1:</b> Hash Set.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Set</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Insert all elements into a hash set. Iterate through the set. If `x - 1` is not in the set, `x` is the start of a sequence. Count consecutive elements `x + 1`, `x + 2`... Update max length.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestConsecutive(nums):&#10;    s = set(nums)&#10;    max_len = 0&#10;    for num in s:&#10;        if num - 1 not in s:&#10;            curr_num, curr_len = num, 1&#10;            while curr_num + 1 in s:&#10;                curr_num += 1&#10;                curr_len += 1&#10;            max_len = max(max_len, curr_len)&#10;    return max_len</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>Hash 17 4Sum<br><br></b> <a href='https://leetcode.com/problems/4sum/' target='_blank'>LeetCode 18</a></td>
+      <td><b>Example 1:</b> Sort + Two Pointers.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>Integer overflow for sum</td>
+      <td><b>Explanation:</b> Sort array. Use nested loops for first two elements. Use two pointers for the remaining two. Skip duplicates to ensure unique quadruplets.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def fourSum(nums, target):&#10;    nums.sort()&#10;    ans = []&#10;    n = len(nums)&#10;    for i in range(n):&#10;        if i &gt; 0 and nums[i] == nums[i-1]: continue&#10;        for j in range(i + 1, n):&#10;            if j &gt; i + 1 and nums[j] == nums[j-1]: continue&#10;            low, high = j + 1, n - 1&#10;            while low &lt; high:&#10;                total = nums[i] + nums[j] + nums[low] + nums[high]&#10;                if total == target:&#10;                    ans.append([nums[i], nums[j], nums[low], nums[high]])&#10;                    while low &lt; high and nums[low] == nums[low+1]: low += 1&#10;                    while low &lt; high and nums[high] == nums[high-1]: high -= 1&#10;                    low += 1; high -= 1&#10;                elif total &lt; target: low += 1&#10;                else: high -= 1&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

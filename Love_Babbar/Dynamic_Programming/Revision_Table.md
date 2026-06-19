@@ -232,5 +232,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Subset sum variation. `S1 - S2 = target`, `S1 + S2 = totalSum`. So, `S1 = (target + totalSum) / 2`. Find subsets with this target sum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findTargetSumWays(nums: List[int], target: int) -&gt; int:&#10;    total = sum(nums)&#10;    if total - target &lt; 0 or (total - target) % 2 == 1: return 0&#10;    s2 = (total - target) // 2&#10;    prev = [0] * (s2 + 1)&#10;    if nums[0] == 0: prev[0] = 2&#10;    else: prev[0] = 1&#10;    if nums[0] != 0 and nums[0] &lt;= s2: prev[nums[0]] = 1&#10;    for ind in range(1, len(nums)):&#10;        cur = [0] * (s2 + 1)&#10;        for t in range(s2 + 1):&#10;            notTaken = prev[t]&#10;            taken = 0&#10;            if nums[ind] &lt;= t: taken = prev[t - nums[ind]]&#10;            cur[t] = notTaken + taken&#10;        prev = cur&#10;    return prev[s2]</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">25</td>
+      <td rowspan="1">Dp 24 Burst Balloons<br><br></b> <a href='https://leetcode.com/problems/burst-balloons/' target='_blank'>LeetCode 312</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: nums = [3,1,5,8], Output: 167</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> MCM Pattern. Add 1 at the beginning and end. Loop lengths from 1 to N. Iterate start `i` and end `j`. Then iterate `k` from `i` to `j`, meaning balloon `k` is the LAST one to burst in the range `[i, j]`. The coins collected are `nums[i-1] * nums[k] * nums[j+1] + dp[i][k-1] + dp[k+1][j]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxCoins(nums: List[int]) -&gt; int:&#10;    n = len(nums)&#10;    nums = [1] + nums + [1]&#10;    dp = [[0] * (n + 2) for _ in range(n + 2)]&#10;    for i in range(n, 0, -1):&#10;        for j in range(1, n + 1):&#10;            if i &gt; j: continue&#10;            maxi = float(&#x27;-inf&#x27;)&#10;            for k in range(i, j + 1):&#10;                cost = nums[i-1]*nums[k]*nums[j+1] + dp[i][k-1] + dp[k+1][j]&#10;                maxi = max(maxi, cost)&#10;            dp[i][j] = maxi&#10;    return dp[1][n]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">26</td>
+      <td rowspan="1">Dp 25 Palindrome Partitioning Ii<br><br></b> <a href='https://leetcode.com/problems/palindrome-partitioning-ii/' target='_blank'>LeetCode 132</a></td>
+      <td rowspan="1"><b>Example 1:</b> Input: s = 'aab', Output: 1</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Front Partitioning. `dp[i]` is the minimum cuts for `s[i...n-1]`. To compute `dp[i]`, iterate `j` from `i` to `n-1`. If `s[i...j]` is a palindrome, then `cost = 1 + dp[j+1]`. `dp[i]` is the minimum of these costs. Return `dp[0] - 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minCut(s: str) -&gt; int:&#10;    n = len(s)&#10;    dp = [0] * (n + 1)&#10;    for i in range(n - 1, -1, -1):&#10;        min_cuts = float(&#x27;inf&#x27;)&#10;        for j in range(i, n):&#10;            if s[i:j+1] == s[i:j+1][::-1]:&#10;                cost = 1 + dp[j+1]&#10;                min_cuts = min(min_cuts, cost)&#10;        dp[i] = min_cuts&#10;    return dp[0] - 1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">27</td>
+      <td rowspan="1">Dp 26 Evaluate Boolean Expression To True<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/boolean-parenthesization5610/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> MCM DP pattern.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> MCM DP. `dp[i][j][isTrue]` stores the number of ways to evaluate `S[i..j]` to boolean `isTrue`. Iterate length, start, and partition `k`. Calculate T/F ways based on the operator at `k`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countWays(N: int, S: str) -&gt; int:&#10;    mod = 1003&#10;    dp = [[[0, 0] for _ in range(N)] for _ in range(N)]&#10;    for i in range(N - 1, -1, -2):&#10;        for j in range(i, N, 2):&#10;            if i == j:&#10;                dp[i][j][1] = 1 if S[i] == &#x27;T&#x27; else 0&#10;                dp[i][j][0] = 1 if S[i] == &#x27;F&#x27; else 0&#10;                continue&#10;            waysT, waysF = 0, 0&#10;            for k in range(i + 1, j, 2):&#10;                lT, lF = dp[i][k-1][1], dp[i][k-1][0]&#10;                rT, rF = dp[k+1][j][1], dp[k+1][j][0]&#10;                if S[k] == &#x27;&amp;&#x27;:&#10;                    waysT = (waysT + lT * rT) % mod&#10;                    waysF = (waysF + lT * rF + lF * rT + lF * rF) % mod&#10;                elif S[k] == &#x27;|&#x27;:&#10;                    waysT = (waysT + lT * rT + lT * rF + lF * rT) % mod&#10;                    waysF = (waysF + lF * rF) % mod&#10;                elif S[k] == &#x27;^&#x27;:&#10;                    waysT = (waysT + lT * rF + lF * rT) % mod&#10;                    waysF = (waysF + lT * rT + lF * rF) % mod&#10;            dp[i][j][1] = waysT&#10;            dp[i][j][0] = waysF&#10;    return dp[0][N-1][1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">28</td>
+      <td rowspan="1">Dp 27 Maximum Rectangle Area With All 1S<br><br></b> <a href='https://leetcode.com/problems/maximal-rectangle/' target='_blank'>LeetCode 85</a></td>
+      <td rowspan="1"><b>Example 1:</b> Calculate largest area.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(M)</td>
+      <td><code>#include <stack></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a histogram for each row. The height of the histogram is the consecutive 1s ending at that cell. For each row's histogram, use the 'Largest Rectangle in Histogram' stack algorithm.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maximalRectangle(matrix: List[List[str]]) -&gt; int:&#10;    if not matrix: return 0&#10;    def largestRectangleArea(heights):&#10;        st = []&#10;        maxA = 0&#10;        heights.append(0)&#10;        for i, h in enumerate(heights):&#10;            while st and heights[st[-1]] &gt;= h:&#10;                height = heights[st.pop()]&#10;                w = i if not st else i - st[-1] - 1&#10;                maxA = max(maxA, height * w)&#10;            st.append(i)&#10;        return maxA&#10;    &#10;    maxArea = 0&#10;    heights = [0] * len(matrix[0])&#10;    for row in matrix:&#10;        for j, val in enumerate(row):&#10;            heights[j] = heights[j] + 1 if val == &#x27;1&#x27; else 0&#10;        maxArea = max(maxArea, largestRectangleArea(heights))&#10;    return maxArea</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">29</td>
+      <td rowspan="1">Dp 28 Count Square Submatrices With All Ones<br><br></b> <a href='https://leetcode.com/problems/count-square-submatrices-with-all-ones/' target='_blank'>LeetCode 1277</a></td>
+      <td rowspan="1"><b>Example 1:</b> Return total count.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N * M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i][j]` is the size of the largest square ending at `(i, j)`. It also represents the number of squares ending at `(i, j)`. `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1` if `matrix[i][j] == 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countSquares(matrix: List[List[int]]) -&gt; int:&#10;    n, m = len(matrix), len(matrix[0])&#10;    dp = [[0]*m for _ in range(n)]&#10;    total = 0&#10;    for i in range(n):&#10;        for j in range(m):&#10;            if matrix[i][j] == 1:&#10;                if i == 0 or j == 0: dp[i][j] = 1&#10;                else: dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1&#10;                total += dp[i][j]&#10;    return total</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">30</td>
+      <td rowspan="1">Dp 29 Word Break Dp<br><br></b> <a href='https://leetcode.com/problems/word-break/' target='_blank'>LeetCode 139</a></td>
+      <td rowspan="1"><b>Example 1:</b> `s = "leetcode"`. Output: `true`.</td>
+      <td><b>Time:</b> O(N^2 * max_word_length)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_set></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i]` is true if `s[0..i-1]` can be segmented. For each `i`, iterate `j` from 0 to `i-1`. If `dp[j]` is true and `s[j..i-1]` is in dict, then `dp[i] = true`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; bool:&#10;    word_set = set(wordDict)&#10;    n = len(s)&#10;    dp = [False] * (n + 1)&#10;    dp[0] = True&#10;    for i in range(1, n + 1):&#10;        for j in range(i - 1, -1, -1):&#10;            if dp[j] and s[j:i] in word_set:&#10;                dp[i] = True&#10;                break&#10;    return dp[n]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">31</td>
+      <td rowspan="1">Dp 30 Matrix Chain Multiplication<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Minimize scalar multiplications.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Standard MCM DP. `dp[i][j]` is min cost to multiply matrices from `i` to `j`. Iterate length of chain, start `i`, and partition `k`. `dp[i][j] = min(dp[i][k] + dp[k+1][j] + arr[i-1]*arr[k]*arr[j])`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def matrixMultiplication(N: int, arr: List[int]) -&gt; int:&#10;    dp = [[0]*N for _ in range(N)]&#10;    for i in range(N-1, 0, -1):&#10;        for j in range(i+1, N):&#10;            mini = float(&#x27;inf&#x27;)&#10;            for k in range(i, j):&#10;                cost = dp[i][k] + dp[k+1][j] + arr[i-1]*arr[k]*arr[j]&#10;                mini = min(mini, cost)&#10;            dp[i][j] = mini&#10;    return dp[1][N-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">32</td>
+      <td rowspan="1">Dp 31 Minimum Cost To Cut A Stick<br><br></b> <a href='https://leetcode.com/problems/minimum-cost-to-cut-a-stick/' target='_blank'>LeetCode 1547</a></td>
+      <td rowspan="1"><b>Example 1:</b> Cost depends on current stick length.</td>
+      <td><b>Time:</b> O(C^3) where C is number of cuts<br><b>Space:</b> O(C^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort cuts array and prepend 0, append `n`. Use MCM pattern. `dp[i][j]` is the minimum cost to cut the stick between cuts `i` and `j`. `dp[i][j] = min(cost + cuts[j+1] - cuts[i-1])`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minCost(n: int, cuts: List[int]) -&gt; int:&#10;    cuts = [0] + sorted(cuts) + [n]&#10;    c = len(cuts) - 2&#10;    dp = [[0] * (c + 2) for _ in range(c + 2)]&#10;    for i in range(c, 0, -1):&#10;        for j in range(1, c + 1):&#10;            if i &gt; j: continue&#10;            mini = float(&#x27;inf&#x27;)&#10;            for k in range(i, j + 1):&#10;                cost = cuts[j+1] - cuts[i-1] + dp[i][k-1] + dp[k+1][j]&#10;                mini = min(mini, cost)&#10;            dp[i][j] = mini&#10;    return dp[1][c]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">33</td>
+      <td rowspan="1">Dp 32 Partition Array For Maximum Sum<br><br></b> <a href='https://leetcode.com/problems/partition-array-for-maximum-sum/' target='_blank'>LeetCode 1043</a></td>
+      <td rowspan="1"><b>Example 1:</b> Front partitioning DP.</td>
+      <td><b>Time:</b> O(N * K)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Front partitioning. `dp[i]` is max sum for `arr[i..n-1]`. For each `i`, iterate `j` up to `i+k-1`. Find `maxi` element in this window, and add `maxi * length + dp[j+1]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSumAfterPartitioning(arr: List[int], k: int) -&gt; int:&#10;    n = len(arr)&#10;    dp = [0] * (n + 1)&#10;    for i in range(n - 1, -1, -1):&#10;        max_val = 0&#10;        max_ans = 0&#10;        length = 0&#10;        for j in range(i, min(n, i + k)):&#10;            length += 1&#10;            max_val = max(max_val, arr[j])&#10;            current_sum = max_val * length + dp[j+1]&#10;            max_ans = max(max_ans, current_sum)&#10;        dp[i] = max_ans&#10;    return dp[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">34</td>
+      <td rowspan="1">Dp 33 Distinct Subsequences<br><br></b> <a href='https://leetcode.com/problems/distinct-subsequences/' target='_blank'>LeetCode 115</a></td>
+      <td rowspan="1"><b>Example 1:</b> Subsequence match count.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(M)</td>
+      <td>-</td>
+      <td><b>Integer Overflow:</b> Use double or long long, or cast to unsigned int.</td>
+      <td><b>Explanation:</b> If characters match, `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]`. If they don't, `dp[i][j] = dp[i-1][j]`. Optimize to 1D array.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numDistinct(s: str, t: str) -&gt; int:&#10;    n, m = len(s), len(t)&#10;    dp = [0] * (m + 1)&#10;    dp[0] = 1&#10;    for i in range(1, n + 1):&#10;        for j in range(m, 0, -1):&#10;            if s[i-1] == t[j-1]:&#10;                dp[j] += dp[j-1]&#10;    return dp[m]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

@@ -169,5 +169,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Create a DAG based on mismatching characters between adjacent words. Use Kahn's algorithm (Topological Sort BFS) to find the character order.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findOrder(dict: List[str], N: int, K: int) -&gt; str:&#10;    adj = [[] for _ in range(K)]&#10;    for i in range(N - 1):&#10;        s1, s2 = dict[i], dict[i+1]&#10;        for j in range(min(len(s1), len(s2))):&#10;            if s1[j] != s2[j]:&#10;                adj[ord(s1[j]) - ord(&#x27;a&#x27;)].append(ord(s2[j]) - ord(&#x27;a&#x27;))&#10;                break&#10;    indegree = [0] * K&#10;    for i in range(K):&#10;        for it in adj[i]: indegree[it] += 1&#10;    q = [i for i in range(K) if indegree[i] == 0]&#10;    topo = []&#10;    while q:&#10;        node = q.pop(0)&#10;        topo.append(chr(node + ord(&#x27;a&#x27;)))&#10;        for it in adj[node]:&#10;            indegree[it] -= 1&#10;            if indegree[it] == 0: q.append(it)&#10;    return &#x27;&#x27;.join(topo)</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">18</td>
+      <td rowspan="1">Graph 19 Shortest Path In Directed Acyclic Graph<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/shortest-path-in-undirected-graph/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Topo Sort.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Perform Topological Sort. Then iterate through the topologically sorted vertices. For each vertex `u`, relax its neighbors: `dist[v] = min(dist[v], dist[u] + weight)`. Return `dist` array.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def shortestPath(N: int, M: int, edges: List[List[int]]) -&gt; List[int]:&#10;    adj = [[] for _ in range(N)]&#10;    for u, v, wt in edges:&#10;        adj[u].append((v, wt))&#10;    vis = [0] * N&#10;    st = []&#10;    def topoSort(node):&#10;        vis[node] = 1&#10;        for v, wt in adj[node]:&#10;            if not vis[v]: topoSort(v)&#10;        st.append(node)&#10;    for i in range(N):&#10;        if not vis[i]: topoSort(i)&#10;    dist = [1e9] * N&#10;    dist[0] = 0&#10;    while st:&#10;        node = st.pop()&#10;        if dist[node] != 1e9:&#10;            for v, wt in adj[node]:&#10;                if dist[node] + wt &lt; dist[v]:&#10;                    dist[v] = dist[node] + wt&#10;    return [d if d != 1e9 else -1 for d in dist]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">19</td>
+      <td rowspan="1">Graph 20 Shortest Path In Undirected Graph With Unit Distance<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/shortest-path-in-undirected-graph-having-unit-distance/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> BFS approach.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Standard BFS starting from source. Distance of neighbors is `dist[u] + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def shortestPath(edges: List[List[int]], n: int, m: int, src: int) -&gt; List[int]:&#10;    adj = [[] for _ in range(n)]&#10;    for u, v in edges:&#10;        adj[u].append(v)&#10;        adj[v].append(u)&#10;    dist = [1e9] * n&#10;    dist[src] = 0&#10;    q = collections.deque([src])&#10;    while q:&#10;        node = q.popleft()&#10;        for neighbor in adj[node]:&#10;            if dist[node] + 1 &lt; dist[neighbor]:&#10;                dist[neighbor] = dist[node] + 1&#10;                q.append(neighbor)&#10;    return [d if d != 1e9 else -1 for d in dist]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">20</td>
+      <td rowspan="1">Graph 21 Dijkstras Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> PQ based Dijkstra.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(V)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a Min-Heap. `dist` array initialized to infinity. Push `{0, src}` to PQ. Pop `node`. If `dist[node] + weight < dist[adjNode]`, update `dist[adjNode]` and push `{dist[adjNode], adjNode}` to PQ.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def dijkstra(V: int, adj: List[List[List[int]]], S: int) -&gt; List[int]:&#10;    pq = [(0, S)]&#10;    dist = [1e9] * V&#10;    dist[S] = 0&#10;    while pq:&#10;        dis, node = heapq.heappop(pq)&#10;        for adjNode, edgeWeight in adj[node]:&#10;            if dis + edgeWeight &lt; dist[adjNode]:&#10;                dist[adjNode] = dis + edgeWeight&#10;                heapq.heappush(pq, (dist[adjNode], adjNode))&#10;    return dist</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">21</td>
+      <td rowspan="1">Graph 22 Bellman Ford Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/distance-from-the-source-bellman-ford-algorithm/0' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Detect negative cycle.</td>
+      <td><b>Time:</b> O(V * E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Relax all E edges V-1 times. If any edge can still be relaxed in the Vth iteration, then there's a negative cycle.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def bellman_ford(V: int, edges: List[List[int]], S: int) -&gt; List[int]:&#10;    dist = [int(1e8)] * V&#10;    dist[S] = 0&#10;    for _ in range(V - 1):&#10;        for u, v, wt in edges:&#10;            if dist[u] != int(1e8) and dist[u] + wt &lt; dist[v]:&#10;                dist[v] = dist[u] + wt&#10;    for u, v, wt in edges:&#10;        if dist[u] != int(1e8) and dist[u] + wt &lt; dist[v]:&#10;            return [-1]&#10;    return dist</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">22</td>
+      <td rowspan="1">Graph 23 Floyd Warshall Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/implementing-floyd-warshall2042/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> All pairs shortest path.</td>
+      <td><b>Time:</b> O(V^3)<br><b>Space:</b> O(V^2) or O(1) if in-place</td>
+      <td>-</td>
+      <td><b>Unreachable:</b> Replace -1 with infinity before loop, revert back to -1 after.</td>
+      <td><b>Explanation:</b> Iterate `k` (via node) from 0 to V-1. Iterate `i` and `j`. `matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j])`. If `matrix[i][i] < 0`, negative cycle exists.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def shortest_distance(matrix):&#10;    n = len(matrix)&#10;    for i in range(n):&#10;        for j in range(n):&#10;            if matrix[i][j] == -1: matrix[i][j] = float(&#x27;inf&#x27;)&#10;            if i == j: matrix[i][j] = 0&#10;    for k in range(n):&#10;        for i in range(n):&#10;            for j in range(n):&#10;                matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j])&#10;    for i in range(n):&#10;        for j in range(n):&#10;            if matrix[i][j] == float(&#x27;inf&#x27;): matrix[i][j] = -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">23</td>
+      <td rowspan="1">Graph 24 Minimum Spanning Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Kruskal or Prim's.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(V)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Prim's Algorithm. Push `{0, 0}` to Min-Heap. If node is visited, continue. Mark visited, add weight to sum. Push all adjacent unvisited nodes to Heap.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def spanningTree(V: int, adj: List[List[List[int]]]) -&gt; int:&#10;    pq = [(0, 0)]&#10;    vis = [0] * V&#10;    sum = 0&#10;    while pq:&#10;        wt, node = heapq.heappop(pq)&#10;        if vis[node]: continue&#10;        vis[node] = 1&#10;        sum += wt&#10;        for adjNode, edW in adj[node]:&#10;            if not vis[adjNode]:&#10;                heapq.heappush(pq, (edW, adjNode))&#10;    return sum</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">24</td>
+      <td rowspan="1">Graph 25 Prims Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> MST.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(V)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Same as previous. Min Heap of `{weight, node}`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def spanningTree(V: int, adj: List[List[List[int]]]) -&gt; int:&#10;    pq = [(0, 0)]&#10;    vis = [0] * V&#10;    sum = 0&#10;    while pq:&#10;        wt, node = heapq.heappop(pq)&#10;        if vis[node]: continue&#10;        vis[node] = 1&#10;        sum += wt&#10;        for adjNode, edW in adj[node]:&#10;            if not vis[adjNode]:&#10;                heapq.heappush(pq, (edW, adjNode))&#10;    return sum</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">25</td>
+      <td rowspan="1">Graph 26 Kruskals Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> DSU approach.</td>
+      <td><b>Time:</b> O(E log E + E * alpha)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort all edges by weight. Iterate through sorted edges. Use Disjoint Set Union (DSU) to check if adding the edge forms a cycle. If not, add edge to MST and union the sets.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class DisjointSet:&#10;    def __init__(self, n):&#10;        self.parent = list(range(n + 1))&#10;        self.size = [1] * (n + 1)&#10;    def find(self, i):&#10;        if self.parent[i] == i: return i&#10;        self.parent[i] = self.find(self.parent[i])&#10;        return self.parent[i]&#10;    def union(self, i, j):&#10;        root_i, root_j = self.find(i), self.find(j)&#10;        if root_i != root_j:&#10;            if self.size[root_i] &lt; self.size[root_j]:&#10;                self.parent[root_i] = root_j&#10;                self.size[root_j] += self.size[root_i]&#10;            else:&#10;                self.parent[root_j] = root_i&#10;                self.size[root_i] += self.size[root_j]&#10;&#10;def spanningTree(V, adj):&#10;    edges = []&#10;    for i in range(V):&#10;        for neighbor, wt in adj[i]:&#10;            edges.append((wt, i, neighbor))&#10;    edges.sort()&#10;    ds = DisjointSet(V)&#10;    sum = 0&#10;    for wt, u, v in edges:&#10;        if ds.find(u) != ds.find(v):&#10;            sum += wt&#10;            ds.union(u, v)&#10;    return sum</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">26</td>
+      <td rowspan="1">Graph 27 Strongly Connected Components Kosarajus Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Reverse graph.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Kosaraju's Algorithm. 1. Topo sort the graph to get finish times (push to stack on completion). 2. Reverse all edges. 3. Pop from stack and run DFS on the reversed graph. Each successful DFS from stack gives one SCC.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kosaraju(V: int, adj: List[List[int]]) -&gt; int:&#10;    vis = [0] * V&#10;    st = []&#10;    def dfs(node):&#10;        vis[node] = 1&#10;        for neighbor in adj[node]:&#10;            if not vis[neighbor]: dfs(neighbor)&#10;        st.append(node)&#10;    for i in range(V):&#10;        if not vis[i]: dfs(i)&#10;    adjT = [[] for _ in range(V)]&#10;    for i in range(V):&#10;        vis[i] = 0&#10;        for neighbor in adj[i]:&#10;            adjT[neighbor].append(i)&#10;    def dfs2(node):&#10;        vis[node] = 1&#10;        for neighbor in adjT[node]:&#10;            if not vis[neighbor]: dfs2(neighbor)&#10;    scc = 0&#10;    while st:&#10;        node = st.pop()&#10;        if not vis[node]:&#10;            scc += 1&#10;            dfs2(node)&#10;    return scc</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">27</td>
+      <td rowspan="1">Graph 28 Bridges In Graph<br><br></b> <a href='https://leetcode.com/problems/critical-connections-in-a-network/' target='_blank'>LeetCode 1192</a></td>
+      <td rowspan="1"><b>Example 1:</b> Tarjan's algorithm.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Tarjan's algorithm. Maintain `tin` (time of insertion) and `low` (lowest time reachable). If `low[neighbor] > tin[node]`, the edge `(node, neighbor)` is a bridge. Update `low[node] = min(low[node], low[neighbor])`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def criticalConnections(n: int, connections: List[List[int]]) -&gt; List[List[int]]:&#10;    adj = [[] for _ in range(n)]&#10;    for u, v in connections:&#10;        adj[u].append(v)&#10;        adj[v].append(u)&#10;    vis = [0] * n&#10;    tin, low = [0] * n, [0] * n&#10;    bridges = []&#10;    timer = 1&#10;    def dfs(node, parent):&#10;        nonlocal timer&#10;        vis[node] = 1&#10;        tin[node] = low[node] = timer&#10;        timer += 1&#10;        for neighbor in adj[node]:&#10;            if neighbor == parent: continue&#10;            if not vis[neighbor]:&#10;                dfs(neighbor, node)&#10;                low[node] = min(low[node], low[neighbor])&#10;                if low[neighbor] &gt; tin[node]:&#10;                    bridges.append([node, neighbor])&#10;            else:&#10;                low[node] = min(low[node], low[neighbor])&#10;    dfs(0, -1)&#10;    return bridges</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

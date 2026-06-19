@@ -259,5 +259,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Tarjan's algorithm. Maintain `tin` (time of insertion) and `low` (lowest time reachable). If `low[neighbor] > tin[node]`, the edge `(node, neighbor)` is a bridge. Update `low[node] = min(low[node], low[neighbor])`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def criticalConnections(n: int, connections: List[List[int]]) -&gt; List[List[int]]:&#10;    adj = [[] for _ in range(n)]&#10;    for u, v in connections:&#10;        adj[u].append(v)&#10;        adj[v].append(u)&#10;    vis = [0] * n&#10;    tin, low = [0] * n, [0] * n&#10;    bridges = []&#10;    timer = 1&#10;    def dfs(node, parent):&#10;        nonlocal timer&#10;        vis[node] = 1&#10;        tin[node] = low[node] = timer&#10;        timer += 1&#10;        for neighbor in adj[node]:&#10;            if neighbor == parent: continue&#10;            if not vis[neighbor]:&#10;                dfs(neighbor, node)&#10;                low[node] = min(low[node], low[neighbor])&#10;                if low[neighbor] &gt; tin[node]:&#10;                    bridges.append([node, neighbor])&#10;            else:&#10;                low[node] = min(low[node], low[neighbor])&#10;    dfs(0, -1)&#10;    return bridges</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">28</td>
+      <td rowspan="1">Graph 29 Articulation Point I<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/articulation-point-1/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Tarjan's algorithm with discovery times.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain `tin` (insertion time) and `low` (lowest insertion time reachable). A node `u` is an articulation point if `low[v] >= tin[u]` (and it's not root). If root, it's an articulation point if it has >1 children in DFS tree.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Solution:&#10;    def __init__(self):&#10;        self.timer = 0&#10;    def dfs(self, node, parent, vis, tin, low, mark, adj):&#10;        vis[node] = 1&#10;        tin[node] = low[node] = self.timer&#10;        self.timer += 1&#10;        child = 0&#10;        for it in adj[node]:&#10;            if it == parent: continue&#10;            if not vis[it]:&#10;                self.dfs(it, node, vis, tin, low, mark, adj)&#10;                low[node] = min(low[node], low[it])&#10;                if low[it] &gt;= tin[node] and parent != -1:&#10;                    mark[node] = 1&#10;                child += 1&#10;            else:&#10;                low[node] = min(low[node], tin[it])&#10;        if child &gt; 1 and parent == -1:&#10;            mark[node] = 1&#10;    def articulationPoints(self, V, adj):&#10;        vis = [0] * V&#10;        tin = [0] * V&#10;        low = [0] * V&#10;        mark = [0] * V&#10;        for i in range(V):&#10;            if not vis[i]:&#10;                self.dfs(i, -1, vis, tin, low, mark, adj)&#10;        ans = []&#10;        for i in range(V):&#10;            if mark[i] == 1: ans.append(i)&#10;        if len(ans) == 0: return [-1]&#10;        return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">29</td>
+      <td rowspan="1">Graph 30 Number Of Provinces Dsu<br><br></b> <a href='https://leetcode.com/problems/number-of-provinces/' target='_blank'>LeetCode 547</a></td>
+      <td rowspan="1"><b>Example 1:</b> Connect elements, count unique parents.</td>
+      <td><b>Time:</b> O(N^2 * alpha(N))<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create DSU of size `n`. For every edge in `isConnected`, union the two nodes. The number of provinces is the number of nodes where `find(i) == i`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class DisjointSet:&#10;    def __init__(self, n):&#10;        self.parent = list(range(n + 1))&#10;        self.size = [1] * (n + 1)&#10;    def findUPar(self, node):&#10;        if node == self.parent[node]:&#10;            return node&#10;        self.parent[node] = self.findUPar(self.parent[node])&#10;        return self.parent[node]&#10;    def unionBySize(self, u, v):&#10;        ulp_u = self.findUPar(u)&#10;        ulp_v = self.findUPar(v)&#10;        if ulp_u == ulp_v: return&#10;        if self.size[ulp_u] &lt; self.size[ulp_v]:&#10;            self.parent[ulp_u] = ulp_v&#10;            self.size[ulp_v] += self.size[ulp_u]&#10;        else:&#10;            self.parent[ulp_v] = ulp_u&#10;            self.size[ulp_u] += self.size[ulp_v]&#10;def findCircleNum(isConnected: List[List[int]]) -&gt; int:&#10;    n = len(isConnected)&#10;    ds = DisjointSet(n)&#10;    for i in range(n):&#10;        for j in range(n):&#10;            if isConnected[i][j] == 1:&#10;                ds.unionBySize(i, j)&#10;    cnt = 0&#10;    for i in range(n):&#10;        if ds.findUPar(i) == i:&#10;            cnt += 1&#10;    return cnt</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">30</td>
+      <td rowspan="1">Graph 31 Accounts Merge<br><br></b> <a href='https://leetcode.com/problems/accounts-merge/' target='_blank'>LeetCode 721</a></td>
+      <td rowspan="1"><b>Example 1:</b> DSU on accounts using emails.</td>
+      <td><b>Time:</b> O(N log N * alpha(N)) where N is total emails<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Map each email to an account index. If an email is seen again, union the current account index with the previously mapped account index. Finally, group emails by their root account index, sort them, and attach the name.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def accountsMerge(accounts: List[List[str]]) -&gt; List[List[str]]:&#10;    n = len(accounts)&#10;    parent = list(range(n))&#10;    def find(i):&#10;        if parent[i] == i: return i&#10;        parent[i] = find(parent[i])&#10;        return parent[i]&#10;    def union(i, j):&#10;        root_i, root_j = find(i), find(j)&#10;        if root_i != root_j: parent[root_i] = root_j&#10;    email_to_id = {}&#10;    for i, acc in enumerate(accounts):&#10;        for email in acc[1:]:&#10;            if email in email_to_id:&#10;                union(i, email_to_id[email])&#10;            else:&#10;                email_to_id[email] = i&#10;    id_to_emails = collections.defaultdict(list)&#10;    for email, i in email_to_id.items():&#10;        id_to_emails[find(i)].append(email)&#10;    ans = []&#10;    for i, emails in id_to_emails.items():&#10;        ans.append([accounts[i][0]] + sorted(emails))&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">31</td>
+      <td rowspan="1">Graph 32 Number Of Operations To Make Network Connected<br><br></b> <a href='https://leetcode.com/problems/number-of-operations-to-make-network-connected/' target='_blank'>LeetCode 1319</a></td>
+      <td rowspan="1"><b>Example 1:</b> Extra edges and connected components.</td>
+      <td><b>Time:</b> O(E * alpha(N))<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If total edges < n - 1, impossible. Use DSU to count number of connected components `C` and number of extra edges `E`. An edge is extra if `find(u) == find(v)`. We need `C - 1` edges to connect `C` components. Since total edges >= n - 1, we guaranteed have enough extra edges. Answer is `C - 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def makeConnected(n: int, connections: List[List[int]]) -&gt; int:&#10;    if len(connections) &lt; n - 1: return -1&#10;    parent = list(range(n))&#10;    def find(i):&#10;        if parent[i] == i: return i&#10;        parent[i] = find(parent[i])&#10;        return parent[i]&#10;    components = n&#10;    for u, v in connections:&#10;        root_u, root_v = find(u), find(v)&#10;        if root_u != root_v:&#10;            parent[root_u] = root_v&#10;            components -= 1&#10;    return components - 1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">32</td>
+      <td rowspan="1">Graph 33 Most Stones Removed With Same Row Or Column<br><br></b> <a href='https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/' target='_blank'>LeetCode 947</a></td>
+      <td rowspan="1"><b>Example 1:</b> Treat rows and columns as nodes.</td>
+      <td><b>Time:</b> O(N * alpha(N))<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Imagine rows and columns are nodes in a bipartite graph. A stone at `(r, c)` connects row `r` and column `c`. The answer is `total_stones - number_of_connected_components`. We can map cols to `col + 10001` to use a single DSU.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def removeStones(stones: List[List[int]]) -&gt; int:&#10;    parent = {}&#10;    components = [0]&#10;    def find(i):&#10;        if i not in parent:&#10;            parent[i] = i&#10;            components[0] += 1&#10;        if parent[i] == i: return i&#10;        parent[i] = find(parent[i])&#10;        return parent[i]&#10;    def union(i, j):&#10;        root_i, root_j = find(i), find(j)&#10;        if root_i != root_j:&#10;            parent[root_i] = root_j&#10;            components[0] -= 1&#10;    for r, c in stones:&#10;        union(r, ~c)&#10;    return len(stones) - components[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">33</td>
+      <td rowspan="1">Graph 34 Making A Large Island<br><br></b> <a href='https://leetcode.com/problems/making-a-large-island/' target='_blank'>LeetCode 827</a></td>
+      <td rowspan="1"><b>Example 1:</b> Component sizes with DSU.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Step 1: Use DSU to connect all adjacent 1s and calculate the size of each component. Step 2: For each 0, check its 4 neighbors. Find the unique roots of those neighbors. The potential new island size is `1 + sum(size[root])` for each unique root. Find max potential size. Handle case where matrix is all 1s.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def largestIsland(grid: List[List[int]]) -&gt; int:&#10;    n = len(grid)&#10;    parent = list(range(n * n))&#10;    size = [1] * (n * n)&#10;    def find(i):&#10;        if parent[i] == i: return i&#10;        parent[i] = find(parent[i])&#10;        return parent[i]&#10;    def union(i, j):&#10;        root_i, root_j = find(i), find(j)&#10;        if root_i != root_j:&#10;            if size[root_i] &lt; size[root_j]:&#10;                parent[root_i] = root_j&#10;                size[root_j] += size[root_i]&#10;            else:&#10;                parent[root_j] = root_i&#10;                size[root_i] += size[root_j]&#10;    dirs = [(-1,0), (1,0), (0,-1), (0,1)]&#10;    for r in range(n):&#10;        for c in range(n):&#10;            if grid[r][c] == 1:&#10;                for dr, dc in dirs:&#10;                    nr, nc = r + dr, c + dc&#10;                    if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and grid[nr][nc] == 1:&#10;                        union(r * n + c, nr * n + nc)&#10;    mx = 0&#10;    for r in range(n):&#10;        for c in range(n):&#10;            if grid[r][c] == 0:&#10;                components = set()&#10;                for dr, dc in dirs:&#10;                    nr, nc = r + dr, c + dc&#10;                    if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n and grid[nr][nc] == 1:&#10;                        components.add(find(nr * n + nc))&#10;                mx = max(mx, 1 + sum(size[comp] for comp in components))&#10;    return mx if mx &gt; 0 else n * n</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">34</td>
+      <td rowspan="1">Graph 35 Swim In Rising Water<br><br></b> <a href='https://leetcode.com/problems/swim-in-rising-water/' target='_blank'>LeetCode 778</a></td>
+      <td rowspan="1"><b>Example 1:</b> Dijkstra-like or Binary Search + BFS.</td>
+      <td><b>Time:</b> O(N^2 log N)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a priority queue (Dijkstra variant). The cost to reach a cell is `max(cost_of_previous_cell, grid[r][c])`. Extract min cost cell, relax neighbors.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def swimInWater(grid: List[List[int]]) -&gt; int:&#10;    n = len(grid)&#10;    pq = [(grid[0][0], 0, 0)]&#10;    dist = [[float(&#x27;inf&#x27;)] * n for _ in range(n)]&#10;    dist[0][0] = grid[0][0]&#10;    dirs = [(-1,0), (1,0), (0,-1), (0,1)]&#10;    while pq:&#10;        d, r, c = heapq.heappop(pq)&#10;        if r == n - 1 and c == n - 1: return d&#10;        for dr, dc in dirs:&#10;            nr, nc = r + dr, c + dc&#10;            if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; n:&#10;                next_d = max(d, grid[nr][nc])&#10;                if next_d &lt; dist[nr][nc]:&#10;                    dist[nr][nc] = next_d&#10;                    heapq.heappush(pq, (next_d, nr, nc))&#10;    return 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">35</td>
+      <td rowspan="1">Graph 36 Word Ladder I<br><br></b> <a href='https://leetcode.com/problems/word-ladder/' target='_blank'>LeetCode 127</a></td>
+      <td rowspan="1"><b>Example 1:</b> BFS level by level.</td>
+      <td><b>Time:</b> O(N * M * 26) where N is words, M is word length<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> BFS. Start from `beginWord`. In each step, change one character from 'a' to 'z' and check if new word is in `wordList`. If yes, push to queue, erase from `wordList` to avoid loops, and continue. Track level/steps.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def ladderLength(beginWord: str, endWord: str, wordList: List[str]) -&gt; int:&#10;    wordSet = set(wordList)&#10;    if endWord not in wordSet: return 0&#10;    q = collections.deque([(beginWord, 1)])&#10;    if beginWord in wordSet: wordSet.remove(beginWord)&#10;    while q:&#10;        word, steps = q.popleft()&#10;        if word == endWord: return steps&#10;        for i in range(len(word)):&#10;            for c in &#x27;abcdefghijklmnopqrstuvwxyz&#x27;:&#10;                newWord = word[:i] + c + word[i+1:]&#10;                if newWord in wordSet:&#10;                    wordSet.remove(newWord)&#10;                    q.append((newWord, steps + 1))&#10;    return 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">36</td>
+      <td rowspan="1">Graph 37 Word Ladder Ii<br><br></b> <a href='https://leetcode.com/problems/word-ladder-ii/' target='_blank'>LeetCode 126</a></td>
+      <td rowspan="1"><b>Example 1:</b> BFS for distance, DFS for paths.</td>
+      <td><b>Time:</b> O(V + E + Paths)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> BFS to find minimum steps to reach each word. Then DFS starting from `endWord` backwards to `beginWord`, only exploring paths where `dist[next_word] == dist[curr_word] - 1`. Reverse the built paths.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def findLadders(beginWord: str, endWord: str, wordList: List[str]) -&gt; List[List[str]]:&#10;    wordSet = set(wordList)&#10;    if endWord not in wordSet: return []&#10;    q = collections.deque([beginWord])&#10;    mpp = {beginWord: 1}&#10;    wordSet.discard(beginWord)&#10;    while q:&#10;        word = q.popleft()&#10;        if word == endWord: break&#10;        steps = mpp[word]&#10;        for i in range(len(word)):&#10;            for c in &#x27;abcdefghijklmnopqrstuvwxyz&#x27;:&#10;                newWord = word[:i] + c + word[i+1:]&#10;                if newWord in wordSet:&#10;                    mpp[newWord] = steps + 1&#10;                    q.append(newWord)&#10;                    wordSet.remove(newWord)&#10;    ans = []&#10;    if endWord in mpp:&#10;        def dfs(word, seq):&#10;            if word == beginWord:&#10;                ans.append(seq[::-1])&#10;                return&#10;            steps = mpp[word]&#10;            for i in range(len(word)):&#10;                for c in &#x27;abcdefghijklmnopqrstuvwxyz&#x27;:&#10;                    newWord = word[:i] + c + word[i+1:]&#10;                    if newWord in mpp and mpp[newWord] + 1 == steps:&#10;                        seq.append(newWord)&#10;                        dfs(newWord, seq)&#10;                        seq.pop()&#10;        dfs(endWord, [endWord])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">37</td>
+      <td rowspan="1">Graph 38 Network Delay Time<br><br></b> <a href='https://leetcode.com/problems/network-delay-time/' target='_blank'>LeetCode 743</a></td>
+      <td rowspan="1"><b>Example 1:</b> Dijkstra's to find max shortest path.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Standard Dijkstra's shortest path from node `k`. Return the maximum value in the distances array. If any node remains unvisited (dist == inf), return -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def networkDelayTime(times: List[List[int]], n: int, k: int) -&gt; int:&#10;    adj = collections.defaultdict(list)&#10;    for u, v, w in times:&#10;        adj[u].append((v, w))&#10;    pq = [(0, k)]&#10;    dist = {i: float(&#x27;inf&#x27;) for i in range(1, n + 1)}&#10;    dist[k] = 0&#10;    while pq:&#10;        time, node = heapq.heappop(pq)&#10;        if time &gt; dist[node]: continue&#10;        for adjNode, wt in adj[node]:&#10;            if time + wt &lt; dist[adjNode]:&#10;                dist[adjNode] = time + wt&#10;                heapq.heappush(pq, (time + wt, adjNode))&#10;    mx = max(dist.values())&#10;    return mx if mx != float(&#x27;inf&#x27;) else -1</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

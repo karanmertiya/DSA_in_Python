@@ -331,5 +331,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Traverse BST. If `curr.val > node.val`, then `curr` is a potential successor, store it and move left to find smaller. Else, move right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def inOrderSuccessor(root, x):&#10;    successor = None&#10;    while root:&#10;        if root.val &lt;= x.val:&#10;            root = root.right&#10;        else:&#10;            successor = root&#10;            root = root.left&#10;    return successor</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">36</td>
+      <td rowspan="1">Tree 35 Two Sum Iv Input Is A Bst<br><br></b> <a href='https://leetcode.com/problems/two-sum-iv-input-is-a-bst/' target='_blank'>LeetCode 653</a></td>
+      <td rowspan="1"><b>Example 1:</b> BST Iterator two pointer.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use two BST iterators: one for normal inorder (next) and one for reverse inorder (before). Apply two-pointer approach like in a sorted array.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class BSTIterator:&#10;    def __init__(self, root, isReverse):&#10;        self.st = []&#10;        self.reverse = isReverse&#10;        self.pushAll(root)&#10;    def pushAll(self, node):&#10;        while node:&#10;            self.st.append(node)&#10;            if self.reverse: node = node.right&#10;            else: node = node.left&#10;    def next(self) -&gt; int:&#10;        tmpNode = self.st.pop()&#10;        if self.reverse: self.pushAll(tmpNode.left)&#10;        else: self.pushAll(tmpNode.right)&#10;        return tmpNode.val&#10;def findTarget(root: Optional[TreeNode], k: int) -&gt; bool:&#10;    if not root: return False&#10;    l = BSTIterator(root, False)&#10;    r = BSTIterator(root, True)&#10;    i = l.next()&#10;    j = r.next()&#10;    while i &lt; j:&#10;        if i + j == k: return True&#10;        elif i + j &lt; k: i = l.next()&#10;        else: j = r.next()&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">37</td>
+      <td rowspan="1">Tree 36 Recover Binary Search Tree<br><br></b> <a href='https://leetcode.com/problems/recover-binary-search-tree/' target='_blank'>LeetCode 99</a></td>
+      <td rowspan="1"><b>Example 1:</b> Inorder traversal tracking anomalies.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Inorder traversal of BST gives sorted array. If two are swapped, there will be 1 or 2 anomalies where `prev->val > curr->val`. First anomaly: `first = prev`, `middle = curr`. Second anomaly: `last = curr`. Swap `first` and `last` (or `first` and `middle` if adjacent).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def recoverTree(root: Optional[TreeNode]) -&gt; None:&#10;    first = middle = last = prev = None&#10;    def inorder(node):&#10;        nonlocal first, middle, last, prev&#10;        if not node: return&#10;        inorder(node.left)&#10;        if prev and node.val &lt; prev.val:&#10;            if not first:&#10;                first = prev&#10;                middle = node&#10;            else:&#10;                last = node&#10;        prev = node&#10;        inorder(node.right)&#10;    inorder(root)&#10;    if first and last:&#10;        first.val, last.val = last.val, first.val&#10;    elif first and middle:&#10;        first.val, middle.val = middle.val, first.val</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">38</td>
+      <td rowspan="1">Tree 37 Largest Bst In Binary Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/largest-bst/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Bottom-up verification.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Return `[minNode, maxNode, maxSize]` from each subtree. For current node, if `left.max < node.val < right.min`, it's a BST. Return `[min(node.val, left.min), max(node.val, right.max), left.size + right.size + 1]`. Else, it's not a BST, return `[-inf, inf, max(left.size, right.size)]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class NodeValue:&#10;    def __init__(self, minNode, maxNode, maxSize):&#10;        self.minNode = minNode&#10;        self.maxNode = maxNode&#10;        self.maxSize = maxSize&#10;def largestBSTSubtreeHelper(root):&#10;    if not root: return NodeValue(float(&#x27;inf&#x27;), float(&#x27;-inf&#x27;), 0)&#10;    left = largestBSTSubtreeHelper(root.left)&#10;    right = largestBSTSubtreeHelper(root.right)&#10;    if left.maxNode &lt; root.data &lt; right.minNode:&#10;        return NodeValue(min(root.data, left.minNode), max(root.data, right.maxNode), left.maxSize + right.maxSize + 1)&#10;    return NodeValue(float(&#x27;-inf&#x27;), float(&#x27;inf&#x27;), max(left.maxSize, right.maxSize))&#10;def largestBst(root):&#10;    return largestBSTSubtreeHelper(root).maxSize</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">39</td>
+      <td rowspan="1">Tree 38 Binary Search Tree Iterator<br><br></b> <a href='https://leetcode.com/problems/binary-search-tree-iterator/' target='_blank'>LeetCode 173</a></td>
+      <td rowspan="1"><b>Example 1:</b> Stack based partial inorder.</td>
+      <td><b>Time:</b> O(1) average per call<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a stack of nodes. In constructor, push all left children of root. In `next()`, pop top, value is answer, if popped node has right child, push it and all its left children. `hasNext()` checks if stack is not empty.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class BSTIterator:&#10;    def __init__(self, root: Optional[TreeNode]):&#10;        self.st = []&#10;        self.pushAll(root)&#10;    def pushAll(self, node):&#10;        while node:&#10;            self.st.append(node)&#10;            node = node.left&#10;    def next(self) -&gt; int:&#10;        tmpNode = self.st.pop()&#10;        self.pushAll(tmpNode.right)&#10;        return tmpNode.val&#10;    def hasNext(self) -&gt; bool:&#10;        return len(self.st) &gt; 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">40</td>
+      <td rowspan="1">Tree 39 Maximum Sum Bst In Binary Tree<br><br></b> <a href='https://leetcode.com/problems/maximum-sum-bst-in-binary-tree/' target='_blank'>LeetCode 1373</a></td>
+      <td rowspan="1"><b>Example 1:</b> Similar to largest BST.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Bottom-up traversal. Return `[isBST, minNode, maxNode, sum]`. Update global max sum when valid BST is found.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Info:&#10;    def __init__(self, isBST, minNode, maxNode, sum_val):&#10;        self.isBST = isBST&#10;        self.minNode = minNode&#10;        self.maxNode = maxNode&#10;        self.sum = sum_val&#10;def maxSumBST(root: Optional[TreeNode]) -&gt; int:&#10;    maxSum = 0&#10;    def solve(node):&#10;        nonlocal maxSum&#10;        if not node: return Info(True, float(&#x27;inf&#x27;), float(&#x27;-inf&#x27;), 0)&#10;        left = solve(node.left)&#10;        right = solve(node.right)&#10;        if left.isBST and right.isBST and left.maxNode &lt; node.val &lt; right.minNode:&#10;            currSum = left.sum + right.sum + node.val&#10;            maxSum = max(maxSum, currSum)&#10;            return Info(True, min(node.val, left.minNode), max(node.val, right.maxNode), currSum)&#10;        return Info(False, float(&#x27;-inf&#x27;), float(&#x27;inf&#x27;), max(left.sum, right.sum))&#10;    solve(root)&#10;    return maxSum if maxSum &gt; 0 else 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">41</td>
+      <td rowspan="1">Tree 40 Kth Largest Element In A Bst<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/kth-largest-element-in-bst/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Reverse inorder traversal.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Kth largest is Kth element in reverse inorder traversal (Right, Root, Left). Maintain a counter `k`. When visiting a node, decrement `k`. If `k == 0`, current node is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kthLargest(root, k):&#10;    ans = -1&#10;    def reverseInorder(node):&#10;        nonlocal ans, k&#10;        if not node or k == 0: return&#10;        reverseInorder(node.right)&#10;        k -= 1&#10;        if k == 0:&#10;            ans = node.data&#10;            return&#10;        reverseInorder(node.left)&#10;    reverseInorder(root)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">42</td>
+      <td rowspan="1">Tree 41 Predecessor And Successor In Bst<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/predecessor-and-successor/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Search down the tree.</td>
+      <td><b>Time:</b> O(H)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> For Successor: search for key. If node->val <= key, go right. If node->val > key, update succ = node, go left. For Predecessor: If node->val >= key, go left. If node->val < key, update pred = node, go right.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPreSuc(root, pre, suc, key):&#10;    curr = root&#10;    while curr:&#10;        if curr.key &gt; key:&#10;            suc[0] = curr&#10;            curr = curr.left&#10;        else:&#10;            curr = curr.right&#10;    curr = root&#10;    while curr:&#10;        if curr.key &lt; key:&#10;            pre[0] = curr&#10;            curr = curr.right&#10;        else:&#10;            curr = curr.left</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">43</td>
+      <td rowspan="1">Tree 42 Construct Bst From Preorder Traversal<br><br></b> <a href='https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/' target='_blank'>LeetCode 1008</a></td>
+      <td rowspan="1"><b>Example 1:</b> Upper bound tracking.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(H)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use an upper bound value. `build(preorder, index, bound)`: If index >= len or preorder[index] > bound, return NULL. Create root with preorder[index]. `root->left = build(..., root->val)`. `root->right = build(..., bound)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def bstFromPreorder(preorder: List[int]) -&gt; Optional[TreeNode]:&#10;    i = 0&#10;    def build(bound):&#10;        nonlocal i&#10;        if i == len(preorder) or preorder[i] &gt; bound: return None&#10;        root = TreeNode(preorder[i])&#10;        i += 1&#10;        root.left = build(root.val)&#10;        root.right = build(bound)&#10;        return root&#10;    return build(float(&#x27;inf&#x27;))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">44</td>
+      <td rowspan="1">Tree 43 All Nodes Distance K In Binary Tree<br><br></b> <a href='https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/' target='_blank'>LeetCode 863</a></td>
+      <td rowspan="1"><b>Example 1:</b> Convert to graph or use parent pointers.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_map>\n#include <queue>\n#include <unordered_set></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Perform BFS/DFS to map each node to its parent. Then, start a BFS from the target node, visiting left, right, and parent. Track visited nodes. After `k` levels in BFS, the current queue holds the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def distanceK(root: TreeNode, target: TreeNode, k: int) -&gt; List[int]:&#10;    parent_track = {}&#10;    def markParents(node):&#10;        if node.left:&#10;            parent_track[node.left] = node&#10;            markParents(node.left)&#10;        if node.right:&#10;            parent_track[node.right] = node&#10;            markParents(node.right)&#10;    markParents(root)&#10;    queue = collections.deque([target])&#10;    visited = {target}&#10;    curr_level = 0&#10;    while queue:&#10;        if curr_level == k: break&#10;        size = len(queue)&#10;        for _ in range(size):&#10;            current = queue.popleft()&#10;            if current.left and current.left not in visited:&#10;                queue.append(current.left)&#10;                visited.add(current.left)&#10;            if current.right and current.right not in visited:&#10;                queue.append(current.right)&#10;                visited.add(current.right)&#10;            if current in parent_track and parent_track[current] not in visited:&#10;                queue.append(parent_track[current])&#10;                visited.add(parent_track[current])&#10;        curr_level += 1&#10;    return [node.val for node in queue]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">45</td>
+      <td rowspan="1">Tree 44 Amount Of Time For Binary Tree To Be Infected<br><br></b> <a href='https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/' target='_blank'>LeetCode 2385</a></td>
+      <td rowspan="1"><b>Example 1:</b> Parent pointers and BFS.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Same as 'Distance K' problem. Map parents. Find the start node. Perform BFS from start node. The time taken is the number of levels in BFS until all reachable nodes are visited.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def amountOfTime(root: Optional[TreeNode], start: int) -&gt; int:&#10;    parent_track = {}&#10;    target = None&#10;    queue = collections.deque([root])&#10;    while queue:&#10;        node = queue.popleft()&#10;        if node.val == start: target = node&#10;        if node.left:&#10;            parent_track[node.left] = node&#10;            queue.append(node.left)&#10;        if node.right:&#10;            parent_track[node.right] = node&#10;            queue.append(node.right)&#10;    queue = collections.deque([target])&#10;    visited = {target}&#10;    time = 0&#10;    while queue:&#10;        fl = False&#10;        for _ in range(len(queue)):&#10;            current = queue.popleft()&#10;            if current.left and current.left not in visited:&#10;                visited.add(current.left)&#10;                queue.append(current.left)&#10;                fl = True&#10;            if current.right and current.right not in visited:&#10;                visited.add(current.right)&#10;                queue.append(current.right)&#10;                fl = True&#10;            if current in parent_track and parent_track[current] not in visited:&#10;                visited.add(parent_track[current])&#10;                queue.append(parent_track[current])&#10;                fl = True&#10;        if fl: time += 1&#10;    return time</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

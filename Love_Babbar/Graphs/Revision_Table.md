@@ -349,5 +349,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Standard Dijkstra's shortest path from node `k`. Return the maximum value in the distances array. If any node remains unvisited (dist == inf), return -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def networkDelayTime(times: List[List[int]], n: int, k: int) -&gt; int:&#10;    adj = collections.defaultdict(list)&#10;    for u, v, w in times:&#10;        adj[u].append((v, w))&#10;    pq = [(0, k)]&#10;    dist = {i: float(&#x27;inf&#x27;) for i in range(1, n + 1)}&#10;    dist[k] = 0&#10;    while pq:&#10;        time, node = heapq.heappop(pq)&#10;        if time &gt; dist[node]: continue&#10;        for adjNode, wt in adj[node]:&#10;            if time + wt &lt; dist[adjNode]:&#10;                dist[adjNode] = time + wt&#10;                heapq.heappush(pq, (time + wt, adjNode))&#10;    mx = max(dist.values())&#10;    return mx if mx != float(&#x27;inf&#x27;) else -1</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">38</td>
+      <td rowspan="1">Graph 39 Cheapest Flights Within K Stops<br><br></b> <a href='https://leetcode.com/problems/cheapest-flights-within-k-stops/' target='_blank'>LeetCode 787</a></td>
+      <td rowspan="1"><b>Example 1:</b> Dijkstra's with Stops / BFS.</td>
+      <td><b>Time:</b> O(E)<br><b>Space:</b> O(N + E)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a queue storing `(stops, node, cost)`. We don't need a priority queue because stops increase uniformly by 1. Distance array stores min cost to reach each node. Only push to queue if new cost is cheaper. If `stops > k`, skip.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def findCheapestPrice(n: int, flights: List[List[int]], src: int, dst: int, k: int) -&gt; int:&#10;    adj = collections.defaultdict(list)&#10;    for u, v, w in flights:&#10;        adj[u].append((v, w))&#10;    q = collections.deque([(0, src, 0)]) # stops, node, cost&#10;    dist = [float(&#x27;inf&#x27;)] * n&#10;    dist[src] = 0&#10;    while q:&#10;        stops, node, cost = q.popleft()&#10;        if stops &gt; k: continue&#10;        for nxt, weight in adj[node]:&#10;            if cost + weight &lt; dist[nxt] and stops &lt;= k:&#10;                dist[nxt] = cost + weight&#10;                q.append((stops + 1, nxt, cost + weight))&#10;    return dist[dst] if dist[dst] != float(&#x27;inf&#x27;) else -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">39</td>
+      <td rowspan="1">Graph 40 Minimum Multiplications To Reach End<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-multiplications-to-reach-end/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> BFS / Dijkstra's with unit weights.</td>
+      <td><b>Time:</b> O(100000 * N)<br><b>Space:</b> O(100000)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Since each multiplication is 1 step, we can use BFS. The 'nodes' are values from 0 to 99999. Use an array `dist` initialized to infinity. Push `start` to queue. For each popped node, multiply by all array elements `% 100000`. If we find a shorter path, push to queue.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def minimumMultiplications(arr: List[int], start: int, end: int) -&gt; int:&#10;    if start == end: return 0&#10;    q = collections.deque([(start, 0)])&#10;    dist = [float(&#x27;inf&#x27;)] * 100000&#10;    dist[start] = 0&#10;    mod = 100000&#10;    while q:&#10;        node, steps = q.popleft()&#10;        for it in arr:&#10;            num = (node * it) % mod&#10;            if steps + 1 &lt; dist[num]:&#10;                dist[num] = steps + 1&#10;                if num == end: return steps + 1&#10;                q.append((num, steps + 1))&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">40</td>
+      <td rowspan="1">Graph 41 Number Of Ways To Arrive At Destination<br><br></b> <a href='https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/' target='_blank'>LeetCode 1976</a></td>
+      <td rowspan="1"><b>Example 1:</b> Dijkstra's with Ways Count.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(V + E)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Modify Dijkstra's. Keep `dist` array and `ways` array. When relaxing an edge: if `curr_dist + weight < dist[neighbor]`, update `dist`, push to PQ, and `ways[neighbor] = ways[curr_node]`. If `curr_dist + weight == dist[neighbor]`, `ways[neighbor] = (ways[neighbor] + ways[curr_node]) % MOD`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections, heapq&#10;def countPaths(n: int, roads: List[List[int]]) -&gt; int:&#10;    adj = collections.defaultdict(list)&#10;    for u, v, w in roads:&#10;        adj[u].append((v, w))&#10;        adj[v].append((u, w))&#10;    heap = [(0, 0)]&#10;    dist = [float(&#x27;inf&#x27;)] * n&#10;    ways = [0] * n&#10;    dist[0] = 0&#10;    ways[0] = 1&#10;    mod = 10**9 + 7&#10;    while heap:&#10;        d, node = heapq.heappop(heap)&#10;        if d &gt; dist[node]: continue&#10;        for nxt, weight in adj[node]:&#10;            if d + weight &lt; dist[nxt]:&#10;                dist[nxt] = d + weight&#10;                ways[nxt] = ways[node]&#10;                heapq.heappush(heap, (dist[nxt], nxt))&#10;            elif d + weight == dist[nxt]:&#10;                ways[nxt] = (ways[nxt] + ways[node]) % mod&#10;    return ways[n-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">41</td>
+      <td rowspan="1">Graph 42 Find The City With The Smallest Number Of Neighbors At A Threshold Distance<br><br></b> <a href='https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/' target='_blank'>LeetCode 1334</a></td>
+      <td rowspan="1"><b>Example 1:</b> Floyd-Warshall Algorithm.</td>
+      <td><b>Time:</b> O(V^3)<br><b>Space:</b> O(V^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Floyd-Warshall to find shortest paths between all pairs of nodes. For each city, count the number of reachable cities within `distanceThreshold`. Return the city with the minimum count (and greatest ID on tie).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findTheCity(n: int, edges: List[List[int]], distanceThreshold: int) -&gt; int:&#10;    dist = [[float(&#x27;inf&#x27;)] * n for _ in range(n)]&#10;    for i in range(n): dist[i][i] = 0&#10;    for u, v, w in edges:&#10;        dist[u][v] = w&#10;        dist[v][u] = w&#10;    for k in range(n):&#10;        for i in range(n):&#10;            for j in range(n):&#10;                if dist[i][k] != float(&#x27;inf&#x27;) and dist[k][j] != float(&#x27;inf&#x27;):&#10;                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])&#10;    minCities = n&#10;    ansCity = -1&#10;    for i in range(n):&#10;        cnt = sum(1 for j in range(n) if dist[i][j] &lt;= distanceThreshold)&#10;        if cnt &lt;= minCities:&#10;            minCities = cnt&#10;            ansCity = i&#10;    return ansCity</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">42</td>
+      <td rowspan="1">Graph 43 Minimum Spanning Tree Prim<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Prim's Algorithm using Min-Heap.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(E + V)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Start from node 0. Push `(0, 0)` -> `(weight, node)` into PQ. Maintain `visited` array. Pop min edge. If not visited, mark visited, add weight to sum. Traverse its neighbors; if not visited, push to PQ.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def spanningTree(V, adj):&#10;    pq = [(0, 0)]&#10;    vis = [0] * V&#10;    sum_wt = 0&#10;    while pq:&#10;        wt, node = heapq.heappop(pq)&#10;        if vis[node]: continue&#10;        vis[node] = 1&#10;        sum_wt += wt&#10;        for neighbor in adj[node]:&#10;            adjNode, edW = neighbor[0], neighbor[1]&#10;            if not vis[adjNode]:&#10;                heapq.heappush(pq, (edW, adjNode))&#10;    return sum_wt</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">43</td>
+      <td rowspan="1">Graph 44 Kruskals Minimum Spanning Tree Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Disjoint Set / Union Find.</td>
+      <td><b>Time:</b> O(E log E)<br><b>Space:</b> O(E + V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Extract all edges as `(weight, u, v)`. Sort edges by weight. Iterate through sorted edges. Use Disjoint Set (Union-Find) to check if `u` and `v` are in the same component. If not, union them and add weight to sum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class DisjointSet:&#10;    def __init__(self, n):&#10;        self.parent = list(range(n + 1))&#10;        self.rank = [0] * (n + 1)&#10;    def find(self, i):&#10;        if self.parent[i] == i: return i&#10;        self.parent[i] = self.find(self.parent[i])&#10;        return self.parent[i]&#10;    def union(self, i, j):&#10;        root_i = self.find(i)&#10;        root_j = self.find(j)&#10;        if root_i != root_j:&#10;            if self.rank[root_i] &lt; self.rank[root_j]:&#10;                self.parent[root_i] = root_j&#10;            elif self.rank[root_i] &gt; self.rank[root_j]:&#10;                self.parent[root_j] = root_i&#10;            else:&#10;                self.parent[root_j] = root_i&#10;                self.rank[root_i] += 1&#10;            return True&#10;        return False&#10;&#10;def spanningTree(V, adj):&#10;    edges = []&#10;    for i in range(V):&#10;        for neighbor in adj[i]:&#10;            edges.append((neighbor[1], i, neighbor[0]))&#10;    edges.sort()&#10;    ds = DisjointSet(V)&#10;    mst_wt = 0&#10;    for wt, u, v in edges:&#10;        if ds.union(u, v):&#10;            mst_wt += wt&#10;    return mst_wt</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">44</td>
+      <td rowspan="1">Graph 45 Number Of Provinces Disjoint Set<br><br></b> <a href='https://leetcode.com/problems/number-of-provinces/' target='_blank'>LeetCode 547</a></td>
+      <td rowspan="1"><b>Example 1:</b> Counting Unique Parents in DSU.</td>
+      <td><b>Time:</b> O(V^2 * alpha)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Initialize Disjoint Set for `n` nodes. Iterate through `isConnected` matrix. If `isConnected[i][j] == 1`, union `i` and `j`. After processing all edges, count how many nodes are their own parents (`parent[i] == i`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># Use DisjointSet class&#10;def findCircleNum(isConnected: List[List[int]]) -&gt; int:&#10;    n = len(isConnected)&#10;    ds = DisjointSet(n)&#10;    for i in range(n):&#10;        for j in range(n):&#10;            if isConnected[i][j] == 1: ds.union(i, j)&#10;    return sum(1 for i in range(n) if ds.find(i) == i)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">45</td>
+      <td rowspan="1">Graph 46 Number Of Operations To Make Network Connected<br><br></b> <a href='https://leetcode.com/problems/number-of-operations-to-make-network-connected/' target='_blank'>LeetCode 1319</a></td>
+      <td rowspan="1"><b>Example 1:</b> Count Extra Edges using DSU.</td>
+      <td><b>Time:</b> O(E * alpha)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If total edges < n - 1, return -1. Count extra edges while building DSU. If union fails (already connected), it's an extra edge. Number of operations to connect components is `components - 1`. If `extraEdges >= components - 1`, return `components - 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def makeConnected(n: int, connections: List[List[int]]) -&gt; int:&#10;    if len(connections) &lt; n - 1: return -1&#10;    ds = DisjointSet(n)&#10;    extraEdges = 0&#10;    for u, v in connections:&#10;        if not ds.union(u, v): extraEdges += 1&#10;    components = sum(1 for i in range(n) if ds.find(i) == i)&#10;    if extraEdges &gt;= components - 1: return components - 1&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">46</td>
+      <td rowspan="1">Graph 47 Most Stones Removed With Same Row Or Column<br><br></b> <a href='https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/' target='_blank'>LeetCode 947</a></td>
+      <td rowspan="1"><b>Example 1:</b> DSU on Rows and Columns.</td>
+      <td><b>Time:</b> O(N * alpha)<br><b>Space:</b> O(Max(Row, Col))</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Treat rows and columns as nodes in DSU. Connect row `x` to column `y` for each stone. Max row and max col define the size of DSU. A column node index can be `maxRow + y + 1` to separate from row indices. The answer is `total stones - number of connected components`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def removeStones(stones: List[List[int]]) -&gt; int:&#10;    maxRow = maxCol = 0&#10;    for x, y in stones:&#10;        maxRow = max(maxRow, x)&#10;        maxCol = max(maxCol, y)&#10;    ds = DisjointSet(maxRow + maxCol + 1)&#10;    stoneNodes = set()&#10;    for x, y in stones:&#10;        nodeRow = x&#10;        nodeCol = y + maxRow + 1&#10;        ds.union(nodeRow, nodeCol)&#10;        stoneNodes.add(nodeRow)&#10;        stoneNodes.add(nodeCol)&#10;    components = sum(1 for node in stoneNodes if ds.find(node) == node)&#10;    return len(stones) - components</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">47</td>
+      <td rowspan="1">Graph 48 Accounts Merge<br><br></b> <a href='https://leetcode.com/problems/accounts-merge/' target='_blank'>LeetCode 721</a></td>
+      <td rowspan="1"><b>Example 1:</b> Map Emails to IDs, DSU on IDs.</td>
+      <td><b>Time:</b> O(N * M * log(N * M)) where N=accounts, M=max emails<br><b>Space:</b> O(N * M)</td>
+      <td><code>#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a DSU of size N (number of accounts). Map each email to its first seen account ID. If an email is seen again, union the current account ID with the mapped account ID. Then group emails by the ultimate parent of their account ID. Sort emails in each group and format the result.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def accountsMerge(accounts: List[List[str]]) -&gt; List[List[str]]:&#10;    n = len(accounts)&#10;    ds = DisjointSet(n)&#10;    mailNode = {}&#10;    for i in range(n):&#10;        for j in range(1, len(accounts[i])):&#10;            mail = accounts[i][j]&#10;            if mail not in mailNode:&#10;                mailNode[mail] = i&#10;            else:&#10;                ds.union(i, mailNode[mail])&#10;    mergedMails = collections.defaultdict(list)&#10;    for mail, node in mailNode.items():&#10;        root = ds.find(node)&#10;        mergedMails[root].append(mail)&#10;    ans = []&#10;    for i in range(n):&#10;        if i not in mergedMails: continue&#10;        ans.append([accounts[i][0]] + sorted(mergedMails[i]))&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

@@ -322,5 +322,185 @@
       <td><b>Integer Overflow:</b> Use double or long long, or cast to unsigned int.</td>
       <td><b>Explanation:</b> If characters match, `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]`. If they don't, `dp[i][j] = dp[i-1][j]`. Optimize to 1D array.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numDistinct(s: str, t: str) -&gt; int:&#10;    n, m = len(s), len(t)&#10;    dp = [0] * (m + 1)&#10;    dp[0] = 1&#10;    for i in range(1, n + 1):&#10;        for j in range(m, 0, -1):&#10;            if s[i-1] == t[j-1]:&#10;                dp[j] += dp[j-1]&#10;    return dp[m]</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">35</td>
+      <td rowspan="1">Dp 34 Wildcard Matching<br><br></b> <a href='https://leetcode.com/problems/wildcard-matching/' target='_blank'>LeetCode 44</a></td>
+      <td rowspan="1"><b>Example 1:</b> 2D DP.</td>
+      <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(N * M) or O(M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a 2D DP array where `dp[i][j]` means if `s[0..i-1]` matches `p[0..j-1]`. If `p[j-1] == '?'` or `s[i-1] == p[j-1]`, `dp[i][j] = dp[i-1][j-1]`. If `p[j-1] == '*'`, it can match empty (`dp[i][j-1]`) or match one character (`dp[i-1][j]`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isMatch(s: str, p: str) -&gt; bool:&#10;    n, m = len(s), len(p)&#10;    dp = [[False] * (m + 1) for _ in range(n + 1)]&#10;    dp[0][0] = True&#10;    for j in range(1, m + 1):&#10;        if p[j-1] == &#x27;*&#x27;: dp[0][j] = dp[0][j-1]&#10;    for i in range(1, n + 1):&#10;        for j in range(1, m + 1):&#10;            if p[j-1] in {s[i-1], &#x27;?&#x27;}:&#10;                dp[i][j] = dp[i-1][j-1]&#10;            elif p[j-1] == &#x27;*&#x27;:&#10;                dp[i][j] = dp[i-1][j] or dp[i][j-1]&#10;    return dp[n][m]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">36</td>
+      <td rowspan="1">Dp 35 Best Time To Buy And Sell Stock Ii<br><br></b> <a href='https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/' target='_blank'>LeetCode 122</a></td>
+      <td rowspan="1"><b>Example 1:</b> Valley Peak approach.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Add the profit whenever the price is higher than the previous day. This is equivalent to capturing every upward slope.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProfit(prices: List[int]) -&gt; int:&#10;    return sum(max(prices[i] - prices[i-1], 0) for i in range(1, len(prices)))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">37</td>
+      <td rowspan="1">Dp 36 Best Time To Buy And Sell Stock Iii<br><br></b> <a href='https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/' target='_blank'>LeetCode 123</a></td>
+      <td rowspan="1"><b>Example 1:</b> 3D DP / State Machine.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain four variables representing the max profit after first buy, first sell, second buy, and second sell. Update them iteratively.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProfit(prices: List[int]) -&gt; int:&#10;    buy1 = buy2 = float(&#x27;-inf&#x27;)&#10;    sell1 = sell2 = 0&#10;    for price in prices:&#10;        buy1 = max(buy1, -price)&#10;        sell1 = max(sell1, buy1 + price)&#10;        buy2 = max(buy2, sell1 - price)&#10;        sell2 = max(sell2, buy2 + price)&#10;    return sell2</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">38</td>
+      <td rowspan="1">Dp 37 Best Time To Buy And Sell Stock Iv<br><br></b> <a href='https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/' target='_blank'>LeetCode 188</a></td>
+      <td rowspan="1"><b>Example 1:</b> DP with transactions.</td>
+      <td><b>Time:</b> O(N * K)<br><b>Space:</b> O(N * K) or O(K)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If `k >= n/2`, it's equivalent to infinite transactions (Stock II). Else, use a DP array `dp[k][n]` where `dp[i][j]` is max profit using `i` transactions up to day `j`. Optimize inner loop by tracking `maxDiff = max(maxDiff, dp[i-1][j-1] - prices[j-1])`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProfit(k: int, prices: List[int]) -&gt; int:&#10;    n = len(prices)&#10;    if n &lt;= 1: return 0&#10;    if k &gt;= n // 2:&#10;        return sum(max(prices[i] - prices[i-1], 0) for i in range(1, n))&#10;    buy = [float(&#x27;-inf&#x27;)] * (k + 1)&#10;    sell = [0] * (k + 1)&#10;    for price in prices:&#10;        for i in range(1, k + 1):&#10;            buy[i] = max(buy[i], sell[i-1] - price)&#10;            sell[i] = max(sell[i], buy[i] + price)&#10;    return sell[k]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">39</td>
+      <td rowspan="1">Dp 38 Best Time To Buy And Sell Stock With Cooldown<br><br></b> <a href='https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/' target='_blank'>LeetCode 309</a></td>
+      <td rowspan="1"><b>Example 1:</b> State Machine DP.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain 3 states: `hold` (holding a stock), `sold` (just sold, entering cooldown next), `rest` (not holding, not in cooldown). Transitions: `hold = max(hold, rest - price)`, `sold = hold + price`, `rest = max(rest, sold_prev)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProfit(prices: List[int]) -&gt; int:&#10;    hold, sold, rest = float(&#x27;-inf&#x27;), 0, 0&#10;    for price in prices:&#10;        prev_sold = sold&#10;        sold = hold + price&#10;        hold = max(hold, rest - price)&#10;        rest = max(rest, prev_sold)&#10;    return max(rest, sold)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">40</td>
+      <td rowspan="1">Dp 39 Best Time To Buy And Sell Stock With Transaction Fee<br><br></b> <a href='https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/' target='_blank'>LeetCode 714</a></td>
+      <td rowspan="1"><b>Example 1:</b> DP State Machine.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Similar to Stock II, but subtract `fee` when selling. Maintain `cash` (max profit not holding stock) and `hold` (max profit holding stock). `cash = max(cash, hold + price - fee)`, `hold = max(hold, cash - price)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxProfit(prices: List[int], fee: int) -&gt; int:&#10;    cash, hold = 0, -prices[0]&#10;    for i in range(1, len(prices)):&#10;        cash = max(cash, hold + prices[i] - fee)&#10;        hold = max(hold, cash - prices[i])&#10;    return cash</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">41</td>
+      <td rowspan="1">Dp 40 Longest Increasing Subsequence<br><br></b> <a href='https://leetcode.com/problems/longest-increasing-subsequence/' target='_blank'>LeetCode 300</a></td>
+      <td rowspan="1"><b>Example 1:</b> Binary Search with tails array.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain an array `tails` where `tails[i]` stores the smallest tail of all increasing subsequences of length `i+1`. Use binary search (`lower_bound`) to find the position to replace or append.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import bisect&#10;def lengthOfLIS(nums: List[int]) -&gt; int:&#10;    tails = []&#10;    for num in nums:&#10;        idx = bisect.bisect_left(tails, num)&#10;        if idx == len(tails): tails.append(num)&#10;        else: tails[idx] = num&#10;    return len(tails)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">42</td>
+      <td rowspan="1">Dp 41 Largest Divisible Subset<br><br></b> <a href='https://leetcode.com/problems/largest-divisible-subset/' target='_blank'>LeetCode 368</a></td>
+      <td rowspan="1"><b>Example 1:</b> Sort and LIS variant.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort the array. Then use LIS logic: `dp[i]` is max subset ending at `i`. If `nums[i] % nums[j] == 0`, `dp[i] = max(dp[i], dp[j] + 1)`. Also keep a `parent` array to reconstruct the subset.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def largestDivisibleSubset(nums: List[int]) -&gt; List[int]:&#10;    if not nums: return []&#10;    nums.sort()&#10;    n = len(nums)&#10;    dp, parent = [1] * n, [-1] * n&#10;    max_len, max_idx = 1, 0&#10;    for i in range(1, n):&#10;        for j in range(i):&#10;            if nums[i] % nums[j] == 0 and dp[i] &lt; dp[j] + 1:&#10;                dp[i] = dp[j] + 1&#10;                parent[i] = j&#10;        if dp[i] &gt; max_len:&#10;            max_len, max_idx = dp[i], i&#10;    res = []&#10;    while max_idx != -1:&#10;        res.append(nums[max_idx])&#10;        max_idx = parent[max_idx]&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">43</td>
+      <td rowspan="1">Dp 42 Longest String Chain<br><br></b> <a href='https://leetcode.com/problems/longest-string-chain/' target='_blank'>LeetCode 1048</a></td>
+      <td rowspan="1"><b>Example 1:</b> Sort by length and use hash map.</td>
+      <td><b>Time:</b> O(N log N + N * L^2) where L is max word length<br><b>Space:</b> O(N * L)</td>
+      <td><code>#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort words by length. Use a hash map `dp` to store the longest chain ending at `word`. For each word, try removing one character at a time to form `prev_word`. `dp[word] = max(dp[word], dp[prev_word] + 1)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestStrChain(words: List[str]) -&gt; int:&#10;    words.sort(key=len)&#10;    dp = {}&#10;    max_len = 1&#10;    for word in words:&#10;        dp[word] = 1&#10;        for i in range(len(word)):&#10;            prev = word[:i] + word[i+1:]&#10;            if prev in dp:&#10;                dp[word] = max(dp[word], dp[prev] + 1)&#10;        max_len = max(max_len, dp[word])&#10;    return max_len</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">44</td>
+      <td rowspan="1">Dp 43 Longest Bitonic Subsequence<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/longest-bitonic-subsequence0824/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> LIS from left + LIS from right.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Compute LIS ending at `i` from left to right (`inc[i]`). Compute LIS starting at `i` from right to left (`dec[i]`). The max bitonic subsequence length is `max(inc[i] + dec[i] - 1)` for all `i`. Sometimes pure increasing or pure decreasing is also bitonic depending on definition, adjust if necessary.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def LongestBitonicSequence(nums: List[int]) -&gt; int:&#10;    n = len(nums)&#10;    inc = [1] * n&#10;    dec = [1] * n&#10;    for i in range(1, n):&#10;        for j in range(i):&#10;            if nums[i] &gt; nums[j]: inc[i] = max(inc[i], inc[j] + 1)&#10;    for i in range(n - 2, -1, -1):&#10;        for j in range(n - 1, i, -1):&#10;            if nums[i] &gt; nums[j]: dec[i] = max(dec[i], dec[j] + 1)&#10;    return max(inc[i] + dec[i] - 1 for i in range(n))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">45</td>
+      <td rowspan="1">Dp 44 Number Of Longest Increasing Subsequence<br><br></b> <a href='https://leetcode.com/problems/number-of-longest-increasing-subsequence/' target='_blank'>LeetCode 673</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two DP arrays (Length and Count).</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain `lengths[i]` (length of LIS ending at i) and `counts[i]` (number of LIS ending at i). If `nums[i] > nums[j]`: if `lengths[j] + 1 > lengths[i]`, then `lengths[i] = lengths[j] + 1` and `counts[i] = counts[j]`. Else if `lengths[j] + 1 == lengths[i]`, then `counts[i] += counts[j]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findNumberOfLIS(nums: List[int]) -&gt; int:&#10;    n = len(nums)&#10;    lengths = [1] * n&#10;    counts = [1] * n&#10;    max_len = 0&#10;    res = 0&#10;    for i in range(n):&#10;        for j in range(i):&#10;            if nums[i] &gt; nums[j]:&#10;                if lengths[j] + 1 &gt; lengths[i]:&#10;                    lengths[i] = lengths[j] + 1&#10;                    counts[i] = counts[j]&#10;                elif lengths[j] + 1 == lengths[i]:&#10;                    counts[i] += counts[j]&#10;        if lengths[i] &gt; max_len:&#10;            max_len = lengths[i]&#10;            res = counts[i]&#10;        elif lengths[i] == max_len:&#10;            res += counts[i]&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">46</td>
+      <td rowspan="1">Dp 45 Matrix Chain Multiplication<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Interval DP.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use DP where `dp[i][j]` is min cost to multiply matrices from `i` to `j`. `dp[i][j] = min(dp[i][k] + dp[k+1][j] + arr[i-1]*arr[k]*arr[j])` for all `i <= k < j`. Solve for subproblem lengths 2 to N.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def matrixMultiplication(N, arr):&#10;    dp = [[0] * N for _ in range(N)]&#10;    for length in range(2, N):&#10;        for i in range(1, N - length + 1):&#10;            j = i + length - 1&#10;            dp[i][j] = float(&#x27;inf&#x27;)&#10;            for k in range(i, j):&#10;                cost = dp[i][k] + dp[k+1][j] + arr[i-1] * arr[k] * arr[j]&#10;                dp[i][j] = min(dp[i][j], cost)&#10;    return dp[1][N-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">47</td>
+      <td rowspan="1">Dp 46 Minimum Cost To Cut A Stick<br><br></b> <a href='https://leetcode.com/problems/minimum-cost-to-cut-a-stick/' target='_blank'>LeetCode 1547</a></td>
+      <td rowspan="1"><b>Example 1:</b> Interval DP like Matrix Chain Multiplication.</td>
+      <td><b>Time:</b> O(C^3) where C is number of cuts<br><b>Space:</b> O(C^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Add 0 and `n` to `cuts`, then sort. `dp[i][j]` is min cost to cut the sub-stick between `cuts[i]` and `cuts[j]`. Try all possible cuts `k` between `i` and `j`. `dp[i][j] = min(dp[i][k] + dp[k][j]) + cuts[j] - cuts[i]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minCost(n: int, cuts: List[int]) -&gt; int:&#10;    cuts = [0] + sorted(cuts) + [n]&#10;    c = len(cuts)&#10;    dp = [[0] * c for _ in range(c)]&#10;    for length in range(2, c):&#10;        for i in range(c - length):&#10;            j = i + length&#10;            dp[i][j] = float(&#x27;inf&#x27;)&#10;            for k in range(i + 1, j):&#10;                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j] + cuts[j] - cuts[i])&#10;    return dp[0][c-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">48</td>
+      <td rowspan="1">Dp 47 Burst Balloons<br><br></b> <a href='https://leetcode.com/problems/burst-balloons/' target='_blank'>LeetCode 312</a></td>
+      <td rowspan="1"><b>Example 1:</b> Interval DP (Thinking backwards).</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Add 1 to both ends of `nums`. `dp[i][j]` is max coins from bursting balloons strictly between `i` and `j`. Guess which balloon `k` (between `i` and `j`) is the LAST one to burst. Coins gained = `nums[i] * nums[k] * nums[j]`. Total = `dp[i][k] + dp[k][j] + coins`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxCoins(nums: List[int]) -&gt; int:&#10;    a = [1] + nums + [1]&#10;    n = len(a)&#10;    dp = [[0] * n for _ in range(n)]&#10;    for length in range(2, n):&#10;        for i in range(n - length):&#10;            j = i + length&#10;            for k in range(i + 1, j):&#10;                dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + a[i] * a[k] * a[j])&#10;    return dp[0][n-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">49</td>
+      <td rowspan="1">Dp 48 Evaluate Boolean Expression To True<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/boolean-parenthesization5610/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> 3D Interval DP.</td>
+      <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N^2 * 2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i][j][isTrue]` is number of ways to evaluate substring `i..j` to boolean `isTrue`. Iterate `k` from `i+1` to `j-1` with step 2 (k is operator). Combine left (`i..k-1`) and right (`k+1..j`) results based on the operator.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countWays(n: int, s: str) -&gt; int:&#10;    dp = [[[0, 0] for _ in range(n)] for _ in range(n)]&#10;    for i in range(0, n, 2):&#10;        if s[i] == &#x27;T&#x27;: dp[i][i][1] = 1&#10;        else: dp[i][i][0] = 1&#10;    for length in range(3, n + 1, 2):&#10;        for i in range(0, n - length + 1, 2):&#10;            j = i + length - 1&#10;            for k in range(i + 1, j, 2):&#10;                lT, lF = dp[i][k-1][1], dp[i][k-1][0]&#10;                rT, rF = dp[k+1][j][1], dp[k+1][j][0]&#10;                if s[k] == &#x27;&amp;&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lT * rT) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lF * rT + lT * rF + lF * rF) % 1003&#10;                elif s[k] == &#x27;|&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lT * rT + lF * rT + lT * rF) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lF * rF) % 1003&#10;                elif s[k] == &#x27;^&#x27;:&#10;                    dp[i][j][1] = (dp[i][j][1] + lT * rF + lF * rT) % 1003&#10;                    dp[i][j][0] = (dp[i][j][0] + lT * rT + lF * rF) % 1003&#10;    return dp[0][n-1][1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">50</td>
+      <td rowspan="1">Dp 49 Palindrome Partitioning Ii<br><br></b> <a href='https://leetcode.com/problems/palindrome-partitioning-ii/' target='_blank'>LeetCode 132</a></td>
+      <td rowspan="1"><b>Example 1:</b> 1D DP using Precomputed Palindrome Table.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Precompute a 2D boolean array `isPal` indicating if `s[i..j]` is palindrome. Then use 1D DP `cuts[i]` indicating min cuts for `s[0..i]`. `cuts[i] = min(cuts[i], cuts[j-1] + 1)` for all `j <= i` where `isPal[j][i]` is true. If `isPal[0][i]` is true, `cuts[i] = 0`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minCut(s: str) -&gt; int:&#10;    n = len(s)&#10;    isPal = [[False] * n for _ in range(n)]&#10;    for i in range(n - 1, -1, -1):&#10;        for j in range(i, n):&#10;            if s[i] == s[j] and (j - i &lt;= 2 or isPal[i+1][j-1]):&#10;                isPal[i][j] = True&#10;    cuts = [0] * n&#10;    for i in range(n):&#10;        if isPal[0][i]:&#10;            cuts[i] = 0&#10;        else:&#10;            cuts[i] = i&#10;            for j in range(1, i + 1):&#10;                if isPal[j][i]:&#10;                    cuts[i] = min(cuts[i], cuts[j-1] + 1)&#10;    return cuts[n-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">51</td>
+      <td rowspan="1">Dp 50 Partition Array For Maximum Sum<br><br></b> <a href='https://leetcode.com/problems/partition-array-for-maximum-sum/' target='_blank'>LeetCode 1043</a></td>
+      <td rowspan="1"><b>Example 1:</b> 1D DP.</td>
+      <td><b>Time:</b> O(N * K)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i]` is max sum for prefix of length `i`. To find `dp[i]`, try all partition lengths `j` from 1 to `k`. Keep track of `max_val` in the last `j` elements. `dp[i] = max(dp[i], dp[i-j] + max_val * j)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxSumAfterPartitioning(arr: List[int], k: int) -&gt; int:&#10;    n = len(arr)&#10;    dp = [0] * (n + 1)&#10;    for i in range(1, n + 1):&#10;        max_val = 0&#10;        for j in range(1, min(k, i) + 1):&#10;            max_val = max(max_val, arr[i - j])&#10;            dp[i] = max(dp[i], dp[i - j] + max_val * j)&#10;    return dp[n]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">52</td>
+      <td rowspan="1">Dp 51 Maximal Rectangle<br><br></b> <a href='https://leetcode.com/problems/maximal-rectangle/' target='_blank'>LeetCode 85</a></td>
+      <td rowspan="1"><b>Example 1:</b> DP to convert to Largest Rectangle in Histogram.</td>
+      <td><b>Time:</b> O(R * C)<br><b>Space:</b> O(C)</td>
+      <td><code>#include <stack></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Treat each row as the base of a histogram. Calculate heights for each row (`heights[j]++` if `matrix[i][j]=='1'`, else `0`). Then compute Largest Rectangle in Histogram for each row and take the maximum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maximalRectangle(matrix: List[List[str]]) -&gt; int:&#10;    if not matrix: return 0&#10;    r, c = len(matrix), len(matrix[0])&#10;    heights = [0] * c&#10;    maxArea = 0&#10;    for i in range(r):&#10;        for j in range(c):&#10;            heights[j] = heights[j] + 1 if matrix[i][j] == &#x27;1&#x27; else 0&#10;        st = []&#10;        for j in range(c + 1):&#10;            h = 0 if j == c else heights[j]&#10;            while st and h &lt; heights[st[-1]]:&#10;                height = heights[st.pop()]&#10;                width = j if not st else j - st[-1] - 1&#10;                maxArea = max(maxArea, height * width)&#10;            st.append(j)&#10;    return maxArea</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">53</td>
+      <td rowspan="1">Dp 52 Count Square Submatrices With All Ones<br><br></b> <a href='https://leetcode.com/problems/count-square-submatrices-with-all-ones/' target='_blank'>LeetCode 1277</a></td>
+      <td rowspan="1"><b>Example 1:</b> 2D DP.</td>
+      <td><b>Time:</b> O(R * C)<br><b>Space:</b> O(R * C) or O(C) optimized</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i][j]` represents the side length of the maximum square whose bottom-right corner is at `(i, j)`. If `matrix[i][j] == 1`, `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1`. The number of squares ending here is exactly `dp[i][j]`. Sum all `dp[i][j]`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countSquares(matrix: List[List[int]]) -&gt; int:&#10;    r, c = len(matrix), len(matrix[0])&#10;    dp = [[0] * c for _ in range(r)]&#10;    ans = 0&#10;    for i in range(r):&#10;        for j in range(c):&#10;            if matrix[i][j] == 1:&#10;                if i == 0 or j == 0:&#10;                    dp[i][j] = 1&#10;                else:&#10;                    dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1&#10;                ans += dp[i][j]&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">54</td>
+      <td rowspan="1">Dp 53 Word Break<br><br></b> <a href='https://leetcode.com/problems/word-break/' target='_blank'>LeetCode 139</a></td>
+      <td rowspan="1"><b>Example 1:</b> 1D DP.</td>
+      <td><b>Time:</b> O(N * M * L) or O(N^2)<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_set></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> `dp[i]` is true if `s[0..i-1]` can be segmented. For each `i` from 1 to `N`, try each word in dictionary. If `s[i-len(word)..i-1] == word` and `dp[i-len(word)]` is true, then `dp[i] = true`. Or iterate `j` from 0 to `i` and check if `dp[j]` is true and `s[j..i-1]` is in dict.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; bool:&#10;    dict_set = set(wordDict)&#10;    dp = [False] * (len(s) + 1)&#10;    dp[0] = True&#10;    for i in range(1, len(s) + 1):&#10;        for j in range(i):&#10;            if dp[j] and s[j:i] in dict_set:&#10;                dp[i] = True&#10;                break&#10;    return dp[len(s)]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

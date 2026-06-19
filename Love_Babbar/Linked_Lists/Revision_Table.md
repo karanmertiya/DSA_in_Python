@@ -295,5 +295,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use a dummy node. Maintain a `prev` pointer. While `prev->next` and `prev->next->next` exist, swap them and move `prev` two steps ahead.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def swapPairs(head: Optional[ListNode]) -&gt; Optional[ListNode]:&#10;    dummy = ListNode(0)&#10;    dummy.next = head&#10;    prev = dummy&#10;    while prev.next and prev.next.next:&#10;        first = prev.next&#10;        second = prev.next.next&#10;        first.next = second.next&#10;        second.next = first&#10;        prev.next = second&#10;        prev = first&#10;    return dummy.next</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">32</td>
+      <td rowspan="1">Ll 36 Reverse Nodes In Even Length Groups<br><br></b> <a href='https://leetcode.com/problems/reverse-nodes-in-even-length-groups/' target='_blank'>LeetCode 2074</a></td>
+      <td rowspan="1"><b>Example 1:</b> Group tracking.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Traverse the list while tracking the expected group length. First, count the actual number of nodes left in the current group. If the count is even, reverse this sublist and connect it to the previous part. If odd, just skip. Update lengths and pointers.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverseEvenLengthGroups(head: Optional[ListNode]) -&gt; Optional[ListNode]:&#10;    groupLen = 1&#10;    prev, curr = None, head&#10;    while curr:&#10;        temp, count = curr, 0&#10;        while count &lt; groupLen and temp:&#10;            temp = temp.next&#10;            count += 1&#10;        if count % 2 == 0:&#10;            gPrev, gCurr = None, curr&#10;            for _ in range(count):&#10;                nxt = gCurr.next&#10;                gCurr.next = gPrev&#10;                gPrev = gCurr&#10;                gCurr = nxt&#10;            prev.next = gPrev&#10;            curr.next = gCurr&#10;            prev = curr&#10;            curr = gCurr&#10;        else:&#10;            for _ in range(count):&#10;                prev = curr&#10;                curr = curr.next&#10;        groupLen += 1&#10;    return head</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">33</td>
+      <td rowspan="1">Ll 37 Swapping Nodes In A Linked List<br><br></b> <a href='https://leetcode.com/problems/swapping-nodes-in-a-linked-list/' target='_blank'>LeetCode 1721</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two passes or three pointers.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use two pointers. Move `fast` pointer `k-1` steps. `first_node` is at `fast`. Initialize `slow = head`. Move both `slow` and `fast` to the end. `slow` will be at `second_node`. Swap values.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def swapNodes(head: Optional[ListNode], k: int) -&gt; Optional[ListNode]:&#10;    fast = head&#10;    for _ in range(k - 1): fast = fast.next&#10;    first_node = fast&#10;    slow = head&#10;    while fast.next:&#10;        slow = slow.next&#10;        fast = fast.next&#10;    first_node.val, slow.val = slow.val, first_node.val&#10;    return head</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">34</td>
+      <td rowspan="1">Ll 38 Merge Nodes In Between Zeros<br><br></b> <a href='https://leetcode.com/problems/merge-nodes-in-between-zeros/' target='_blank'>LeetCode 2181</a></td>
+      <td rowspan="1"><b>Example 1:</b> Accumulate and connect.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1) extra space if we modify in-place</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a dummy node. Traverse the list. Maintain a running sum. When we encounter a 0 (and sum > 0), create a new node with `sum`, attach it to dummy list, reset `sum` to 0.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def mergeNodes(head: Optional[ListNode]) -&gt; Optional[ListNode]:&#10;    dummy = currDummy = ListNode(0)&#10;    curr = head.next&#10;    current_sum = 0&#10;    while curr:&#10;        if curr.val == 0:&#10;            currDummy.next = ListNode(current_sum)&#10;            currDummy = currDummy.next&#10;            current_sum = 0&#10;        else:&#10;            current_sum += curr.val&#10;        curr = curr.next&#10;    return dummy.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">35</td>
+      <td rowspan="1">Ll 39 Design Hashset<br><br></b> <a href='https://leetcode.com/problems/design-hashset/' target='_blank'>LeetCode 705</a></td>
+      <td rowspan="1"><b>Example 1:</b> Array of Linked Lists.</td>
+      <td><b>Time:</b> O(1) amortized<br><b>Space:</b> O(Number of elements)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use an array of linked lists (chaining) for collision resolution. Hash function `key % capacity`. Add: Insert if not present. Remove: Delete node. Contains: Traverse list at `hash(key)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class ListNode:&#10;    def __init__(self, key):&#10;        self.key = key&#10;        self.next = None&#10;class MyHashSet:&#10;    def __init__(self):&#10;        self.size = 10007&#10;        self.buckets = [None] * self.size&#10;    def add(self, key: int) -&gt; None:&#10;        idx = key % self.size&#10;        curr = self.buckets[idx]&#10;        while curr:&#10;            if curr.key == key: return&#10;            curr = curr.next&#10;        newNode = ListNode(key)&#10;        newNode.next = self.buckets[idx]&#10;        self.buckets[idx] = newNode&#10;    def remove(self, key: int) -&gt; None:&#10;        idx = key % self.size&#10;        curr = self.buckets[idx]&#10;        prev = None&#10;        while curr:&#10;            if curr.key == key:&#10;                if prev: prev.next = curr.next&#10;                else: self.buckets[idx] = curr.next&#10;                return&#10;            prev = curr&#10;            curr = curr.next&#10;    def contains(self, key: int) -&gt; bool:&#10;        idx = key % self.size&#10;        curr = self.buckets[idx]&#10;        while curr:&#10;            if curr.key == key: return True&#10;            curr = curr.next&#10;        return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">36</td>
+      <td rowspan="1">Ll 40 Design Hashmap<br><br></b> <a href='https://leetcode.com/problems/design-hashmap/' target='_blank'>LeetCode 706</a></td>
+      <td rowspan="1"><b>Example 1:</b> Array of Linked Lists with Key-Value pairs.</td>
+      <td><b>Time:</b> O(1) amortized<br><b>Space:</b> O(Number of elements)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Similar to HashSet, but each node stores a `(key, value)` pair. On Put, if key exists, update value. Else insert new node. On Get, return value if key found, else -1.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class ListNode:&#10;    def __init__(self, key, val):&#10;        self.key, self.val = key, val&#10;        self.next = None&#10;class MyHashMap:&#10;    def __init__(self):&#10;        self.size = 10007&#10;        self.buckets = [None] * self.size&#10;    def put(self, key: int, value: int) -&gt; None:&#10;        idx = key % self.size&#10;        curr = self.buckets[idx]&#10;        while curr:&#10;            if curr.key == key:&#10;                curr.val = value&#10;                return&#10;            curr = curr.next&#10;        newNode = ListNode(key, value)&#10;        newNode.next = self.buckets[idx]&#10;        self.buckets[idx] = newNode&#10;    def get(self, key: int) -&gt; int:&#10;        idx = key % self.size&#10;        curr = self.buckets[idx]&#10;        while curr:&#10;            if curr.key == key: return curr.val&#10;            curr = curr.next&#10;        return -1&#10;    def remove(self, key: int) -&gt; None:&#10;        idx = key % self.size&#10;        curr = self.buckets[idx]&#10;        prev = None&#10;        while curr:&#10;            if curr.key == key:&#10;                if prev: prev.next = curr.next&#10;                else: self.buckets[idx] = curr.next&#10;                return&#10;            prev = curr&#10;            curr = curr.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">37</td>
+      <td rowspan="1">Ll 41 Design Browser History<br><br></b> <a href='https://leetcode.com/problems/design-browser-history/' target='_blank'>LeetCode 1472</a></td>
+      <td rowspan="1"><b>Example 1:</b> Doubly Linked List.</td>
+      <td><b>Time:</b> O(1) visit, O(steps) back/forward<br><b>Space:</b> O(N) for URLs</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a Doubly Linked List. Each visit creates a new node, clearing forward history. Back and forward operations just traverse the pointers up to `steps` times.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self, url):&#10;        self.url = url&#10;        self.prev = self.next = None&#10;class BrowserHistory:&#10;    def __init__(self, homepage: str):&#10;        self.curr = Node(homepage)&#10;    def visit(self, url: str) -&gt; None:&#10;        newNode = Node(url)&#10;        self.curr.next = newNode&#10;        newNode.prev = self.curr&#10;        self.curr = newNode&#10;    def back(self, steps: int) -&gt; str:&#10;        while steps &gt; 0 and self.curr.prev:&#10;            self.curr = self.curr.prev&#10;            steps -= 1&#10;        return self.curr.url&#10;    def forward(self, steps: int) -&gt; str:&#10;        while steps &gt; 0 and self.curr.next:&#10;            self.curr = self.curr.next&#10;            steps -= 1&#10;        return self.curr.url</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">38</td>
+      <td rowspan="1">Ll 42 Lru Cache Ll<br><br></b> <a href='https://leetcode.com/problems/lru-cache/' target='_blank'>LeetCode 146</a></td>
+      <td rowspan="1"><b>Example 1:</b> Duplicate logic entry to ensure coverage.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Included for chapter coverage completeness. See sq_31_lru_cache.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># See Stacks and Queues module for full implementation.</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">39</td>
+      <td rowspan="1">Ll 43 Lfu Cache Ll<br><br></b> <a href='https://leetcode.com/problems/lfu-cache/' target='_blank'>LeetCode 460</a></td>
+      <td rowspan="1"><b>Example 1:</b> Duplicate logic entry to ensure coverage.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Included for chapter coverage completeness. See sq_32_lfu_cache.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># See Stacks and Queues module for full implementation.</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">40</td>
+      <td rowspan="1">Ll 44 All Oone Data Structure<br><br></b> <a href='https://leetcode.com/problems/all-oone-data-structure/' target='_blank'>LeetCode 432</a></td>
+      <td rowspan="1"><b>Example 1:</b> Doubly linked list of frequency buckets.</td>
+      <td><b>Time:</b> O(1) amortized<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_set>\n#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a DLL where each node represents a specific frequency and contains a set of strings. Use a hash map mapping strings to their current bucket. On inc/dec, move the string to the adjacent bucket (create if necessary). Max is tail->prev, Min is head->next.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Bucket:&#10;    def __init__(self, count):&#10;        self.count = count&#10;        self.keys = set()&#10;        self.prev = self.next = None&#10;class AllOne:&#10;    def __init__(self):&#10;        self.head, self.tail = Bucket(0), Bucket(0)&#10;        self.head.next, self.tail.prev = self.tail, self.head&#10;        self.m = {}&#10;    def _add_bucket(self, prev_b, new_b):&#10;        new_b.prev, new_b.next = prev_b, prev_b.next&#10;        prev_b.next.prev = prev_b.next = new_b&#10;    def _remove_bucket(self, b):&#10;        b.prev.next, b.next.prev = b.next, b.prev&#10;    def inc(self, key: str) -&gt; None:&#10;        if key in self.m:&#10;            curr = self.m[key]&#10;            nxt = curr.next&#10;            if nxt == self.tail or nxt.count != curr.count + 1:&#10;                self._add_bucket(curr, Bucket(curr.count + 1))&#10;                nxt = curr.next&#10;            nxt.keys.add(key)&#10;            self.m[key] = nxt&#10;            curr.keys.remove(key)&#10;            if not curr.keys: self._remove_bucket(curr)&#10;        else:&#10;            nxt = self.head.next&#10;            if nxt == self.tail or nxt.count != 1:&#10;                self._add_bucket(self.head, Bucket(1))&#10;                nxt = self.head.next&#10;            nxt.keys.add(key)&#10;            self.m[key] = nxt&#10;    def dec(self, key: str) -&gt; None:&#10;        curr = self.m[key]&#10;        if curr.count == 1:&#10;            del self.m[key]&#10;        else:&#10;            prv = curr.prev&#10;            if prv == self.head or prv.count != curr.count - 1:&#10;                self._add_bucket(curr.prev, Bucket(curr.count - 1))&#10;                prv = curr.prev&#10;            prv.keys.add(key)&#10;            self.m[key] = prv&#10;        curr.keys.remove(key)&#10;        if not curr.keys: self._remove_bucket(curr)&#10;    def getMaxKey(self) -&gt; str:&#10;        return next(iter(self.tail.prev.keys)) if self.tail.prev != self.head else &quot;&quot;&#10;    def getMinKey(self) -&gt; str:&#10;        return next(iter(self.head.next.keys)) if self.head.next != self.tail else &quot;&quot;</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">41</td>
+      <td rowspan="1">Ll 45 Flatten A Multilevel Doubly Linked List<br><br></b> <a href='https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/' target='_blank'>LeetCode 430</a></td>
+      <td rowspan="1"><b>Example 1:</b> DFS / Recursion.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the list. When a node has a child, find the tail of the child list. Connect the tail to `node->next`, and `node->next` to the child. Update `prev` pointers. Set `node->child` to `nullptr`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def flatten(head: &#x27;Optional[Node]&#x27;) -&gt; &#x27;Optional[Node]&#x27;:&#10;    if not head: return None&#10;    curr = head&#10;    while curr:&#10;        if curr.child:&#10;            tail = curr.child&#10;            while tail.next: tail = tail.next&#10;            tail.next = curr.next&#10;            if curr.next: curr.next.prev = tail&#10;            curr.next = curr.child&#10;            curr.child.prev = curr&#10;            curr.child = None&#10;        curr = curr.next&#10;    return head</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

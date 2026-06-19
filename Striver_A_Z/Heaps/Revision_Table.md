@@ -142,5 +142,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use a hash map to map user to their followees. Use another map to map user to their tweets. For news feed, use a Max-Heap to extract the 10 most recent tweets from the user and their followees.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;import collections&#10;class Twitter:&#10;    def __init__(self):&#10;        self.time = 0&#10;        self.tweets = collections.defaultdict(list)&#10;        self.followers = collections.defaultdict(set)&#10;    def postTweet(self, userId: int, tweetId: int) -&gt; None:&#10;        self.tweets[userId].append((self.time, tweetId))&#10;        self.time -= 1&#10;    def getNewsFeed(self, userId: int) -&gt; List[int]:&#10;        users = self.followers[userId] | {userId}&#10;        hq = []&#10;        for u in users:&#10;            for t in self.tweets[u][-10:]:&#10;                heapq.heappush(hq, t)&#10;        return [t[1] for t in heapq.nsmallest(10, hq)]&#10;    def follow(self, followerId: int, followeeId: int) -&gt; None:&#10;        self.followers[followerId].add(followeeId)&#10;    def unfollow(self, followerId: int, followeeId: int) -&gt; None:&#10;        self.followers[followerId].discard(followeeId)</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">15</td>
+      <td rowspan="1">Heap 24 Kth Largest Element In A Stream<br><br></b> <a href='https://leetcode.com/problems/kth-largest-element-in-a-stream/' target='_blank'>LeetCode 703</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-heap of size K.</td>
+      <td><b>Time:</b> O(N log K) for init, O(log K) for add<br><b>Space:</b> O(K)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a min-heap of size exactly `k`. The top of the min-heap will always represent the kth largest element. For every new element added, if the heap size is less than `k`, push it. If the heap is of size `k` and the new element is greater than the top, pop the top and push the new element.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;class KthLargest:&#10;    def __init__(self, k: int, nums: List[int]):&#10;        self.k = k&#10;        self.min_heap = nums&#10;        heapq.heapify(self.min_heap)&#10;        while len(self.min_heap) &gt; k:&#10;            heapq.heappop(self.min_heap)&#10;    def add(self, val: int) -&gt; int:&#10;        heapq.heappush(self.min_heap, val)&#10;        if len(self.min_heap) &gt; self.k:&#10;            heapq.heappop(self.min_heap)&#10;        return self.min_heap[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">16</td>
+      <td rowspan="1">Heap 25 Kth Largest Element In An Array<br><br></b> <a href='https://leetcode.com/problems/kth-largest-element-in-an-array/' target='_blank'>LeetCode 215</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-heap or Quickselect.</td>
+      <td><b>Time:</b> O(N log K) Heap, O(N) avg Quickselect<br><b>Space:</b> O(K) Heap, O(1) Quickselect</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Min-heap: Keep a min-heap of size K. The root is the Kth largest. Quickselect: Partition the array like in Quicksort, recursively searching only the partition containing the target index.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def findKthLargest(nums: List[int], k: int) -&gt; int:&#10;    return heapq.nlargest(k, nums)[-1]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">17</td>
+      <td rowspan="1">Heap 26 K Closest Points To Origin<br><br></b> <a href='https://leetcode.com/problems/k-closest-points-to-origin/' target='_blank'>LeetCode 973</a></td>
+      <td rowspan="1"><b>Example 1:</b> Max-heap of pairs.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(K)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a max-heap of size `k` to store pairs of `(distance, point_index)`. Iterate over all points, push into heap. If heap size exceeds `k`, pop the max element. The heap will eventually hold the `k` points with minimum distance.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def kClosest(points: List[List[int]], k: int) -&gt; List[List[int]]:&#10;    heap = []&#10;    for i, (x, y) in enumerate(points):&#10;        dist = -(x*x + y*y)&#10;        if len(heap) &lt; k:&#10;            heapq.heappush(heap, (dist, i))&#10;        else:&#10;            heapq.heappushpop(heap, (dist, i))&#10;    return [points[i] for _, i in heap]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">18</td>
+      <td rowspan="1">Heap 27 Top K Frequent Elements<br><br></b> <a href='https://leetcode.com/problems/top-k-frequent-elements/' target='_blank'>LeetCode 347</a></td>
+      <td rowspan="1"><b>Example 1:</b> Hash map + Min-heap or Bucket sort.</td>
+      <td><b>Time:</b> O(N log K) Heap, O(N) Bucket Sort<br><b>Space:</b> O(N)</td>
+      <td><code>#include <unordered_map>\n#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Count frequencies using a hash map. Use a min-heap of size `k` storing pairs of `(frequency, element)`. Or use bucket sort where index is frequency and value is list of elements with that frequency.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;import heapq&#10;def topKFrequent(nums: List[int], k: int) -&gt; List[int]:&#10;    counts = collections.Counter(nums)&#10;    return heapq.nlargest(k, counts.keys(), key=counts.get)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">19</td>
+      <td rowspan="1">Heap 28 Sort Characters By Frequency<br><br></b> <a href='https://leetcode.com/problems/sort-characters-by-frequency/' target='_blank'>LeetCode 451</a></td>
+      <td rowspan="1"><b>Example 1:</b> Hash map + Max-heap or Sort.</td>
+      <td><b>Time:</b> O(N log M) where M is unique characters<br><b>Space:</b> O(M)</td>
+      <td><code>#include <unordered_map>\n#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Count frequencies of each character. Store pairs of `(frequency, character)` in a max-heap (or sort an array). Construct the result string by popping from the heap.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def frequencySort(s: str) -&gt; str:&#10;    counts = collections.Counter(s)&#10;    return &quot;&quot;.join([char * count for char, count in counts.most_common()])</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">20</td>
+      <td rowspan="1">Heap 29 Find Median From Data Stream<br><br></b> <a href='https://leetcode.com/problems/find-median-from-data-stream/' target='_blank'>LeetCode 295</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two heaps (Max-heap for lower half, Min-heap for upper half).</td>
+      <td><b>Time:</b> O(log N) add, O(1) find<br><b>Space:</b> O(N)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use two heaps: a max-heap for the smaller half of numbers, and a min-heap for the larger half. Keep the sizes balanced (either equal, or max-heap has 1 more). Median is root of max-heap (odd total) or average of both roots (even total).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;class MedianFinder:&#10;    def __init__(self):&#10;        self.small, self.large = [], []&#10;    def addNum(self, num: int) -&gt; None:&#10;        heapq.heappush(self.large, num)&#10;        heapq.heappush(self.small, -heapq.heappop(self.large))&#10;        if len(self.small) &gt; len(self.large):&#10;            heapq.heappush(self.large, -heapq.heappop(self.small))&#10;    def findMedian(self) -&gt; float:&#10;        if len(self.large) &gt; len(self.small):&#10;            return self.large[0]&#10;        return (self.large[0] - self.small[0]) / 2</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">21</td>
+      <td rowspan="1">Heap 30 Merge K Sorted Lists<br><br></b> <a href='https://leetcode.com/problems/merge-k-sorted-lists/' target='_blank'>LeetCode 23</a></td>
+      <td rowspan="1"><b>Example 1:</b> Min-heap of list nodes.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(K)</td>
+      <td><code>#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Push the head of each list into a min-heap. Extract the minimum node, append it to the merged list, and push its next node (if any) into the min-heap. Repeat until heap is empty.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def mergeKLists(lists: List[Optional[ListNode]]) -&gt; Optional[ListNode]:&#10;    setattr(ListNode, &quot;__lt__&quot;, lambda self, other: self.val &lt; other.val)&#10;    heap = []&#10;    for node in lists:&#10;        if node:&#10;            heapq.heappush(heap, node)&#10;    dummy = tail = ListNode(0)&#10;    while heap:&#10;        curr = heapq.heappop(heap)&#10;        tail.next = curr&#10;        tail = tail.next&#10;        if curr.next:&#10;            heapq.heappush(heap, curr.next)&#10;    return dummy.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">22</td>
+      <td rowspan="1">Heap 31 Task Scheduler<br><br></b> <a href='https://leetcode.com/problems/task-scheduler/' target='_blank'>LeetCode 621</a></td>
+      <td rowspan="1"><b>Example 1:</b> Duplicate logic entry. See Greedy chapter.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> See greedy_37_task_scheduler.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># Implementation provided in greedy chapter.</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">23</td>
+      <td rowspan="1">Heap 32 Design Twitter<br><br></b> <a href='https://leetcode.com/problems/design-twitter/' target='_blank'>LeetCode 355</a></td>
+      <td rowspan="1"><b>Example 1:</b> Heap to merge multiple sorted lists.</td>
+      <td><b>Time:</b> O(K log K) for feed where K is 10.<br><b>Space:</b> O(Total Tweets + Follow Relations)</td>
+      <td><code>#include <unordered_map>\n#include <unordered_set>\n#include <queue></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a timestamp for tweets. Each user has a list of tweets and a set of followed users. To get the news feed, gather the most recent tweets from the user and all followees using a max-heap (like merging K sorted lists).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;import heapq&#10;class Twitter:&#10;    def __init__(self):&#10;        self.time = 0&#10;        self.tweets = collections.defaultdict(list)&#10;        self.followees = collections.defaultdict(set)&#10;    def postTweet(self, userId: int, tweetId: int) -&gt; None:&#10;        self.tweets[userId].append((self.time, tweetId))&#10;        self.time += 1&#10;    def getNewsFeed(self, userId: int) -&gt; List[int]:&#10;        users = self.followees[userId] | {userId}&#10;        heap = []&#10;        for u in users:&#10;            if self.tweets[u]:&#10;                idx = len(self.tweets[u]) - 1&#10;                t, tweetId = self.tweets[u][idx]&#10;                heapq.heappush(heap, (-t, tweetId, u, idx - 1))&#10;        res = []&#10;        while heap and len(res) &lt; 10:&#10;            _, tweetId, u, idx = heapq.heappop(heap)&#10;            res.append(tweetId)&#10;            if idx &gt;= 0:&#10;                t, nxtTweetId = self.tweets[u][idx]&#10;                heapq.heappush(heap, (-t, nxtTweetId, u, idx - 1))&#10;        return res&#10;    def follow(self, followerId: int, followeeId: int) -&gt; None:&#10;        self.followees[followerId].add(followeeId)&#10;    def unfollow(self, followerId: int, followeeId: int) -&gt; None:&#10;        self.followees[followerId].discard(followeeId)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">24</td>
+      <td rowspan="1">Heap 33 Reorganize String<br><br></b> <a href='https://leetcode.com/problems/reorganize-string/' target='_blank'>LeetCode 767</a></td>
+      <td rowspan="1"><b>Example 1:</b> Duplicate logic entry. See Greedy chapter.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(26)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> See greedy_38_reorganize_string.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># Implementation provided in greedy chapter.</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

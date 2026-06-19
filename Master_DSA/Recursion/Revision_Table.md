@@ -259,5 +259,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Recurse through string. For index `i`, check substring `s[index...i]`. If it is palindrome, add it to current list, and recurse for `i+1`. Backtrack after recursion.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def partition(s: str) -&gt; List[List[str]]:&#10;    res = []&#10;    def isPal(string, l, r):&#10;        while l &lt;= r:&#10;            if string[l] != string[r]: return False&#10;            l += 1; r -= 1&#10;        return True&#10;    def func(index, path):&#10;        if index == len(s):&#10;            res.append(list(path))&#10;            return&#10;        for i in range(index, len(s)):&#10;            if isPal(s, index, i):&#10;                path.append(s[index:i+1])&#10;                func(i + 1, path)&#10;                path.pop()&#10;    func(0, [])&#10;    return res</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">28</td>
+      <td rowspan="1">Recursion 27 N Queens Ii<br><br></b> <a href='https://leetcode.com/problems/n-queens-ii/' target='_blank'>LeetCode 52</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking with hashing.</td>
+      <td><b>Time:</b> O(N!)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use backtracking to place queens column by column. Use three hash arrays (or bitmasks) to track attacked rows, upper diagonals, and lower diagonals. If placing a queen is safe, update hashes, recurse for next column, and then backtrack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def totalNQueens(n: int) -&gt; int:&#10;    count = 0&#10;    leftRow = [0] * n&#10;    upperDiag = [0] * (2 * n - 1)&#10;    lowerDiag = [0] * (2 * n - 1)&#10;    def solve(col):&#10;        nonlocal count&#10;        if col == n:&#10;            count += 1&#10;            return&#10;        for row in range(n):&#10;            if leftRow[row] == 0 and lowerDiag[row + col] == 0 and upperDiag[n - 1 + col - row] == 0:&#10;                leftRow[row] = 1&#10;                lowerDiag[row + col] = 1&#10;                upperDiag[n - 1 + col - row] = 1&#10;                solve(col + 1)&#10;                leftRow[row] = 0&#10;                lowerDiag[row + col] = 0&#10;                upperDiag[n - 1 + col - row] = 0&#10;    solve(0)&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">29</td>
+      <td rowspan="1">Recursion 28 Sudoku Solver<br><br></b> <a href='https://leetcode.com/problems/sudoku-solver/' target='_blank'>LeetCode 37</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(9^(n*n))<br><b>Space:</b> O(1) excluding recursion stack</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through each cell. If it's empty, try placing digits '1' to '9'. For each digit, check if it's valid in its row, column, and 3x3 subgrid. If valid, place it and recursively try to solve the rest. If a path leads to a solution, return true. Otherwise, backtrack (remove digit).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solveSudoku(board: List[List[str]]) -&gt; None:&#10;    def isValid(row, col, c):&#10;        for i in range(9):&#10;            if board[i][col] == c: return False&#10;            if board[row][i] == c: return False&#10;            if board[3 * (row // 3) + i // 3][3 * (col // 3) + i % 3] == c: return False&#10;        return True&#10;    def solve():&#10;        for i in range(len(board)):&#10;            for j in range(len(board[0])):&#10;                if board[i][j] == &#x27;.&#x27;:&#10;                    for c in map(str, range(1, 10)):&#10;                        if isValid(i, j, c):&#10;                            board[i][j] = c&#10;                            if solve(): return True&#10;                            board[i][j] = &#x27;.&#x27;&#10;                    return False&#10;        return True&#10;    solve()</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">30</td>
+      <td rowspan="1">Recursion 29 Word Search<br><br></b> <a href='https://leetcode.com/problems/word-search/' target='_blank'>LeetCode 79</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking DFS.</td>
+      <td><b>Time:</b> O(N * M * 4^L)<br><b>Space:</b> O(L) recursion stack</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Start DFS from each cell that matches the first letter of the word. In DFS, check 4 neighbors. Mark current cell as visited (e.g. change to '#') before moving to neighbors, and unmark (backtrack) after exploring.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def exist(board: List[List[str]], word: str) -&gt; bool:&#10;    def dfs(i, j, idx):&#10;        if idx == len(word): return True&#10;        if i &lt; 0 or i &gt;= len(board) or j &lt; 0 or j &gt;= len(board[0]) or board[i][j] != word[idx]:&#10;            return False&#10;        temp = board[i][j]&#10;        board[i][j] = &#x27;#&#x27;&#10;        found = (dfs(i+1, j, idx+1) or dfs(i-1, j, idx+1) or&#10;                 dfs(i, j+1, idx+1) or dfs(i, j-1, idx+1))&#10;        board[i][j] = temp&#10;        return found&#10;    for i in range(len(board)):&#10;        for j in range(len(board[0])):&#10;            if board[i][j] == word[0] and dfs(i, j, 0):&#10;                return True&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">31</td>
+      <td rowspan="1">Recursion 30 Palindrome Partitioning<br><br></b> <a href='https://leetcode.com/problems/palindrome-partitioning/' target='_blank'>LeetCode 131</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(N * 2^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the string. If a prefix is a palindrome, add it to the current partition list, and recursively partition the remaining substring. When we reach the end of the string, add the current partition to the result.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def partition(s: str) -&gt; List[List[str]]:&#10;    def is_palindrome(sub):&#10;        return sub == sub[::-1]&#10;    res = []&#10;    def solve(idx, path):&#10;        if idx == len(s):&#10;            res.append(path[:])&#10;            return&#10;        for i in range(idx, len(s)):&#10;            if is_palindrome(s[idx:i+1]):&#10;                path.append(s[idx:i+1])&#10;                solve(i+1, path)&#10;                path.pop()&#10;    solve(0, [])&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">32</td>
+      <td rowspan="1">Recursion 31 Rat In A Maze Problem I<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking DFS.</td>
+      <td><b>Time:</b> O(4^(N*N))<br><b>Space:</b> O(N*N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Start DFS from (0,0). Try D, L, R, U sequentially. If valid and not visited, mark visited, append direction to path, recurse, then unmark (backtrack) and pop direction. If reached (N-1, N-1), add path to results.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPath(m, n):&#10;    ans = []&#10;    vis = [[0 for _ in range(n)] for _ in range(n)]&#10;    dirs = &quot;DLRU&quot;&#10;    di = [1, 0, 0, -1]&#10;    dj = [0, -1, 1, 0]&#10;    def solve(i, j, move):&#10;        if i == n - 1 and j == n - 1:&#10;            ans.append(move)&#10;            return&#10;        for ind in range(4):&#10;            ni = i + di[ind]&#10;            nj = j + dj[ind]&#10;            if 0 &lt;= ni &lt; n and 0 &lt;= nj &lt; n and not vis[ni][nj] and m[ni][nj] == 1:&#10;                vis[i][j] = 1&#10;                solve(ni, nj, move + dirs[ind])&#10;                vis[i][j] = 0&#10;    if m[0][0] == 1:&#10;        solve(0, 0, &quot;&quot;)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">33</td>
+      <td rowspan="1">Recursion 32 Word Break Ii<br><br></b> <a href='https://leetcode.com/problems/word-break-ii/' target='_blank'>LeetCode 140</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking with Memoization (optional, but good for optimization).</td>
+      <td><b>Time:</b> O(N * 2^N)<br><b>Space:</b> O(N * 2^N)</td>
+      <td><code>#include <unordered_set></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through all possible prefixes. If a prefix exists in the wordDict, recursively solve for the remaining suffix. Backtrack by appending the current prefix to the results of the suffix.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; List[str]:&#10;    dict_set = set(wordDict)&#10;    res = []&#10;    def solve(idx, path):&#10;        if idx == len(s):&#10;            res.append(path[:-1])&#10;            return&#10;        temp = &quot;&quot;&#10;        for i in range(idx, len(s)):&#10;            temp += s[i]&#10;            if temp in dict_set:&#10;                solve(i + 1, path + temp + &quot; &quot;)&#10;    solve(0, &quot;&quot;)&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">34</td>
+      <td rowspan="1">Recursion 33 M Coloring Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/m-coloring-problem-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(M^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Try coloring nodes one by one. For each node, try all M colors. Check if it's safe (no adjacent node has the same color). If safe, color it and recurse to the next node. If recursion returns true, we are done. Else backtrack and try next color.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def graphColoring(graph, m, n):&#10;    color = [0] * n&#10;    def isSafe(node, col):&#10;        for k in range(n):&#10;            if k != node and graph[k][node] == 1 and color[k] == col:&#10;                return False&#10;        return True&#10;    def solve(node):&#10;        if node == n: return True&#10;        for i in range(1, m + 1):&#10;            if isSafe(node, i):&#10;                color[node] = i&#10;                if solve(node + 1): return True&#10;                color[node] = 0&#10;        return False&#10;    return solve(0)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">35</td>
+      <td rowspan="1">Recursion 34 Expression Add Operators<br><br></b> <a href='https://leetcode.com/problems/expression-add-operators/' target='_blank'>LeetCode 282</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking with value and previous operand tracking.</td>
+      <td><b>Time:</b> O(4^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the string, extracting substrings as numbers. Prevent numbers with leading zeros. Recursively try `+`, `-`, `*`. For `*`, we must subtract the previous added value, and add `prev * current_val` to maintain precedence.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def addOperators(num: str, target: int) -&gt; List[str]:&#10;    res = []&#10;    def solve(idx, path, prevNum, currVal):&#10;        if idx == len(num):&#10;            if currVal == target: res.append(path)&#10;            return&#10;        s = &quot;&quot;&#10;        n = 0&#10;        for i in range(idx, len(num)):&#10;            if i &gt; idx and num[idx] == &#x27;0&#x27;: break&#10;            s += num[i]&#10;            n = n * 10 + int(num[i])&#10;            if idx == 0:&#10;                solve(i + 1, s, n, n)&#10;            else:&#10;                solve(i + 1, path + &quot;+&quot; + s, n, currVal + n)&#10;                solve(i + 1, path + &quot;-&quot; + s, -n, currVal - n)&#10;                solve(i + 1, path + &quot;*&quot; + s, prevNum * n, currVal - prevNum + prevNum * n)&#10;    solve(0, &quot;&quot;, 0, 0)&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">36</td>
+      <td rowspan="1">Recursion 35 K Th Symbol In Grammar<br><br></b> <a href='https://leetcode.com/problems/k-th-symbol-in-grammar/' target='_blank'>LeetCode 779</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive division.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Row N has length 2^(N-1). The first half of row N is exactly same as row N-1. The second half of row N is the complement of row N-1. If k is in the first half (k <= mid), return solve(N-1, k). If k is in the second half, return !solve(N-1, k - mid).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kthGrammar(n: int, k: int) -&gt; int:&#10;    if n == 1 and k == 1: return 0&#10;    mid = 2 ** (n - 2)&#10;    if k &lt;= mid:&#10;        return kthGrammar(n - 1, k)&#10;    else:&#10;        return 1 - kthGrammar(n - 1, k - mid)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">37</td>
+      <td rowspan="1">Recursion 36 Beautiful Arrangement<br><br></b> <a href='https://leetcode.com/problems/beautiful-arrangement/' target='_blank'>LeetCode 526</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(K) where K is number of valid permutations<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use an array to track visited numbers. Iterate from index 1 to n. For the current index, try placing an unvisited number. Check if the condition `(num % idx == 0 || idx % num == 0)` is met. If so, mark as visited, recurse to `idx + 1`, then backtrack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countArrangement(n: int) -&gt; int:&#10;    count = 0&#10;    visited = [0] * (n + 1)&#10;    def solve(idx):&#10;        nonlocal count&#10;        if idx &gt; n:&#10;            count += 1&#10;            return&#10;        for i in range(1, n + 1):&#10;            if not visited[i] and (i % idx == 0 or idx % i == 0):&#10;                visited[i] = 1&#10;                solve(idx + 1)&#10;                visited[i] = 0&#10;    solve(1)&#10;    return count</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

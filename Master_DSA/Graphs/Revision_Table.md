@@ -619,5 +619,95 @@
       <td>Multiple disconnected components</td>
       <td><b>Explanation:</b> Try to color the graph using 2 colors. Use BFS/DFS. For every unvisited node, color it 0. For its neighbors, color them opposite (1). If a neighbor is already colored with the SAME color, it's not bipartite.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isBipartite(V: int, adj: List[List[int]]) -&gt; bool:&#10;    color = [-1] * V&#10;    def check(start):&#10;        q = collections.deque([start])&#10;        color[start] = 0&#10;        while q:&#10;            node = q.popleft()&#10;            for neighbor in adj[node]:&#10;                if color[neighbor] == -1:&#10;                    color[neighbor] = 1 - color[node]&#10;                    q.append(neighbor)&#10;                elif color[neighbor] == color[node]:&#10;                    return False&#10;        return True&#10;    for i in range(V):&#10;        if color[i] == -1:&#10;            if not check(i): return False&#10;    return True</code></pre></details></td>
     </tr>
+    <tr>
+      <td>68</td>
+      <td>Graph 14 Detect Negative Cycle In A Graph<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/negative-weight-cycle3504/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Bellman Ford variant.</td>
+      <td><b>Time:</b> O(V * E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Bellman Ford algorithm. Relax all edges V-1 times. Then relax one more time. If any shortest path distance updates in the V-th relaxation, it means there is a negative weight cycle.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isNegativeWeightCycle(n, edges):&#10;    dist = [1e8] * n&#10;    dist[0] = 0&#10;    for _ in range(n - 1):&#10;        for u, v, wt in edges:&#10;            if dist[u] != 1e8 and dist[u] + wt &lt; dist[v]:&#10;                dist[v] = dist[u] + wt&#10;    for u, v, wt in edges:&#10;        if dist[u] != 1e8 and dist[u] + wt &lt; dist[v]:&#10;            return 1&#10;    return 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>69</td>
+      <td>Graph 15 Find Bridge In A Graph<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/bridge-edge-in-graph/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Tarjan's Algorithm / DFS.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Remove the given edge `(c, d)` from the graph. Then run a DFS/BFS from `c`. If `d` is not reachable from `c`, then `(c, d)` was a bridge.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isBridge(V, adj, c, d):&#10;    vis = [False] * V&#10;    def dfs(node):&#10;        vis[node] = True&#10;        for nbr in adj[node]:&#10;            if (node == c and nbr == d) or (node == d and nbr == c): continue&#10;            if not vis[nbr]: dfs(nbr)&#10;    dfs(c)&#10;    return 1 if not vis[d] else 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>70</td>
+      <td>Graph 16 Strongly Connected Components Kosaraju<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Kosaraju's Algorithm.</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V + E)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> 1. Perform DFS and push nodes to stack upon finish (topological sort order). 2. Reverse all edges of the graph. 3. Pop nodes from stack and perform DFS on the reversed graph. Each DFS call gives one Strongly Connected Component.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kosaraju(V, adj):&#10;    vis = [False] * V&#10;    st = []&#10;    def dfs1(node):&#10;        vis[node] = True&#10;        for nbr in adj[node]:&#10;            if not vis[nbr]: dfs1(nbr)&#10;        st.append(node)&#10;    for i in range(V):&#10;        if not vis[i]: dfs1(i)&#10;    revAdj = [[] for _ in range(V)]&#10;    for i in range(V):&#10;        vis[i] = False&#10;        for nbr in adj[i]: revAdj[nbr].append(i)&#10;    def dfs2(node):&#10;        vis[node] = True&#10;        for nbr in revAdj[node]:&#10;            if not vis[nbr]: dfs2(nbr)&#10;    scc = 0&#10;    while st:&#10;        node = st.pop()&#10;        if not vis[node]:&#10;            dfs2(node)&#10;            scc += 1&#10;    return scc</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>71</td>
+      <td>Graph 17 Bipartite Graph<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/bipartite-graph/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Graph Coloring (BFS).</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>Disconnected components</td>
+      <td><b>Explanation:</b> Use BFS to color the graph with 2 colors (0 and 1). Start with a node, color it 0. All its neighbors must be colored 1, their neighbors 0, and so on. If we ever find an adjacent node with the same color, the graph is not bipartite.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def isBipartite(V, adj):&#10;    color = [-1] * V&#10;    def check(start):&#10;        q = deque([start])&#10;        color[start] = 0&#10;        while q:&#10;            node = q.popleft()&#10;            for nbr in adj[node]:&#10;                if color[nbr] == -1:&#10;                    color[nbr] = 1 - color[node]&#10;                    q.append(nbr)&#10;                elif color[nbr] == color[node]:&#10;                    return False&#10;        return True&#10;    for i in range(V):&#10;        if color[i] == -1:&#10;            if not check(i): return False&#10;    return True</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>72</td>
+      <td>Graph 18 Word Ladder<br><br></b> <a href='https://leetcode.com/problems/word-ladder/' target='_blank'>LeetCode 127</a></td>
+      <td><b>Example 1:</b> BFS level order.</td>
+      <td><b>Time:</b> O(N * M * 26)<br><b>Space:</b> O(N * M)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use BFS to find the shortest path. Put the `beginWord` in a queue. For each word popped from the queue, try changing every character to all 26 lowercase letters. If the new word is in the dictionary, push it to the queue with level + 1 and remove it from dictionary to avoid cycles.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def ladderLength(beginWord, endWord, wordList):&#10;    st = set(wordList)&#10;    q = deque([(beginWord, 1)])&#10;    if beginWord in st: st.remove(beginWord)&#10;    while q:&#10;        word, steps = q.popleft()&#10;        if word == endWord: return steps&#10;        for i in range(len(word)):&#10;            for c in &#x27;abcdefghijklmnopqrstuvwxyz&#x27;:&#10;                new_word = word[:i] + c + word[i+1:]&#10;                if new_word in st:&#10;                    st.remove(new_word)&#10;                    q.append((new_word, steps + 1))&#10;    return 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>73</td>
+      <td>Graph 19 Dijkstras Algorithm<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Priority Queue.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(V)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Initialize distances to infinity, and source distance to 0. Use a Min Heap (priority queue) to store `{dist, vertex}`. Pop the vertex with min distance, and relax its neighbors. If a shorter path is found to a neighbor, push it to the queue.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def dijkstra(V, adj, S):&#10;    dist = [int(1e9)] * V&#10;    dist[S] = 0&#10;    pq = [(0, S)]&#10;    while pq:&#10;        d, node = heapq.heappop(pq)&#10;        if d &gt; dist[node]: continue&#10;        for v, wt in adj[node]:&#10;            if d + wt &lt; dist[v]:&#10;                dist[v] = d + wt&#10;                heapq.heappush(pq, (dist[v], v))&#10;    return dist</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>74</td>
+      <td>Graph 20 Alien Dictionary V2<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/alien-dictionary/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Topological Sort.</td>
+      <td><b>Time:</b> O(N * L + K)<br><b>Space:</b> O(K)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Compare adjacent words in the sorted dictionary. The first differing character creates a directed edge `char1 -> char2` indicating `char1` comes before `char2`. Build a directed graph and perform Topological Sorting to get the order.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque, defaultdict&#10;def findOrder(dict_arr, N, K):&#10;    adj = defaultdict(list)&#10;    for i in range(N - 1):&#10;        s1, s2 = dict_arr[i], dict_arr[i+1]&#10;        for j in range(min(len(s1), len(s2))):&#10;            if s1[j] != s2[j]:&#10;                adj[ord(s1[j]) - ord(&#x27;a&#x27;)].append(ord(s2[j]) - ord(&#x27;a&#x27;))&#10;                break&#10;    inDegree = [0] * K&#10;    for i in range(K):&#10;        for nbr in adj[i]:&#10;            inDegree[nbr] += 1&#10;    q = deque([i for i in range(K) if inDegree[i] == 0])&#10;    ans = &quot;&quot;&#10;    while q:&#10;        node = q.popleft()&#10;        ans += chr(node + ord(&#x27;a&#x27;))&#10;        for nbr in adj[node]:&#10;            inDegree[nbr] -= 1&#10;            if inDegree[nbr] == 0: q.append(nbr)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>75</td>
+      <td>Graph 21 Kruskals Algorithm V2<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Disjoint Set + Sort edges.</td>
+      <td><b>Time:</b> O(E log E)<br><b>Space:</b> O(V + E)</td>
+      <td>Disjoint Set</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort all edges by weight. Use a Disjoint Set (Union-Find) to maintain components. Iterate through sorted edges, and if adding the edge doesn't form a cycle (i.e. nodes belong to different sets), add its weight to MST and union the sets.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class DisjointSet:&#10;    def __init__(self, n):&#10;        self.parent = list(range(n + 1))&#10;        self.size = [1] * (n + 1)&#10;    def find(self, node):&#10;        if node == self.parent[node]: return node&#10;        self.parent[node] = self.find(self.parent[node])&#10;        return self.parent[node]&#10;    def union(self, u, v):&#10;        pu, pv = self.find(u), self.find(v)&#10;        if pu == pv: return&#10;        if self.size[pu] &lt; self.size[pv]:&#10;            self.parent[pu] = pv&#10;            self.size[pv] += self.size[pu]&#10;        else:&#10;            self.parent[pv] = pu&#10;            self.size[pu] += self.size[pv]&#10;def spanningTree(V, adj):&#10;    edges = []&#10;    for i in range(V):&#10;        for nbr, wt in adj[i]: edges.append((wt, i, nbr))&#10;    edges.sort()&#10;    ds = DisjointSet(V)&#10;    mst_wt = 0&#10;    for wt, u, v in edges:&#10;        if ds.find(u) != ds.find(v):&#10;            mst_wt += wt&#10;            ds.union(u, v)&#10;    return mst_wt</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>76</td>
+      <td>Graph 22 Number Of Islands<br><br></b> <a href='https://leetcode.com/problems/number-of-islands/' target='_blank'>LeetCode 200</a></td>
+      <td><b>Example 1:</b> DFS.</td>
+      <td><b>Time:</b> O(M * N)<br><b>Space:</b> O(M * N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through each cell. When a '1' is found, increment the island count and start a DFS/BFS to mark all connected '1's as '0' (visited).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numIslands(grid):&#10;    if not grid: return 0&#10;    def dfs(r, c):&#10;        if r &lt; 0 or r &gt;= len(grid) or c &lt; 0 or c &gt;= len(grid[0]) or grid[r][c] == &#x27;0&#x27;: return&#10;        grid[r][c] = &#x27;0&#x27;&#10;        dfs(r - 1, c)&#10;        dfs(r + 1, c)&#10;        dfs(r, c - 1)&#10;        dfs(r, c + 1)&#10;    count = 0&#10;    for i in range(len(grid)):&#10;        for j in range(len(grid[0])):&#10;            if grid[i][j] == &#x27;1&#x27;:&#10;                count += 1&#10;                dfs(i, j)&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>77</td>
+      <td>Graph 23 Minimum Spanning Tree<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Prim's Algorithm.</td>
+      <td><b>Time:</b> O(E log V)<br><b>Space:</b> O(V + E)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a Min Heap to store `(weight, node)`. Start from node 0. Pop min edge. If node is unvisited, add weight to sum, mark visited, and push its unvisited neighbors to the heap.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def spanningTree(V, adj):&#10;    pq = [(0, 0)]&#10;    vis = [False] * V&#10;    sum_wt = 0&#10;    while pq:&#10;        wt, node = heapq.heappop(pq)&#10;        if vis[node]: continue&#10;        vis[node] = True&#10;        sum_wt += wt&#10;        for nbr, edW in adj[node]:&#10;            if not vis[nbr]:&#10;                heapq.heappush(pq, (edW, nbr))&#10;    return sum_wt</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

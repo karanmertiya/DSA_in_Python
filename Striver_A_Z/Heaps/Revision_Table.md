@@ -295,5 +295,14 @@
       <td>-</td>
       <td><b>Explanation:</b> Count frequencies using a hash map. Maintain a min-heap of size K storing `(frequency, element)`. Push each pair into the heap. If size > K, pop. The remaining elements in the heap are the top K frequent.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections, heapq&#10;def topKFrequent(nums: List[int], k: int) -&gt; List[int]:&#10;    count = collections.Counter(nums)&#10;    pq = []&#10;    for num, freq in count.items():&#10;        heapq.heappush(pq, (freq, num))&#10;        if len(pq) &gt; k:&#10;            heapq.heappop(pq)&#10;    return [num for freq, num in pq]</code></pre></details></td>
     </tr>
+    <tr>
+      <td>32</td>
+      <td>Heaps 12 Minimum Cost Of Ropes<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-cost-of-ropes-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Min Heap.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a Min Heap to always pick the two smallest ropes. Add their sum to the total cost and insert the merged rope back into the heap. Repeat until one rope is left.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def minCost(arr, n):&#10;    heapq.heapify(arr)&#10;    cost = 0&#10;    while len(arr) &gt; 1:&#10;        a = heapq.heappop(arr)&#10;        b = heapq.heappop(arr)&#10;        cost += (a + b)&#10;        heapq.heappush(arr, a + b)&#10;    return cost</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

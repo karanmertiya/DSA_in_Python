@@ -133,5 +133,95 @@
       <td>-</td>
       <td><b>Explanation:</b> This translates to finding the longest subarray with at most 2 distinct elements. Maintain a frequency map and use a sliding window. If distinct elements > 2, shrink the window until distinct elements <= 2.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def totalFruit(fruits: List[int]) -&gt; int:&#10;    count = collections.defaultdict(int)&#10;    l = maxFruits = 0&#10;    for r in range(len(fruits)):&#10;        count[fruits[r]] += 1&#10;        while len(count) &gt; 2:&#10;            count[fruits[l]] -= 1&#10;            if count[fruits[l]] == 0:&#10;                del count[fruits[l]]&#10;            l += 1&#10;        maxFruits = max(maxFruits, r - l + 1)&#10;    return maxFruits</code></pre></details></td>
     </tr>
+    <tr>
+      <td>14</td>
+      <td>Sw 08 Max Consecutive Ones Iii<br><br></b> <a href='https://leetcode.com/problems/max-consecutive-ones-iii/' target='_blank'>LeetCode 1004</a></td>
+      <td><b>Example 1:</b> Sliding Window.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a sliding window. Expand the right pointer. If the element is 0, increment a zero counter. While the zero counter > k, shrink the window from the left by moving the left pointer and decrementing the zero counter if left element is 0. The max window size is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestOnes(nums, k):&#10;    left = 0&#10;    zeroes = 0&#10;    max_len = 0&#10;    for right in range(len(nums)):&#10;        if nums[right] == 0: zeroes += 1&#10;        while zeroes &gt; k:&#10;            if nums[left] == 0: zeroes -= 1&#10;            left += 1&#10;        max_len = max(max_len, right - left + 1)&#10;    return max_len</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>Sw 09 Fruit Into Baskets<br><br></b> <a href='https://leetcode.com/problems/fruit-into-baskets/' target='_blank'>LeetCode 904</a></td>
+      <td><b>Example 1:</b> Longest Subarray with at most 2 distinct elements.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> This translates to finding the longest subarray with at most 2 distinct elements. Use a hash map to keep track of fruit counts in the current window. Expand right, update map. If map size > 2, shrink from left until map size is 2.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def totalFruit(fruits):&#10;    count = {}&#10;    left = 0&#10;    max_len = 0&#10;    for right in range(len(fruits)):&#10;        count[fruits[right]] = count.get(fruits[right], 0) + 1&#10;        while len(count) &gt; 2:&#10;            count[fruits[left]] -= 1&#10;            if count[fruits[left]] == 0: del count[fruits[left]]&#10;            left += 1&#10;        max_len = max(max_len, right - left + 1)&#10;    return max_len</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>Sw 10 Longest Repeating Character Replacement<br><br></b> <a href='https://leetcode.com/problems/longest-repeating-character-replacement/' target='_blank'>LeetCode 424</a></td>
+      <td><b>Example 1:</b> Sliding Window + Max Freq.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a sliding window. Maintain the character frequencies and the `max_freq` in the window. The number of replacements needed is `window_size - max_freq`. If this is > k, shrink the window from left and decrement the corresponding frequency.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def characterReplacement(s, k):&#10;    count = [0] * 26&#10;    left = 0&#10;    max_freq = 0&#10;    max_len = 0&#10;    for right in range(len(s)):&#10;        count[ord(s[right]) - ord(&#x27;A&#x27;)] += 1&#10;        max_freq = max(max_freq, count[ord(s[right]) - ord(&#x27;A&#x27;)])&#10;        if (right - left + 1) - max_freq &gt; k:&#10;            count[ord(s[left]) - ord(&#x27;A&#x27;)] -= 1&#10;            left += 1&#10;        max_len = max(max_len, right - left + 1)&#10;    return max_len</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>Sw 11 Binary Subarrays With Sum<br><br></b> <a href='https://leetcode.com/problems/binary-subarrays-with-sum/' target='_blank'>LeetCode 930</a></td>
+      <td><b>Example 1:</b> atMost(goal) - atMost(goal - 1).</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use the helper function `atMost(goal)` which finds the number of subarrays with sum <= goal. The answer is `atMost(goal) - atMost(goal - 1)`. In `atMost`, use a sliding window to maintain the sum.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numSubarraysWithSum(nums, goal):&#10;    def atMost(k):&#10;        if k &lt; 0: return 0&#10;        left, sum_val, count = 0, 0, 0&#10;        for right in range(len(nums)):&#10;            sum_val += nums[right]&#10;            while sum_val &gt; k:&#10;                sum_val -= nums[left]&#10;                left += 1&#10;            count += (right - left + 1)&#10;        return count&#10;    return atMost(goal) - atMost(goal - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>Sw 12 Count Number Of Nice Subarrays<br><br></b> <a href='https://leetcode.com/problems/count-number-of-nice-subarrays/' target='_blank'>LeetCode 1248</a></td>
+      <td><b>Example 1:</b> atMost(k) - atMost(k - 1).</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Replace all odd numbers with 1 and even numbers with 0. The problem then reduces to finding the number of subarrays with a sum equal to k. Use the `atMost(k) - atMost(k - 1)` sliding window approach.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numberOfSubarrays(nums, k):&#10;    def atMost(limit):&#10;        if limit &lt; 0: return 0&#10;        left, count, res = 0, 0, 0&#10;        for right in range(len(nums)):&#10;            if nums[right] % 2 != 0: count += 1&#10;            while count &gt; limit:&#10;                if nums[left] % 2 != 0: count -= 1&#10;                left += 1&#10;            res += (right - left + 1)&#10;        return res&#10;    return atMost(k) - atMost(k - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>Sw 13 Number Of Substrings Containing All Three Characters<br><br></b> <a href='https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/' target='_blank'>LeetCode 1358</a></td>
+      <td><b>Example 1:</b> Store last seen indices.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the string. Track the last seen indices of 'a', 'b', and 'c'. If all three have been seen, the number of valid substrings ending at the current index `i` is `1 + min(last_a, last_b, last_c)`. Add this to the total count.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numberOfSubstrings(s):&#10;    last = [-1, -1, -1]&#10;    count = 0&#10;    for i in range(len(s)):&#10;        last[ord(s[i]) - ord(&#x27;a&#x27;)] = i&#10;        if last[0] != -1 and last[1] != -1 and last[2] != -1:&#10;            count += 1 + min(last)&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>Sw 14 Maximum Points You Can Obtain From Cards<br><br></b> <a href='https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/' target='_blank'>LeetCode 1423</a></td>
+      <td><b>Example 1:</b> Sliding Window on remaining cards.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Instead of picking cards from the ends, find the subarray of length `N - K` that has the minimum sum. Subtract this minimum sum from the total sum of the array. That gives the maximum score.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxScore(cardPoints, k):&#10;    n = len(cardPoints)&#10;    total_sum = sum(cardPoints)&#10;    window_size = n - k&#10;    window_sum = sum(cardPoints[:window_size])&#10;    min_window_sum = window_sum&#10;    for i in range(window_size, n):&#10;        window_sum += cardPoints[i] - cardPoints[i - window_size]&#10;        min_window_sum = min(min_window_sum, window_sum)&#10;    return total_sum - min_window_sum</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td>Sw 15 Subarrays With K Different Integers<br><br></b> <a href='https://leetcode.com/problems/subarrays-with-k-different-integers/' target='_blank'>LeetCode 992</a></td>
+      <td><b>Example 1:</b> atMost(k) - atMost(k - 1).</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>Hash Map</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Like "Binary Subarrays With Sum", the number of subarrays with exactly k distinct integers is `atMost(k) - atMost(k-1)`. The `atMost` function uses a sliding window with a hash map to track the frequencies of elements.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def subarraysWithKDistinct(nums, k):&#10;    def atMost(limit):&#10;        if limit == 0: return 0&#10;        count = {}&#10;        left, res = 0, 0&#10;        for right in range(len(nums)):&#10;            count[nums[right]] = count.get(nums[right], 0) + 1&#10;            while len(count) &gt; limit:&#10;                count[nums[left]] -= 1&#10;                if count[nums[left]] == 0: del count[nums[left]]&#10;                left += 1&#10;            res += (right - left + 1)&#10;        return res&#10;    return atMost(k) - atMost(k - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td>Sw 16 Minimum Window Substring<br><br></b> <a href='https://leetcode.com/problems/minimum-window-substring/' target='_blank'>LeetCode 76</a></td>
+      <td><b>Example 1:</b> Hash map + Sliding Window.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>t > s length</td>
+      <td><b>Explanation:</b> Store frequency of chars in `t`. Use `left` and `right` pointers. Expand `right`, if the character is in `t`, decrease its required count. If all characters are found, update the minimum length and start shrinking from `left`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minWindow(s, t):&#10;    count = [0] * 128&#10;    for c in t: count[ord(c)] += 1&#10;    required = len(t)&#10;    left, min_len, min_start = 0, float(&#x27;inf&#x27;), 0&#10;    for right in range(len(s)):&#10;        if count[ord(s[right])] &gt; 0: required -= 1&#10;        count[ord(s[right])] -= 1&#10;        while required == 0:&#10;            if right - left + 1 &lt; min_len:&#10;                min_len = right - left + 1&#10;                min_start = left&#10;            count[ord(s[left])] += 1&#10;            if count[ord(s[left])] &gt; 0: required += 1&#10;            left += 1&#10;    return &quot;&quot; if min_len == float(&#x27;inf&#x27;) else s[min_start:min_start + min_len]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td>Sw 17 Find All Anagrams In A String<br><br></b> <a href='https://leetcode.com/problems/find-all-anagrams-in-a-string/' target='_blank'>LeetCode 438</a></td>
+      <td><b>Example 1:</b> Fixed Window + Hash Map.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create frequency arrays for `p` and a window of size `p.length()` in `s`. Slide the window across `s`, updating the window frequencies. If the arrays match, add the window's start index to the result.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findAnagrams(s, p):&#10;    ans = []&#10;    if len(p) &gt; len(s): return ans&#10;    countP, countS = [0]*26, [0]*26&#10;    for i in range(len(p)):&#10;        countP[ord(p[i]) - ord(&#x27;a&#x27;)] += 1&#10;        countS[ord(s[i]) - ord(&#x27;a&#x27;)] += 1&#10;    if countP == countS: ans.append(0)&#10;    for i in range(len(p), len(s)):&#10;        countS[ord(s[i]) - ord(&#x27;a&#x27;)] += 1&#10;        countS[ord(s[i - len(p)]) - ord(&#x27;a&#x27;)] -= 1&#10;        if countP == countS: ans.append(i - len(p) + 1)&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

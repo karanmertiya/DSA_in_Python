@@ -367,5 +367,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Iterate over the string to pick substrings. Check if the picked substring is a palindrome. If yes, add it to current partition and recur for the remaining string. Backtrack by removing it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isPalindrome(s, l, r):&#10;    while l &lt; r:&#10;        if s[l] != s[r]: return False&#10;        l += 1; r -= 1&#10;    return True&#10;&#10;def allPalindromicPerms(S):&#10;    ans, curr = [], []&#10;    def solve(idx):&#10;        if idx == len(S):&#10;            ans.append(list(curr))&#10;            return&#10;        for i in range(idx, len(S)):&#10;            if isPalindrome(S, idx, i):&#10;                curr.append(S[idx:i+1])&#10;                solve(i + 1)&#10;                curr.pop()&#10;    solve(0)&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td>40</td>
+      <td>Rec 01 Print 1 To N Without Loop<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/print-1-to-n-without-using-loops-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursion.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a recursive function. Call `f(N-1)` first and then print `N`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def printTillN(N):&#10;    if N == 0: return&#10;    printTillN(N - 1)&#10;    print(N, end=&quot; &quot;)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>41</td>
+      <td>Rec 02 Print N To 1 Without Loop<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/print-n-to-1-without-loop/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursion.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a recursive function. Print `N` first and then call `f(N-1)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def printNos(N):&#10;    if N == 0: return&#10;    print(N, end=&quot; &quot;)&#10;    printNos(N - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>42</td>
+      <td>Rec 03 Sum Of First N Terms<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/sum-of-first-n-terms5843/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Math or Recursion.</td>
+      <td><b>Time:</b> O(1) Math, O(N) Recursion<br><b>Space:</b> O(1) Math, O(N) Recursion</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> The mathematical formula for the sum of cubes is `(n * (n + 1) / 2)^2`. Alternatively, use recursion `f(n) = n^3 + f(n-1)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def sumOfSeries(n):&#10;    return (n * (n + 1) // 2) ** 2</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>43</td>
+      <td>Rec 04 Find All Factorial Numbers Less Than Or Equal To N<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-all-factorial-numbers-less-than-or-equal-to-n3548/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursion.</td>
+      <td><b>Time:</b> O(K) where K! <= N<br><b>Space:</b> O(K)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain a current factorial value and an index `i`. At each recursive step, compute the next factorial by multiplying by `i`. If the next factorial is `<= n`, add it to the list and recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def factorialNumbers(N):&#10;    ans = []&#10;    def findFactorials(i, fact):&#10;        if fact &gt; N: return&#10;        ans.append(fact)&#10;        findFactorials(i + 1, fact * (i + 1))&#10;    findFactorials(1, 1)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>44</td>
+      <td>Rec 05 Reverse An Array<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/reverse-an-array/0' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursion with two pointers.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N) recursive stack</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Swap `arr[l]` and `arr[r]` and then recursively call `reverse(arr, l+1, r-1)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverseArray(arr, l, r):&#10;    if l &gt;= r: return&#10;    arr[l], arr[r] = arr[r], arr[l]&#10;    reverseArray(arr, l + 1, r - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>45</td>
+      <td>Rec 06 Check If A String Is Palindrome<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/palindrome-string0817/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursion.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Check if `S[l] == S[r]`. If yes, recursively check `isPalindrome(S, l+1, r-1)`. Base case: `l >= r` returns true.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isPalindrome(S):&#10;    def isPal(l, r):&#10;        if l &gt;= r: return 1&#10;        if S[l] != S[r]: return 0&#10;        return isPal(l + 1, r - 1)&#10;    return isPal(0, len(S) - 1)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>46</td>
+      <td>Rec 07 Fibonacci Number<br><br></b> <a href='https://leetcode.com/problems/fibonacci-number/' target='_blank'>LeetCode 509</a></td>
+      <td><b>Example 1:</b> Base Case.</td>
+      <td><b>Time:</b> O(2^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Return `fib(n-1) + fib(n-2)` with base cases `fib(0) = 0`, `fib(1) = 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def fib(n):&#10;    if n &lt;= 1: return n&#10;    return fib(n - 1) + fib(n - 2)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>47</td>
+      <td>Rec 08 Pow X N<br><br></b> <a href='https://leetcode.com/problems/powx-n/' target='_blank'>LeetCode 50</a></td>
+      <td><b>Example 1:</b> Binary Exponentiation.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(log N) recursive stack</td>
+      <td>-</td>
+      <td>n = INT_MIN</td>
+      <td><b>Explanation:</b> If n is even, `pow(x, n) = pow(x*x, n/2)`. If n is odd, `pow(x, n) = x * pow(x, n-1)`. Handle negative n by making it positive and returning `1 / ans`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def myPow(x, n):&#10;    nn = abs(n)&#10;    ans = 1.0&#10;    while nn &gt; 0:&#10;        if nn % 2 == 1:&#10;            ans *= x&#10;            nn -= 1&#10;        else:&#10;            x *= x&#10;            nn //= 2&#10;    if n &lt; 0: ans = 1.0 / ans&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>48</td>
+      <td>Rec 09 Count Good Numbers<br><br></b> <a href='https://leetcode.com/problems/count-good-numbers/' target='_blank'>LeetCode 1922</a></td>
+      <td><b>Example 1:</b> Modular Exponentiation.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> There are 5 even digits and 4 prime digits. At even indices we have 5 choices. At odd indices we have 4 choices. If `n` is even, we have `n/2` even indices and `n/2` odd indices. So answer is `(5^(n/2) * 4^(n/2)) % mod`. If `n` is odd, we have `n/2 + 1` even indices. So answer is `(5^(n/2 + 1) * 4^(n/2)) % mod`. Use binary exponentiation.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countGoodNumbers(n):&#10;    mod = 10**9 + 7&#10;    def power(x, y):&#10;        res = 1&#10;        x = x % mod&#10;        while y &gt; 0:&#10;            if y % 2 == 1: res = (res * x) % mod&#10;            y = y // 2&#10;            x = (x * x) % mod&#10;        return res&#10;    evenIndices = (n + 1) // 2&#10;    oddIndices = n // 2&#10;    return (power(5, evenIndices) * power(4, oddIndices)) % mod</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>49</td>
+      <td>Rec 10 Sort A Stack Using Recursion<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/sort-a-stack/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursive sort and insert.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>Stack</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Recursively pop elements until the stack is empty. When returning from the recursive call, use another recursive function `sortedInsert` to insert the popped element into its correct sorted position in the stack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def sortedInsert(s, element):&#10;    if not s or element &gt; s[-1]:&#10;        s.append(element)&#10;        return&#10;    num = s.pop()&#10;    sortedInsert(s, element)&#10;    s.append(num)&#10;def sortStack(s):&#10;    if not s: return&#10;    num = s.pop()&#10;    sortStack(s)&#10;    sortedInsert(s, num)</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

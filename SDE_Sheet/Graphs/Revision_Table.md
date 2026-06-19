@@ -124,5 +124,23 @@
       <td>-</td>
       <td><b>Explanation:</b> Kosaraju's Algo: 1) Sort nodes by finish time (Topo Sort DFS). 2) Transpose the graph (reverse edges). 3) DFS on transposed graph in order of finish time.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def kosaraju(V: int, adj: List[List[int]]) -&gt; int:&#10;    vis = [0] * V&#10;    st = []&#10;    def dfs(node):&#10;        vis[node] = 1&#10;        for it in adj[node]:&#10;            if not vis[it]: dfs(it)&#10;        st.append(node)&#10;    for i in range(V):&#10;        if not vis[i]: dfs(i)&#10;    adjT = [[] for _ in range(V)]&#10;    for i in range(V):&#10;        vis[i] = 0&#10;        for it in adj[i]: adjT[it].append(i)&#10;    def dfs3(node):&#10;        vis[node] = 1&#10;        for it in adjT[node]:&#10;            if not vis[it]: dfs3(it)&#10;    scc = 0&#10;    while st:&#10;        node = st.pop()&#10;        if not vis[node]:&#10;            scc += 1; dfs3(node)&#10;    return scc</code></pre></details></td>
     </tr>
+    <tr>
+      <td>13</td>
+      <td>Graph 17 Bipartite Graph<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/bipartite-graph/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Graph Coloring (BFS).</td>
+      <td><b>Time:</b> O(V + E)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>Disconnected components</td>
+      <td><b>Explanation:</b> Use BFS to color the graph with 2 colors (0 and 1). Start with a node, color it 0. All its neighbors must be colored 1, their neighbors 0, and so on. If we ever find an adjacent node with the same color, the graph is not bipartite.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def isBipartite(V, adj):&#10;    color = [-1] * V&#10;    def check(start):&#10;        q = deque([start])&#10;        color[start] = 0&#10;        while q:&#10;            node = q.popleft()&#10;            for nbr in adj[node]:&#10;                if color[nbr] == -1:&#10;                    color[nbr] = 1 - color[node]&#10;                    q.append(nbr)&#10;                elif color[nbr] == color[node]:&#10;                    return False&#10;        return True&#10;    for i in range(V):&#10;        if color[i] == -1:&#10;            if not check(i): return False&#10;    return True</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>Graph 22 Number Of Islands<br><br></b> <a href='https://leetcode.com/problems/number-of-islands/' target='_blank'>LeetCode 200</a></td>
+      <td><b>Example 1:</b> DFS.</td>
+      <td><b>Time:</b> O(M * N)<br><b>Space:</b> O(M * N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through each cell. When a '1' is found, increment the island count and start a DFS/BFS to mark all connected '1's as '0' (visited).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def numIslands(grid):&#10;    if not grid: return 0&#10;    def dfs(r, c):&#10;        if r &lt; 0 or r &gt;= len(grid) or c &lt; 0 or c &gt;= len(grid[0]) or grid[r][c] == &#x27;0&#x27;: return&#10;        grid[r][c] = &#x27;0&#x27;&#10;        dfs(r - 1, c)&#10;        dfs(r + 1, c)&#10;        dfs(r, c - 1)&#10;        dfs(r, c + 1)&#10;    count = 0&#10;    for i in range(len(grid)):&#10;        for j in range(len(grid[0])):&#10;            if grid[i][j] == &#x27;1&#x27;:&#10;                count += 1&#10;                dfs(i, j)&#10;    return count</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

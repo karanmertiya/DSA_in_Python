@@ -97,5 +97,41 @@
       <td><b>No intersection:</b> Both pointers will reach NULL simultaneously after swapping lists once.</td>
       <td><b>Explanation:</b> Two pointers. Pointer A traverses list A, then jumps to list B. Pointer B traverses list B, then jumps to list A. They traverse the same total distance (A+B) and will meet at the intersection, or at NULL.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def getIntersectionNode(headA: ListNode, headB: ListNode) -&gt; Optional[ListNode]:&#10;    if not headA or not headB: return None&#10;    a, b = headA, headB&#10;    while a != b:&#10;        a = a.next if a else headB&#10;        b = b.next if b else headA&#10;    return a</code></pre></details></td>
     </tr>
+    <tr>
+      <td>10</td>
+      <td>Ll 29 Reverse A Linked List In Groups Of Given Size<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/reverse-a-linked-list-in-groups-of-given-size/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursive approach.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N/k) recursive stack</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Reverse the first k nodes iteratively. The next node becomes the head of the remaining list. Recursively call the function for the rest of the list and attach it to the tail of the reversed group (which is `head`). Return the new head.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse(head, k):&#10;    if not head: return None&#10;    curr, prev, next_node = head, None, None&#10;    count = 0&#10;    while curr and count &lt; k:&#10;        next_node = curr.next&#10;        curr.next = prev&#10;        prev = curr&#10;        curr = next_node&#10;        count += 1&#10;    if next_node: head.next = reverse(next_node, k)&#10;    return prev</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>Ll 30 Detect Loop In Linked List<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/detect-loop-in-linked-list/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Floyd's Cycle Detection.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Floyd's Cycle Detection algorithm (Tortoise and Hare). Move `slow` by 1 and `fast` by 2. If they meet, a loop exists. If `fast` reaches NULL, there is no loop.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def detectLoop(head):&#10;    slow = fast = head&#10;    while fast and fast.next:&#10;        slow = slow.next&#10;        fast = fast.next.next&#10;        if slow == fast: return True&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>Ll 36 Add Two Numbers Represented By Linked Lists<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/add-two-numbers-represented-by-linked-lists/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Reverse, Add, Reverse.</td>
+      <td><b>Time:</b> O(max(N, M))<br><b>Space:</b> O(max(N, M))</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Reverse both linked lists. Traverse both lists simultaneously, adding the data values of corresponding nodes along with the carry. Create new nodes for the sum and append them to the result list. Finally, reverse the result list.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def addTwoLists(first, second):&#10;    def reverse(node):&#10;        curr, prev, nxt = node, None, None&#10;        while curr:&#10;            nxt = curr.next&#10;            curr.next = prev&#10;            prev = curr&#10;            curr = nxt&#10;        return prev&#10;    first = reverse(first)&#10;    second = reverse(second)&#10;    dummy = Node(0)&#10;    temp = dummy&#10;    carry = 0&#10;    while first or second or carry:&#10;        total = carry&#10;        if first: total += first.data; first = first.next&#10;        if second: total += second.data; second = second.next&#10;        carry = total // 10&#10;        temp.next = Node(total % 10)&#10;        temp = temp.next&#10;    return reverse(dummy.next)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>Ll 38 Intersection Point In Y Shaped Linked Lists<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/intersection-point-in-y-shapped-linked-lists/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Two Pointers.</td>
+      <td><b>Time:</b> O(N + M)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use two pointers `a` and `b`. Traverse both lists. When `a` reaches the end, redirect it to `head2`. When `b` reaches the end, redirect it to `head1`. They will meet at the intersection point or both become NULL.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def intersectPoint(head1, head2):&#10;    a, b = head1, head2&#10;    while a != b:&#10;        a = a.next if a else head2&#10;        b = b.next if b else head1&#10;    if a: return a.data&#10;    return -1</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

@@ -529,5 +529,14 @@
       <td>-</td>
       <td><b>Explanation:</b> Iterate from current index. For each prefix, if it is in the dictionary, add it to the current sentence string, add a space, and recur for the suffix. If we reach the end of the string, add the current sentence to the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(n, dict_words, s):&#10;    st = set(dict_words)&#10;    ans = []&#10;    def solve(idx, curr):&#10;        if idx == len(s):&#10;            ans.append(curr.strip())&#10;            return&#10;        for i in range(idx, len(s)):&#10;            word = s[idx:i+1]&#10;            if word in st:&#10;                solve(i + 1, curr + word + &quot; &quot;)&#10;    solve(0, &quot;&quot;)&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td>58</td>
+      <td>Rec 10 Sort A Stack Using Recursion<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/sort-a-stack/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursive sort and insert.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>Stack</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Recursively pop elements until the stack is empty. When returning from the recursive call, use another recursive function `sortedInsert` to insert the popped element into its correct sorted position in the stack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def sortedInsert(s, element):&#10;    if not s or element &gt; s[-1]:&#10;        s.append(element)&#10;        return&#10;    num = s.pop()&#10;    sortedInsert(s, element)&#10;    s.append(num)&#10;def sortStack(s):&#10;    if not s: return&#10;    num = s.pop()&#10;    sortStack(s)&#10;    sortedInsert(s, num)</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

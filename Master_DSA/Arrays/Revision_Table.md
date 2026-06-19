@@ -565,5 +565,95 @@
       <td>-</td>
       <td><b>Explanation:</b> First count all elements <= k (let's say `cnt`). This will be the window size. Find elements > k in the first window. Then slide the window, updating the number of elements > k. The minimum among all windows is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minSwap(arr, n, k):&#10;    cnt = sum(1 for x in arr if x &lt;= k)&#10;    bad = sum(1 for i in range(cnt) if arr[i] &gt; k)&#10;    ans = bad&#10;    for i in range(n - cnt):&#10;        if arr[i] &gt; k: bad -= 1&#10;        if arr[i + cnt] &gt; k: bad += 1&#10;        ans = min(ans, bad)&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td>62</td>
+      <td>Greedy 05 Fractional Knapsack<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/fractional-knapsack-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sort by value/weight ratio.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort items in descending order of value/weight ratio. Greedily pick items with the highest ratio first. If an item cannot fit completely, take the fraction that fits.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Item:&#10;    def __init__(self,val,w):&#10;        self.value = val&#10;        self.weight = w&#10;&#10;def fractionalKnapsack(W, arr, n):&#10;    arr.sort(key=lambda x: x.value / x.weight, reverse=True)&#10;    finalValue = 0.0&#10;    for item in arr:&#10;        if W &gt;= item.weight:&#10;            finalValue += item.value&#10;            W -= item.weight&#10;        else:&#10;            finalValue += item.value * (W / item.weight)&#10;            break&#10;    return finalValue</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>63</td>
+      <td>Greedy 06 Choose And Swap<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/choose-and-swap0531/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Track first occurrences.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Store the first occurrence index of all characters. Iterate the string, for each character check if there is a lexicographically smaller character that appears later in the string. If so, swap them and break.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def chooseandswap(a):&#10;    s = set(a)&#10;    for i in range(len(a)):&#10;        if a[i] in s: s.remove(a[i])&#10;        if not s: break&#10;        min_char = min(s)&#10;        if min_char &lt; a[i]:&#10;            ch1, ch2 = a[i], min_char&#10;            a = a.replace(ch1, &#x27;#&#x27;)&#10;            a = a.replace(ch2, ch1)&#10;            a = a.replace(&#x27;#&#x27;, ch2)&#10;            break&#10;    return a</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>64</td>
+      <td>Greedy 07 Maximum Trains For Which Stoppage Can Be Provided<br><br></b> <a href='https://www.geeksforgeeks.org/maximum-trains-stoppage-can-provided/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Activity Selection on each platform.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Group trains by platform. For each platform, this reduces to the Activity Selection Problem. Sort the trains by departure time and greedily pick non-overlapping trains.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxStop(trains, n, m):&#10;    platforms = [[] for _ in range(m + 1)]&#10;    for arr, dep, plat in trains:&#10;        platforms[plat].append((dep, arr))&#10;    count = 0&#10;    for i in range(1, m + 1):&#10;        if not platforms[i]: continue&#10;        platforms[i].sort()&#10;        count += 1&#10;        lastDep = platforms[i][0][0]&#10;        for j in range(1, len(platforms[i])):&#10;            if platforms[i][j][1] &gt;= lastDep:&#10;                count += 1&#10;                lastDep = platforms[i][j][0]&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>65</td>
+      <td>Greedy 08 Minimum Platforms<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-platforms-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sort arrival and departure times separately.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort arrival and departure arrays separately. Use two pointers, one for arrival and one for departure. If arrival < departure, a platform is needed, so increment count. If arrival >= departure, a platform is freed, so decrement count. Track the maximum count.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPlatform(arr, dep, n):&#10;    arr.sort()&#10;    dep.sort()&#10;    plat_needed, result = 1, 1&#10;    i, j = 1, 0&#10;    while i &lt; n and j &lt; n:&#10;        if arr[i] &lt;= dep[j]:&#10;            plat_needed += 1&#10;            i += 1&#10;        else:&#10;            plat_needed -= 1&#10;            j += 1&#10;        result = max(result, plat_needed)&#10;    return result</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>66</td>
+      <td>Greedy 09 Buy Maximum Stocks If I Stocks Can Be Bought On I Th Day<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/buy-maximum-stocks-if-i-stocks-can-be-bought-on-i-th-day/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sort by price.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Store pairs of (price, day). Sort by price. Greedily buy as many stocks as possible on the day with the lowest price, bounded by the maximum allowed on that day (which is 'day') and the remaining money.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def buyMaximumProducts(n, k, price):&#10;    v = [(price[i], i + 1) for i in range(n)]&#10;    v.sort()&#10;    ans = 0&#10;    for p, d in v:&#10;        amount = min(d, k // p)&#10;        ans += amount&#10;        k -= amount * p&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>67</td>
+      <td>Greedy 10 Shop In Candy Store<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/shop-in-candy-store1145/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sort and pick from ends.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort the candies by price. For minimum cost, buy the cheapest and take K most expensive for free. For maximum cost, buy the most expensive and take K cheapest for free.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def candyStore(candies, N, K):&#10;    candies.sort()&#10;    minCost, maxCost = 0, 0&#10;    i, j = 0, N - 1&#10;    while i &lt;= j:&#10;        minCost += candies[i]&#10;        i += 1; j -= K&#10;    i, j = N - 1, 0&#10;    while j &lt;= i:&#10;        maxCost += candies[i]&#10;        i -= 1; j += K&#10;    return [minCost, maxCost]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>68</td>
+      <td>Greedy 11 Minimize Cash Flow Among A Given Set Of Friends Who Have Borrowed Money From Each Other<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimize-cash-flow/0' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Net amounts.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Calculate the net amount for each person by subtracting incoming debts from outgoing debts. Find the person with maximum net credit and maximum net debit. Settle their amounts, and repeat recursively or iteratively until all net amounts are zero.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minCashFlow(graph, n):&#10;    amount = [0] * n&#10;    for p in range(n):&#10;        for i in range(n):&#10;            amount[p] += (graph[i][p] - graph[p][i])&#10;    ans = [[0]*n for _ in range(n)]&#10;    def rec(amount):&#10;        mxCredit = amount.index(max(amount))&#10;        mxDebit = amount.index(min(amount))&#10;        if amount[mxCredit] == 0 and amount[mxDebit] == 0: return&#10;        minVal = min(-amount[mxDebit], amount[mxCredit])&#10;        amount[mxCredit] -= minVal&#10;        amount[mxDebit] += minVal&#10;        ans[mxDebit][mxCredit] = minVal&#10;        rec(amount)&#10;    rec(amount)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>69</td>
+      <td>Greedy 12 Minimum Cost To Cut A Board Into Squares<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/minimum-cost-to-cut-a-board-into-squares/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Sort costs.</td>
+      <td><b>Time:</b> O(M log M + N log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort all vertical and horizontal cuts in descending order. Maintain counts of horizontal and vertical pieces. Greedily pick the cut with the highest cost. If a horizontal cut is made, its total cost is `cut_cost * vertical_pieces`. Update the counts.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def minimumCostOfBreaking(X, Y, M, N):&#10;    X.sort(reverse=True)&#10;    Y.sort(reverse=True)&#10;    hzntl, vert = 1, 1&#10;    i, j, res = 0, 0, 0&#10;    while i &lt; M - 1 and j &lt; N - 1:&#10;        if X[i] &gt; Y[j]:&#10;            res += X[i] * vert&#10;            hzntl += 1; i += 1&#10;        else:&#10;            res += Y[j] * hzntl&#10;            vert += 1; j += 1&#10;    while i &lt; M - 1:&#10;        res += X[i] * vert; i += 1&#10;    while j &lt; N - 1:&#10;        res += Y[j] * hzntl; j += 1&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>70</td>
+      <td>Greedy 13 Survival On Island<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/check-if-it-is-possible-to-survive-on-island4922/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Math.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If total required food > max food you can buy in S days excluding Sundays, return -1. Else, total required food is `S * M`. Minimum days = `ceil((S * M) / N)`. Also handle the edge case where `N < M` or if survival > 6 days and `(N * 6) < (M * 7)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def minimumDays(S, N, M):&#10;    if M &gt; N: return -1&#10;    if S &gt; 6 and (N * 6) &lt; (M * 7): return -1&#10;    return math.ceil((S * M) / N)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>71</td>
+      <td>Greedy 14 Maximum Meetings In One Room<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/maximum-meetings-in-one-room/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Activity Selection.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Store `(start, end, index)`. Sort by end time. Pick the first meeting. For subsequent meetings, if `start > last_picked_end`, pick it and update `last_picked_end`. Return sorted indices.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def maxMeetings(N, S, F):&#10;    m = [(S[i], F[i], i + 1) for i in range(N)]&#10;    m.sort(key=lambda x: (x[1], x[2]))&#10;    ans = [m[0][2]]&#10;    last_e = m[0][1]&#10;    for i in range(1, N):&#10;        if m[i][0] &gt; last_e:&#10;            ans.append(m[i][2])&#10;            last_e = m[i][1]&#10;    ans.sort()&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

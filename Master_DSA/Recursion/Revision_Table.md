@@ -439,5 +439,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Use a global `max_dist` or pass it by reference. In `solve(r, c, dist)`, if `(r, c) == (dest_r, dest_c)`, `max_dist = max(max_dist, dist)` and return. Mark `(r, c)` as visited. Explore 4 directions. Unmark `(r, c)`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def longestPath(mat: List[List[int]], xs: int, ys: int, xd: int, yd: int) -&gt; int:&#10;    if mat[xs][ys] == 0 or mat[xd][yd] == 0: return -1&#10;    maxDist = [-1]&#10;    n, m = len(mat), len(mat[0])&#10;    def solve(r, c, dist):&#10;        if r == xd and c == yd:&#10;            maxDist[0] = max(maxDist[0], dist)&#10;            return&#10;        mat[r][c] = 0&#10;        for nr, nc in [(r-1, c), (r+1, c), (r, c-1), (r, c+1)]:&#10;            if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; m and mat[nr][nc] == 1:&#10;                solve(nr, nc, dist + 1)&#10;        mat[r][c] = 1&#10;    solve(xs, ys, 0)&#10;    return maxDist[0]</code></pre></details></td>
     </tr>
+    <tr>
+      <td>48</td>
+      <td>Backtracking 09 Find Shortest Safe Route In A Path With Landmines<br><br></b> <a href='https://www.geeksforgeeks.org/find-shortest-safe-route-in-a-path-with-landmines/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> BFS or Backtracking.</td>
+      <td><b>Time:</b> O(R * C)<br><b>Space:</b> O(R * C)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> First, mark all adjacent cells of landmines as unsafe. Then start from each cell in the first column and use BFS or Backtracking to find the shortest path to the last column, avoiding unsafe cells.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">from collections import deque&#10;def findShortestPath(mat):&#10;    R, C = len(mat), len(mat[0])&#10;    grid = [[1] * C for _ in range(R)]&#10;    dr, dc = [-1, 1, 0, 0], [0, 0, -1, 1]&#10;    for i in range(R):&#10;        for j in range(C):&#10;            if mat[i][j] == 0:&#10;                grid[i][j] = 0&#10;                for k in range(4):&#10;                    nr, nc = i + dr[k], j + dc[k]&#10;                    if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C: grid[nr][nc] = 0&#10;    q = deque()&#10;    vis = [[False] * C for _ in range(R)]&#10;    for i in range(R):&#10;        if grid[i][0] == 1:&#10;            q.append((i, 0, 1))&#10;            vis[i][0] = True&#10;    while q:&#10;        r, c, dist = q.popleft()&#10;        if c == C - 1: return dist&#10;        for k in range(4):&#10;            nr, nc = r + dr[k], c + dc[k]&#10;            if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C and grid[nr][nc] == 1 and not vis[nr][nc]:&#10;                vis[nr][nc] = True&#10;                q.append((nr, nc, dist + 1))&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>49</td>
+      <td>Backtracking 10 Combinational Sum<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/combination-sum-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(2^N * K)<br><b>Space:</b> O(K * X)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort the array and remove duplicates. Use backtracking. At each step, either include the current element (and stay at the current element to allow unlimited picks) or move to the next element. Backtrack when sum < 0 or we reach the end.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def combinationSum(A, B):&#10;    A = sorted(list(set(A)))&#10;    ans = []&#10;    def solve(idx, current_sum, curr):&#10;        if current_sum == B:&#10;            ans.append(list(curr))&#10;            return&#10;        if current_sum &gt; B or idx == len(A): return&#10;        curr.append(A[idx])&#10;        solve(idx, current_sum + A[idx], curr)&#10;        curr.pop()&#10;        solve(idx + 1, current_sum, curr)&#10;    solve(0, 0, [])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>50</td>
+      <td>Backtracking 11 Find Maximum Number Possible By Doing At Most K Swaps<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/largest-number-in-k-swaps-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(N! / (N-K)!)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use backtracking to try swapping each digit with every digit that appears after it and is greater than it. Keep track of the maximum string seen so far. Prune if swaps == 0.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findMaximumNum(str_val, k):&#10;    max_str = [str_val]&#10;    def solve(curr, k_left, idx):&#10;        if k_left == 0 or idx == len(curr) - 1: return&#10;        max_char = curr[idx]&#10;        for i in range(idx + 1, len(curr)):&#10;            if curr[i] &gt; max_char: max_char = curr[i]&#10;        if max_char != curr[idx]: k_left -= 1&#10;        for i in range(len(curr) - 1, idx - 1, -1):&#10;            if curr[i] == max_char:&#10;                curr_list = list(curr)&#10;                curr_list[idx], curr_list[i] = curr_list[i], curr_list[idx]&#10;                new_str = &quot;&quot;.join(curr_list)&#10;                if new_str &gt; max_str[0]: max_str[0] = new_str&#10;                solve(new_str, k_left, idx + 1)&#10;    solve(str_val, k, 0)&#10;    return max_str[0]</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td>Backtracking 12 Print All Permutations Of A String<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Swap based backtracking.</td>
+      <td><b>Time:</b> O(N! * N)<br><b>Space:</b> O(N!)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate from index `i` to `n-1`. Swap `str[i]` with `str[j]`, then recursively call for the next index. After returning, swap back to backtrack. Store permutations in a set or sort the array to handle duplicates and lexicographical order.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def find_permutation(S):&#10;    st = set()&#10;    S = list(S)&#10;    def solve(idx):&#10;        if idx == len(S):&#10;            st.add(&quot;&quot;.join(S))&#10;            return&#10;        for i in range(idx, len(S)):&#10;            S[idx], S[i] = S[i], S[idx]&#10;            solve(idx + 1)&#10;            S[idx], S[i] = S[i], S[idx]&#10;    solve(0)&#10;    return sorted(list(st))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td>Backtracking 13 Find If There Is A Path Of More Than K Length From A Source<br><br></b> <a href='https://www.geeksforgeeks.org/find-if-there-is-a-path-of-more-than-k-length-from-a-source/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DFS Backtracking.</td>
+      <td><b>Time:</b> O(V!)<br><b>Space:</b> O(V)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Backtracking to perform DFS traversal from the source. Mark the current vertex as visited, subtract the edge weight from `k`, and recursively call for all adjacent unvisited vertices. If `k <= 0`, return true. Backtrack by unmarking the vertex.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def pathMoreThanK(src, k, adj, vis):&#10;    if k &lt;= 0: return True&#10;    vis[src] = True&#10;    for v, w in adj[src]:&#10;        if not vis[v]:&#10;            if pathMoreThanK(v, k - w, adj, vis):&#10;                return True&#10;    vis[src] = False&#10;    return False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>53</td>
+      <td>Backtracking 14 Longest Possible Route In A Matrix With Hurdles<br><br></b> <a href='https://www.geeksforgeeks.org/longest-possible-route-in-a-matrix-with-hurdles/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(4^(M*N))<br><b>Space:</b> O(M*N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Backtracking. Start from the source, mark it as visited, recursively find the longest path from all valid unvisited adjacent cells, add 1 to the maximum among them. Unmark the cell after returning.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findLongestPath(mat, i, j, di, dj, curr, max_dist, vis):&#10;    if i == di and j == dj:&#10;        max_dist[0] = max(max_dist[0], curr)&#10;        return&#10;    vis[i][j] = True&#10;    dr, dc = [-1, 1, 0, 0], [0, 0, -1, 1]&#10;    for k in range(4):&#10;        nr, nc = i + dr[k], j + dc[k]&#10;        if 0 &lt;= nr &lt; len(mat) and 0 &lt;= nc &lt; len(mat[0]) and mat[nr][nc] == 1 and not vis[nr][nc]:&#10;            findLongestPath(mat, nr, nc, di, dj, curr + 1, max_dist, vis)&#10;    vis[i][j] = False</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>54</td>
+      <td>Backtracking 15 Print All Possible Paths From Top Left To Bottom Right Of A Mxn Matrix<br><br></b> <a href='https://www.geeksforgeeks.org/print-all-possible-paths-from-top-left-to-bottom-right-of-a-mxn-matrix/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> DFS.</td>
+      <td><b>Time:</b> O(2^(M+N))<br><b>Space:</b> O(M+N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use simple DFS from top-left. From cell (i, j), we can move to (i+1, j) or (i, j+1). Keep track of the path elements in an array/list. When reaching bottom-right, print/save the path.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPaths(mat, i, j, path, ans):&#10;    if i == len(mat) - 1 and j == len(mat[0]) - 1:&#10;        ans.append(path + [mat[i][j]])&#10;        return&#10;    path.append(mat[i][j])&#10;    if i + 1 &lt; len(mat): findPaths(mat, i + 1, j, path, ans)&#10;    if j + 1 &lt; len(mat[0]): findPaths(mat, i, j + 1, path, ans)&#10;    path.pop()</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>55</td>
+      <td>Backtracking 16 Partition Of A Set Into K Subsets With Equal Sum<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/partition-array-to-k-subsets/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Backtracking with tracking subset sum.</td>
+      <td><b>Time:</b> O(K^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If total sum is not divisible by K, return false. Create an array of K subset sums. Backtrack to assign each element to one of the K subsets, ensuring no subset sum exceeds total_sum / K. To optimize, sort array descending.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solve(a, k, target, subsetSum, idx):&#10;    if idx == len(a):&#10;        for s in subsetSum:&#10;            if s != target: return False&#10;        return True&#10;    for i in range(k):&#10;        if subsetSum[i] + a[idx] &lt;= target:&#10;            subsetSum[i] += a[idx]&#10;            if solve(a, k, target, subsetSum, idx + 1): return True&#10;            subsetSum[i] -= a[idx]&#10;        if subsetSum[i] == 0: break&#10;    return False&#10;&#10;def isKPartitionPossible(a, k):&#10;    total = sum(a)&#10;    if total % k != 0: return False&#10;    a.sort(reverse=True)&#10;    subsetSum = [0] * k&#10;    return solve(a, k, total // k, subsetSum, 0)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>56</td>
+      <td>Backtracking 17 Find All Possible Palindromic Partitions Of A String<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-all-possible-palindromic-partitions-of-a-string/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(2^N * N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate over the string to pick substrings. Check if the picked substring is a palindrome. If yes, add it to current partition and recur for the remaining string. Backtrack by removing it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isPalindrome(s, l, r):&#10;    while l &lt; r:&#10;        if s[l] != s[r]: return False&#10;        l += 1; r -= 1&#10;    return True&#10;&#10;def allPalindromicPerms(S):&#10;    ans, curr = [], []&#10;    def solve(idx):&#10;        if idx == len(S):&#10;            ans.append(list(curr))&#10;            return&#10;        for i in range(idx, len(S)):&#10;            if isPalindrome(S, idx, i):&#10;                curr.append(S[idx:i+1])&#10;                solve(i + 1)&#10;                curr.pop()&#10;    solve(0)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>57</td>
+      <td>Backtracking 18 Word Break Problem Using Backtracking<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/word-break-part-23249/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(2^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate from current index. For each prefix, if it is in the dictionary, add it to the current sentence string, add a space, and recur for the suffix. If we reach the end of the string, add the current sentence to the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(n, dict_words, s):&#10;    st = set(dict_words)&#10;    ans = []&#10;    def solve(idx, curr):&#10;        if idx == len(s):&#10;            ans.append(curr.strip())&#10;            return&#10;        for i in range(idx, len(s)):&#10;            word = s[idx:i+1]&#10;            if word in st:&#10;                solve(i + 1, curr + word + &quot; &quot;)&#10;    solve(0, &quot;&quot;)&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

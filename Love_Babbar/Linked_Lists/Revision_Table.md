@@ -466,5 +466,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Reverse the first `k` nodes of the linked list iteratively. After reversing, the `head` pointer will be the end of the reversed group, and `curr` will point to the next node. Recursively call the function for `curr` and set `head->next` to the result.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse(head: Node, k: int) -&gt; Node:&#10;    if not head: return None&#10;    curr, prev, nxt = head, None, None&#10;    count = 0&#10;    while curr and count &lt; k:&#10;        nxt = curr.next&#10;        curr.next = prev&#10;        prev = curr&#10;        curr = nxt&#10;        count += 1&#10;    if nxt:&#10;        head.next = reverse(nxt, k)&#10;    return prev</code></pre></details></td>
     </tr>
+    <tr>
+      <td>51</td>
+      <td>Ll 19 Split A Circular Linked List Into Two Halves<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/split-a-circular-linked-list-into-two-halves/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Slow and Fast Pointer.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use slow and fast pointers to find the mid of the circular linked list. The slow pointer will point to the mid. Then break the list into two and make both circular.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def splitList(head, head1, head2):&#10;    if head is None: return&#10;    slow, fast = head, head&#10;    while fast.next != head and fast.next.next != head:&#10;        slow = slow.next&#10;        fast = fast.next.next&#10;    if fast.next.next == head:&#10;        fast = fast.next&#10;    head1.head = head&#10;    if head.next != head:&#10;        head2.head = slow.next&#10;    fast.next = slow.next&#10;    slow.next = head</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td>Ll 20 Check If Circular Linked List<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/circular-linked-list/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Traverse to head.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>Empty list</td>
+      <td><b>Explanation:</b> Traverse the linked list starting from head. If we reach NULL, it's not circular. If we reach head again, it is circular.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isCircular(head):&#10;    if head is None: return True&#10;    temp = head.next&#10;    while temp is not None and temp != head:&#10;        temp = temp.next&#10;    return temp == head</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>53</td>
+      <td>Ll 21 Count Triplets In A Sorted Doubly Linked List Whose Sum Is Equal To Given Value X<br><br></b> <a href='https://www.geeksforgeeks.org/count-triplets-sorted-doubly-linked-list-whose-sum-equal-given-value-x/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Two Pointers.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through the list. For each node, use two pointers (left and right) on the remaining list to find pairs that sum to `x - node.data`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countTriplets(head, x):&#10;    if head is None: return 0&#10;    last = head&#10;    while last.next: last = last.next&#10;    count = 0&#10;    curr = head&#10;    while curr:&#10;        first = curr.next&#10;        right = last&#10;        while first and right and first != right and right.next != first:&#10;            total = curr.data + first.data + right.data&#10;            if total == x:&#10;                count += 1&#10;                first = first.next&#10;                right = right.prev&#10;            elif total &lt; x:&#10;                first = first.next&#10;            else:&#10;                right = right.prev&#10;        curr = curr.next&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>54</td>
+      <td>Ll 22 Sort A K Sorted Doubly Linked List<br><br></b> <a href='https://www.geeksforgeeks.org/sort-k-sorted-doubly-linked-list/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Min Heap.</td>
+      <td><b>Time:</b> O(N log K)<br><b>Space:</b> O(K)</td>
+      <td>Priority Queue</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a Min Heap of size k+1. Insert the first k+1 elements into the heap. Then, pop the minimum element, place it in the sorted list, and push the next element from the original list into the heap.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import heapq&#10;def sortAKSortedDLL(head, k):&#10;    if not head: return head&#10;    pq = []&#10;    newHead, last = None, None&#10;    i = 0&#10;    while head and i &lt;= k:&#10;        heapq.heappush(pq, (head.data, id(head), head))&#10;        head = head.next&#10;        i += 1&#10;    while pq:&#10;        _, _, minNode = heapq.heappop(pq)&#10;        if not newHead:&#10;            newHead = minNode&#10;            newHead.prev = None&#10;            last = newHead&#10;        else:&#10;            last.next = minNode&#10;            minNode.prev = last&#10;            last = minNode&#10;        if head:&#10;            heapq.heappush(pq, (head.data, id(head), head))&#10;            head = head.next&#10;    last.next = None&#10;    return newHead</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>55</td>
+      <td>Ll 23 Rotate Doubly Linked List By N Nodes<br><br></b> <a href='https://www.geeksforgeeks.org/rotate-doubly-linked-list-n-nodes/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Traverse and link.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>N == 0</td>
+      <td><b>Explanation:</b> Traverse to the Nth node. This will be the new tail. Its next will be the new head. Traverse to the end of the list and link it to the original head.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def rotateDLL(start, N):&#10;    if N == 0: return start&#10;    current = start&#10;    count = 1&#10;    while count &lt; N and current:&#10;        current = current.next&#10;        count += 1&#10;    if not current: return start&#10;    nthNode = current&#10;    while current.next:&#10;        current = current.next&#10;    current.next = start&#10;    start.prev = current&#10;    start = nthNode.next&#10;    start.prev = None&#10;    nthNode.next = None&#10;    return start</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>56</td>
+      <td>Ll 24 Reverse A Doubly Linked List In Groups Of Given Size<br><br></b> <a href='https://www.geeksforgeeks.org/reverse-doubly-linked-list-groups-given-size/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Recursion.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(N/K) recursion stack</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Similar to reversing singly linked list in groups of k. Keep track of prev, next, and current. Reverse k nodes, then recursively call for the rest of the list.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def revListInGroupOfGivenSize(head, k):&#10;    if not head: return None&#10;    current = head&#10;    next_node = None&#10;    new_head = None&#10;    count = 0&#10;    while current and count &lt; k:&#10;        next_node = current.next&#10;        current.prev = next_node&#10;        current.next = new_head&#10;        if new_head:&#10;            new_head.prev = current&#10;        new_head = current&#10;        current = next_node&#10;        count += 1&#10;    if next_node:&#10;        head.next = revListInGroupOfGivenSize(next_node, k)&#10;        head.next.prev = head&#10;    return new_head</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>57</td>
+      <td>Ll 25 Can We Reverse A Linked List In Less Than On<br><br></b> N/A</td>
+      <td><b>Example 1:</b> Theoretical Question.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> No, it is not possible. To reverse a linked list, we must visit every single node at least once to change its pointer. Therefore, the minimum time complexity required is strictly O(N), where N is the number of nodes in the linked list.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># It is not possible to reverse in less than O(n).</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>58</td>
+      <td>Ll 26 Find The First Node Of Loop In Linked List<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-the-first-node-of-loop-in-linked-list--170645/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Floyd's Cycle Detection.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use Floyd's Cycle Detection to find if a cycle exists (slow and fast pointers meet). Then, move slow back to head, and advance both slow and fast by one step until they meet. The meeting point is the start of the loop.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findFirstNode(head):&#10;    slow = head&#10;    fast = head&#10;    while fast and fast.next:&#10;        slow = slow.next&#10;        fast = fast.next.next&#10;        if slow == fast:&#10;            slow = head&#10;            while slow != fast:&#10;                slow = slow.next&#10;                fast = fast.next&#10;            return slow.data&#10;    return -1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>59</td>
+      <td>Ll 27 Multiply Two Linked Lists<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/multiply-two-linked-lists/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Form numbers.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Traverse both linked lists to form the respective numbers modulo a given large number (e.g., 10^9+7). Then multiply the two formed numbers and return the result modulo the same large number.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def multiplyTwoLists(head1, head2):&#10;    MOD = 1000000007&#10;    num1, num2 = 0, 0&#10;    while head1:&#10;        num1 = (num1 * 10 + head1.data) % MOD&#10;        head1 = head1.next&#10;    while head2:&#10;        num2 = (num2 * 10 + head2.data) % MOD&#10;        head2 = head2.next&#10;    return (num1 * num2) % MOD</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>60</td>
+      <td>Ll 28 Delete Nodes Having Greater Value On Right<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/delete-nodes-having-greater-value-on-right/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Reverse and filter.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Reverse the linked list. Keep track of the max node seen so far. If a node is less than the max node, delete it. Else, update max node. Finally, reverse the list back.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse(head):&#10;    prev = None&#10;    curr = head&#10;    while curr:&#10;        nxt = curr.next&#10;        curr.next = prev&#10;        prev = curr&#10;        curr = nxt&#10;    return prev&#10;&#10;def compute(head):&#10;    head = reverse(head)&#10;    curr = head&#10;    maxNode = head&#10;    while curr and curr.next:&#10;        if curr.next.data &lt; maxNode.data:&#10;            curr.next = curr.next.next&#10;        else:&#10;            curr = curr.next&#10;            maxNode = curr&#10;    return reverse(head)</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

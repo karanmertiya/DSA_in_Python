@@ -349,5 +349,23 @@
       <td>-</td>
       <td><b>Explanation:</b> Use an array to track visited numbers. Iterate from index 1 to n. For the current index, try placing an unvisited number. Check if the condition `(num % idx == 0 || idx % num == 0)` is met. If so, mark as visited, recurse to `idx + 1`, then backtrack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countArrangement(n: int) -&gt; int:&#10;    count = 0&#10;    visited = [0] * (n + 1)&#10;    def solve(idx):&#10;        nonlocal count&#10;        if idx &gt; n:&#10;            count += 1&#10;            return&#10;        for i in range(1, n + 1):&#10;            if not visited[i] and (i % idx == 0 or idx % i == 0):&#10;                visited[i] = 1&#10;                solve(idx + 1)&#10;                visited[i] = 0&#10;    solve(1)&#10;    return count</code></pre></details></td>
     </tr>
+    <tr>
+      <td>38</td>
+      <td>Backtracking 12 Print All Permutations Of A String<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Swap based backtracking.</td>
+      <td><b>Time:</b> O(N! * N)<br><b>Space:</b> O(N!)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate from index `i` to `n-1`. Swap `str[i]` with `str[j]`, then recursively call for the next index. After returning, swap back to backtrack. Store permutations in a set or sort the array to handle duplicates and lexicographical order.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def find_permutation(S):&#10;    st = set()&#10;    S = list(S)&#10;    def solve(idx):&#10;        if idx == len(S):&#10;            st.add(&quot;&quot;.join(S))&#10;            return&#10;        for i in range(idx, len(S)):&#10;            S[idx], S[i] = S[i], S[idx]&#10;            solve(idx + 1)&#10;            S[idx], S[i] = S[i], S[idx]&#10;    solve(0)&#10;    return sorted(list(st))</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>39</td>
+      <td>Backtracking 17 Find All Possible Palindromic Partitions Of A String<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-all-possible-palindromic-partitions-of-a-string/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(2^N * N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate over the string to pick substrings. Check if the picked substring is a palindrome. If yes, add it to current partition and recur for the remaining string. Backtrack by removing it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isPalindrome(s, l, r):&#10;    while l &lt; r:&#10;        if s[l] != s[r]: return False&#10;        l += 1; r -= 1&#10;    return True&#10;&#10;def allPalindromicPerms(S):&#10;    ans, curr = [], []&#10;    def solve(idx):&#10;        if idx == len(S):&#10;            ans.append(list(curr))&#10;            return&#10;        for i in range(idx, len(S)):&#10;            if isPalindrome(S, idx, i):&#10;                curr.append(S[idx:i+1])&#10;                solve(i + 1)&#10;                curr.pop()&#10;    solve(0)&#10;    return ans</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

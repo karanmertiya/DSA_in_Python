@@ -277,5 +277,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Iterate from 1 to `(1 << n) - 1`. For each number, its binary representation indicates which characters of the string to include. Example: 011 means include 1st and 2nd char.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def AllPossibleStrings(s: str) -&gt; List[str]:&#10;    n = len(s)&#10;    res = []&#10;    for i in range(1, 1 &lt;&lt; n):&#10;        sub = &quot;&quot;&#10;        for j in range(n):&#10;            if i &amp; (1 &lt;&lt; j):&#10;                sub += s[j]&#10;        res.append(sub)&#10;    res.sort()&#10;    return res</code></pre></details></td>
     </tr>
+    <tr>
+      <td>30</td>
+      <td>Bit 04 Copy Set Bits In Range<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/copy-set-bits-in-range0623/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Masking.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Create a mask of length (R - L + 1) with all 1s. Shift this mask to the left by (L - 1). AND this mask with Y to isolate the bits to be copied. Finally, OR this isolated value with X.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def setSetBit(x, y, l, r):&#10;    mask = (1 &lt;&lt; (r - l + 1)) - 1&#10;    mask = (mask &lt;&lt; (l - 1))&#10;    mask = mask &amp; y&#10;    return x | mask</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td>Bit 05 Divide Two Integers Without Using Multiplication Division And Mod Operator<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/division-without-using-multiplication-division-and-mod-operator/0' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Bit shifts.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>Overflow cases like INT_MIN / -1</td>
+      <td><b>Explanation:</b> Determine the sign. Work with absolute values. Keep shifting the divisor left (multiplying by 2) until it's greater than the dividend. The shift amount `i` means the divisor can be multiplied by `2^i`. Subtract `(divisor << i)` from dividend, add `2^i` to quotient. Repeat until dividend < divisor.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def divide(dividend, divisor):&#10;    sign = -1 if ((dividend &lt; 0) ^ (divisor &lt; 0)) else 1&#10;    dividend, divisor = abs(dividend), abs(divisor)&#10;    quotient = 0&#10;    temp = 0&#10;    for i in range(31, -1, -1):&#10;        if temp + (divisor &lt;&lt; i) &lt;= dividend:&#10;            temp += divisor &lt;&lt; i&#10;            quotient |= 1 &lt;&lt; i&#10;    res = sign * quotient&#10;    if res &gt; 2147483647: return 2147483647&#10;    if res &lt; -2147483648: return -2147483648&#10;    return res</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>Bit 06 Calculate Square Of A Number Without Using And Pow<br><br></b> <a href='https://www.geeksforgeeks.org/calculate-square-of-a-number-without-using-and-pow/' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Bit shifts and recursion.</td>
+      <td><b>Time:</b> O(log N)<br><b>Space:</b> O(log N) recursion stack</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use `n^2 = (2x)^2 = 4x^2` if n is even (n = 2x). If n is odd (n = 2x+1), `n^2 = (2x+1)^2 = 4x^2 + 4x + 1`. This allows calculating the square using bitwise shifts (multiply by 4 is `<< 2`, multiply by 2 is `<< 1`).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def square(n):&#10;    if n == 0: return 0&#10;    if n &lt; 0: n = -n&#10;    x = n &gt;&gt; 1&#10;    if n &amp; 1:&#10;        return (square(x) &lt;&lt; 2) + (x &lt;&lt; 2) + 1&#10;    else:&#10;        return (square(x) &lt;&lt; 2)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>33</td>
+      <td>Bit 07 Power Set<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/power-set4302/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Bit Manipulation.</td>
+      <td><b>Time:</b> O(2^N * N)<br><b>Space:</b> O(2^N * N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate from 1 to `2^N - 1`. For each number, treat its binary representation as a mask to pick characters from the string. Sort the resulting list of subsequences.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def AllPossibleStrings(s):&#10;    n = len(s)&#10;    ans = []&#10;    for i in range(1, 1 &lt;&lt; n):&#10;        sub = &quot;&quot;&#10;        for j in range(n):&#10;            if i &amp; (1 &lt;&lt; j):&#10;                sub += s[j]&#10;        ans.append(sub)&#10;    ans.sort()&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>Bit 08 Find Position Of The Only Set Bit<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-position-of-set-bit3706/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Log base 2.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Check if the number is a power of 2 using `(N & (N - 1)) == 0`. If yes, the position is `log2(N) + 1`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import math&#10;def findPosition(N):&#10;    if N == 0 or (N &amp; (N - 1)) != 0: return -1&#10;    return int(math.log2(N)) + 1</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td>Bit 09 Power Of 2<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/power-of-2-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> Bitwise AND.</td>
+      <td><b>Time:</b> O(1)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> If a number N is a power of 2, it has only one set bit. Thus `N & (N - 1)` will be 0. We also check if N > 0.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isPowerofTwo(n):&#10;    if n == 0: return False&#10;    return (n &amp; (n - 1)) == 0</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>Bit 10 Bit Difference<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/bit-difference-1587115620/1' target='_blank'>GFG</a></td>
+      <td><b>Example 1:</b> XOR.</td>
+      <td><b>Time:</b> O(1) or O(set bits)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> The XOR of A and B will have set bits only at positions where A and B differ. Thus, we just need to count the set bits in `A ^ B`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def countBitsFlip(a, b):&#10;    n = a ^ b&#10;    count = 0&#10;    while n:&#10;        count += 1&#10;        n &amp;= (n - 1)&#10;    return count</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>37</td>
+      <td>Bit 11 Single Number<br><br></b> <a href='https://leetcode.com/problems/single-number/' target='_blank'>LeetCode 136</a></td>
+      <td><b>Example 1:</b> XOR.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> XORing a number with itself gives 0. Thus, XORing all numbers in the array will cancel out all the numbers that appear twice, leaving only the single number.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def singleNumber(nums):&#10;    ans = 0&#10;    for num in nums:&#10;        ans ^= num&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td>Bit 12 Single Number Ii<br><br></b> <a href='https://leetcode.com/problems/single-number-ii/' target='_blank'>LeetCode 137</a></td>
+      <td><b>Example 1:</b> Ones and Twos.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain two variables, `ones` and `twos`. `ones` keeps track of bits appearing once, `twos` tracks bits appearing twice. When a bit appears a third time, it is cleared from both. Update logic: `ones = (ones ^ num) & ~twos`, `twos = (twos ^ num) & ~ones`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def singleNumber(nums):&#10;    ones, twos = 0, 0&#10;    for num in nums:&#10;        ones = (ones ^ num) &amp; ~twos&#10;        twos = (twos ^ num) &amp; ~ones&#10;    return ones</code></pre></details></td>
+    </tr>
+    <tr>
+      <td>39</td>
+      <td>Bit 13 Single Number Iii<br><br></b> <a href='https://leetcode.com/problems/single-number-iii/' target='_blank'>LeetCode 260</a></td>
+      <td><b>Example 1:</b> Rightmost set bit.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> XOR all elements to get `A ^ B`. The rightmost set bit in `A ^ B` means A and B differ at this bit. Use this bit to partition the array into two groups and XOR elements in each group. The results are A and B.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def singleNumber(nums):&#10;    XOR = 0&#10;    for num in nums: XOR ^= num&#10;    rightmost_set_bit = XOR &amp; ~(XOR - 1)&#10;    b1, b2 = 0, 0&#10;    for num in nums:&#10;        if num &amp; rightmost_set_bit:&#10;            b1 ^= num&#10;        else:&#10;            b2 ^= num&#10;    return [b1, b2]</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

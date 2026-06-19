@@ -169,5 +169,95 @@
       <td>-</td>
       <td><b>Explanation:</b> Backtracking. Create a mapping of digit to letters. Iterate through digits, for each digit loop through its mapped letters, append to current string, and recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def letterCombinations(digits: str) -&gt; List[str]:&#10;    if not digits: return []&#10;    ans = []&#10;    mapping = [&quot;&quot;, &quot;&quot;, &quot;abc&quot;, &quot;def&quot;, &quot;ghi&quot;, &quot;jkl&quot;, &quot;mno&quot;, &quot;pqrs&quot;, &quot;tuv&quot;, &quot;wxyz&quot;]&#10;    def solve(ind, path):&#10;        if ind == len(digits):&#10;            ans.append(path)&#10;            return&#10;        number = int(digits[ind])&#10;        value = mapping[number]&#10;        for i in range(len(value)):&#10;            solve(ind + 1, path + value[i])&#10;    solve(0, &quot;&quot;)&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">18</td>
+      <td rowspan="1">Rec 18 Rat In A Maze<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking.</td>
+      <td><b>Time:</b> O(4^(N^2))<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use backtracking to explore paths in lexicographical order: Down, Left, Right, Up (DLRU). Maintain a visited array. If destination is reached, add path to answers. Backtrack by unmarking visited.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def findPath(m: List[List[int]], n: int) -&gt; List[str]:&#10;    ans = []&#10;    vis = [[0 for _ in range(n)] for _ in range(n)]&#10;    di = [1, 0, 0, -1]&#10;    dj = [0, -1, 1, 0]&#10;    direction = &quot;DLRU&quot;&#10;    def solve(i, j, move):&#10;        if i == n - 1 and j == n - 1:&#10;            ans.append(move)&#10;            return&#10;        for ind in range(4):&#10;            nexti = i + di[ind]&#10;            nextj = j + dj[ind]&#10;            if 0 &lt;= nexti &lt; n and 0 &lt;= nextj &lt; n and not vis[nexti][nextj] and m[nexti][nextj] == 1:&#10;                vis[i][j] = 1&#10;                solve(nexti, nextj, move + direction[ind])&#10;                vis[i][j] = 0&#10;    if m[0][0] == 1: solve(0, 0, &quot;&quot;)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">19</td>
+      <td rowspan="1">Rec 19 Word Break Ii<br><br></b> <a href='https://leetcode.com/problems/word-break-ii/' target='_blank'>LeetCode 140</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursion + Memoization.</td>
+      <td><b>Time:</b> O(N * 2^N)<br><b>Space:</b> O(2^N * N)</td>
+      <td><code>#include <unordered_set>\n#include <unordered_map></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Backtracking. For each index, try all possible prefixes. If prefix is in dict, recursively break the remaining string. Use memoization or DP to store answers for a substring to avoid recomputation.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; List[str]:&#10;    wordSet = set(wordDict)&#10;    memo = {}&#10;    def dfs(s):&#10;        if s in memo: return memo[s]&#10;        res = []&#10;        if s in wordSet: res.append(s)&#10;        for i in range(1, len(s)):&#10;            right = s[i:]&#10;            if right in wordSet:&#10;                left_res = dfs(s[:i])&#10;                for l in left_res:&#10;                    res.append(l + &quot; &quot; + right)&#10;        memo[s] = res&#10;        return res&#10;    return dfs(s)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">20</td>
+      <td rowspan="1">Rec 20 M Coloring Problem<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/m-coloring-problem-1587115620/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Graph coloring backtracking.</td>
+      <td><b>Time:</b> O(M^N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Try coloring each node from `1` to `M`. Before coloring, check if it's safe (no adjacent node has same color). If safe, color it and recurse for next node. Backtrack if no color works.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def graphColoring(graph, m, V):&#10;    color = [0] * V&#10;    def isSafe(node, col):&#10;        for k in range(V):&#10;            if k != node and graph[k][node] == 1 and color[k] == col:&#10;                return False&#10;        return True&#10;    def solve(node):&#10;        if node == V: return True&#10;        for i in range(1, m + 1):&#10;            if isSafe(node, i):&#10;                color[node] = i&#10;                if solve(node + 1): return True&#10;                color[node] = 0&#10;        return False&#10;    return solve(0)</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">21</td>
+      <td rowspan="1">Rec 21 Sudoku Solver<br><br></b> <a href='https://leetcode.com/problems/sudoku-solver/' target='_blank'>LeetCode 37</a></td>
+      <td rowspan="1"><b>Example 1:</b> Classic backtracking.</td>
+      <td><b>Time:</b> O(9^(N^2))<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate through matrix. If empty, try '1' to '9'. Check `isValid` (row, col, 3x3 box). If valid, set it and recurse. If recursion returns true, puzzle solved. Else backtrack. If loop ends without returning true, return false.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solveSudoku(board: List[List[str]]) -&gt; None:&#10;    def is_valid(r, c, ch):&#10;        for i in range(9):&#10;            if board[i][c] == ch: return False&#10;            if board[r][i] == ch: return False&#10;            if board[3 * (r // 3) + i // 3][3 * (c // 3) + i % 3] == ch: return False&#10;        return True&#10;    def solve():&#10;        for i in range(9):&#10;            for j in range(9):&#10;                if board[i][j] == &#x27;.&#x27;:&#10;                    for ch in &#x27;123456789&#x27;:&#10;                        if is_valid(i, j, ch):&#10;                            board[i][j] = ch&#10;                            if solve(): return True&#10;                            board[i][j] = &#x27;.&#x27;&#10;                    return False&#10;        return True&#10;    solve()</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">22</td>
+      <td rowspan="1">Rec 22 N Queens<br><br></b> <a href='https://leetcode.com/problems/n-queens/' target='_blank'>LeetCode 51</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking on board.</td>
+      <td><b>Time:</b> O(N!)<br><b>Space:</b> O(N^2)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Place queens column by column. Keep track of safe rows and diagonals using hashing arrays: `leftRow`, `lowerDiagonal`, `upperDiagonal`. If safe, place queen, update hashes, and recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solveNQueens(n: int) -&gt; List[List[str]]:&#10;    ans = []&#10;    board = [[&quot;.&quot;] * n for _ in range(n)]&#10;    leftRow = [0] * n&#10;    upperDiagonal = [0] * (2 * n - 1)&#10;    lowerDiagonal = [0] * (2 * n - 1)&#10;    def solve(col):&#10;        if col == n:&#10;            ans.append([&quot;&quot;.join(r) for r in board])&#10;            return&#10;        for row in range(n):&#10;            if leftRow[row] == 0 and lowerDiagonal[row + col] == 0 and upperDiagonal[n - 1 + col - row] == 0:&#10;                board[row][col] = &#x27;Q&#x27;&#10;                leftRow[row] = 1; lowerDiagonal[row + col] = 1; upperDiagonal[n - 1 + col - row] = 1&#10;                solve(col + 1)&#10;                board[row][col] = &#x27;.&#x27;&#10;                leftRow[row] = 0; lowerDiagonal[row + col] = 0; upperDiagonal[n - 1 + col - row] = 0&#10;    solve(0)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">23</td>
+      <td rowspan="1">Rec 23 Permutations Of A String Or Array<br><br></b> <a href='https://leetcode.com/problems/permutations/' target='_blank'>LeetCode 46</a></td>
+      <td rowspan="1"><b>Example 1:</b> Backtracking swap.</td>
+      <td><b>Time:</b> O(N! * N)<br><b>Space:</b> O(N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate `i` from `index` to `n-1`. Swap `nums[index]` and `nums[i]`, then recurse for `index + 1`. Swap back to backtrack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def permute(nums: List[int]) -&gt; List[List[int]]:&#10;    ans = []&#10;    def recur(index):&#10;        if index == len(nums):&#10;            ans.append(nums[:])&#10;            return&#10;        for i in range(index, len(nums)):&#10;            nums[index], nums[i] = nums[i], nums[index]&#10;            recur(index + 1)&#10;            nums[index], nums[i] = nums[i], nums[index]&#10;    recur(0)&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">24</td>
+      <td rowspan="1">Rec 24 Combination Sum Ii<br><br></b> <a href='https://leetcode.com/problems/combination-sum-ii/' target='_blank'>LeetCode 40</a></td>
+      <td rowspan="1"><b>Example 1:</b> `candidates = [10,1,2,7,6,1,5], target = 8`.</td>
+      <td><b>Time:</b> O(2^N)<br><b>Space:</b> O(N * X) where X is number of combinations</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort candidates. Recursively pick combinations. If `i > ind` and `candidates[i] == candidates[i-1]`, skip to avoid duplicates. If `target - candidates[i] >= 0`, pick it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def combinationSum2(candidates: List[int], target: int) -&gt; List[List[int]]:&#10;    candidates.sort()&#10;    ans = []&#10;    def find(ind, target, ds):&#10;        if target == 0:&#10;            ans.append(list(ds))&#10;            return&#10;        for i in range(ind, len(candidates)):&#10;            if i &gt; ind and candidates[i] == candidates[i-1]: continue&#10;            if candidates[i] &gt; target: break&#10;            ds.append(candidates[i])&#10;            find(i + 1, target - candidates[i], ds)&#10;            ds.pop()&#10;    find(0, target, [])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">25</td>
+      <td rowspan="1">Rec 25 Subset Sum I<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/subset-sums2234/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Take / Not Take.</td>
+      <td><b>Time:</b> O(2^N)<br><b>Space:</b> O(2^N)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Recursively either include `arr[ind]` in sum, or exclude it. If `ind == N`, add `sum` to result array.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def subsetSums(arr: List[int], N: int) -&gt; List[int]:&#10;    sumSubset = []&#10;    def func(ind, current_sum):&#10;        if ind == N:&#10;            sumSubset.append(current_sum)&#10;            return&#10;        func(ind + 1, current_sum + arr[ind])&#10;        func(ind + 1, current_sum)&#10;    func(0, 0)&#10;    sumSubset.sort()&#10;    return sumSubset</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">26</td>
+      <td rowspan="1">Rec 26 Subset Sum Ii<br><br></b> <a href='https://leetcode.com/problems/subsets-ii/' target='_blank'>LeetCode 90</a></td>
+      <td rowspan="1"><b>Example 1:</b> Subset skip duplicates.</td>
+      <td><b>Time:</b> O(2^N * N)<br><b>Space:</b> O(2^N * K)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Sort array. Recursive call adds current `ds` to `ans`. Then iterate `i` from `ind` to `n`. Skip if `i > ind` and `nums[i] == nums[i-1]`. Add to `ds`, recurse for `i+1`, pop from `ds`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def subsetsWithDup(nums: List[int]) -&gt; List[List[int]]:&#10;    ans = []&#10;    nums.sort()&#10;    def find(ind, ds):&#10;        ans.append(list(ds))&#10;        for i in range(ind, len(nums)):&#10;            if i != ind and nums[i] == nums[i-1]: continue&#10;            ds.append(nums[i])&#10;            find(i + 1, ds)&#10;            ds.pop()&#10;    find(0, [])&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">27</td>
+      <td rowspan="1">Rec 27 Palindrome Partitioning<br><br></b> <a href='https://leetcode.com/problems/palindrome-partitioning/' target='_blank'>LeetCode 131</a></td>
+      <td rowspan="1"><b>Example 1:</b> Valid palindrome checks on prefix.</td>
+      <td><b>Time:</b> O(N * 2^N)<br><b>Space:</b> O(N * X)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Recurse through string. For index `i`, check substring `s[index...i]`. If it is palindrome, add it to current list, and recurse for `i+1`. Backtrack after recursion.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def partition(s: str) -&gt; List[List[str]]:&#10;    res = []&#10;    def isPal(string, l, r):&#10;        while l &lt;= r:&#10;            if string[l] != string[r]: return False&#10;            l += 1; r -= 1&#10;        return True&#10;    def func(index, path):&#10;        if index == len(s):&#10;            res.append(list(path))&#10;            return&#10;        for i in range(index, len(s)):&#10;            if isPal(s, index, i):&#10;                path.append(s[index:i+1])&#10;                func(i + 1, path)&#10;                path.pop()&#10;    func(0, [])&#10;    return res</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

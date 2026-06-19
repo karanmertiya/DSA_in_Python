@@ -205,5 +205,95 @@
       <td><b>k > length:</b> Fill remaining parts with null.</td>
       <td><b>Explanation:</b> First, calculate the length of the list. Then, determine base size `len / k` and extra nodes `len % k`. Iterate through the list, breaking it into parts of appropriate sizes.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def splitListToParts(head: Optional[ListNode], k: int) -&gt; List[Optional[ListNode]]:&#10;    length = 0&#10;    curr = head&#10;    while curr:&#10;        length += 1&#10;        curr = curr.next&#10;    partSize, extra = length // k, length % k&#10;    ans = []&#10;    curr = head&#10;    for i in range(k):&#10;        ans.append(curr)&#10;        currentPartSize = partSize + (1 if extra &gt; 0 else 0)&#10;        extra -= 1&#10;        for _ in range(currentPartSize - 1):&#10;            if curr: curr = curr.next&#10;        if curr:&#10;            nextPart = curr.next&#10;            curr.next = None&#10;            curr = nextPart&#10;    return ans</code></pre></details></td>
     </tr>
+    <tr>
+      <td rowspan="1">22</td>
+      <td rowspan="1">Ll 26 Reverse Nodes In K Group<br><br></b> <a href='https://leetcode.com/problems/reverse-nodes-in-k-group/' target='_blank'>LeetCode 25</a></td>
+      <td rowspan="1"><b>Example 1:</b> Recursive/Iterative k-reverse.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Count nodes. While `count >= k`, reverse `k` nodes. Keep track of previous group's tail to connect to current group's head. If `< k` nodes remain, just connect them.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverseKGroup(head: Optional[ListNode], k: int) -&gt; Optional[ListNode]:&#10;    if not head or k == 1: return head&#10;    dummy = ListNode(0)&#10;    dummy.next = head&#10;    curr, nex, pre = dummy, dummy, dummy&#10;    count = 0&#10;    while curr.next:&#10;        curr = curr.next&#10;        count += 1&#10;    while count &gt;= k:&#10;        curr = pre.next&#10;        nex = curr.next&#10;        for _ in range(1, k):&#10;            curr.next = nex.next&#10;            nex.next = pre.next&#10;            pre.next = nex&#10;            nex = curr.next&#10;        pre = curr&#10;        count -= k&#10;    return dummy.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">23</td>
+      <td rowspan="1">Ll 27 Rotate List<br><br></b> <a href='https://leetcode.com/problems/rotate-list/' target='_blank'>LeetCode 61</a></td>
+      <td rowspan="1"><b>Example 1:</b> Find tail and break.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Compute length `N` of list. Connect tail to head to form a cycle. Find `k = k % N`. Move `N - k` steps from head. The new head is `current->next`. Break the cycle by setting `current->next = NULL`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def rotateRight(head: Optional[ListNode], k: int) -&gt; Optional[ListNode]:&#10;    if not head or not head.next or k == 0: return head&#10;    cur = head&#10;    length = 1&#10;    while cur.next:&#10;        length += 1&#10;        cur = cur.next&#10;    cur.next = head&#10;    k = k % length&#10;    k = length - k&#10;    while k &gt; 0:&#10;        cur = cur.next&#10;        k -= 1&#10;    head = cur.next&#10;    cur.next = None&#10;    return head</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">24</td>
+      <td rowspan="1">Ll 28 Flattening A Linked List<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/flattening-a-linked-list/1' target='_blank'>GFG</a></td>
+      <td rowspan="1"><b>Example 1:</b> Merge two sorted lists bottom-up.</td>
+      <td><b>Time:</b> O(N * M) total nodes<br><b>Space:</b> O(N) aux space for recursion</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Recursively go to the end of the `next` pointers. Merge the last two lists using the `bottom` pointers, just like merging two sorted linked lists. Return the merged head upwards.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self, data):&#10;        self.data = data&#10;        self.next = None&#10;        self.bottom = None&#10;def mergeTwoLists(a, b):&#10;    temp = Node(0)&#10;    res = temp&#10;    while a is not None and b is not None:&#10;        if a.data &lt; b.data:&#10;            temp.bottom = a&#10;            temp = temp.bottom&#10;            a = a.bottom&#10;        else:&#10;            temp.bottom = b&#10;            temp = temp.bottom&#10;            b = b.bottom&#10;    if a: temp.bottom = a&#10;    else: temp.bottom = b&#10;    return res.bottom&#10;def flatten(root):&#10;    if root is None or root.next is None: return root&#10;    root.next = flatten(root.next)&#10;    root = mergeTwoLists(root, root.next)&#10;    return root</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">25</td>
+      <td rowspan="1">Ll 29 Copy List With Random Pointer<br><br></b> <a href='https://leetcode.com/problems/copy-list-with-random-pointer/' target='_blank'>LeetCode 138</a></td>
+      <td rowspan="1"><b>Example 1:</b> Insert copies in-between.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Iterate list. For each node, insert a copy node right after it. Then, iterate again and set `copy->random = original->random->next`. Finally, separate the original list and the copy list.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self, x: int, next: &#x27;Node&#x27; = None, random: &#x27;Node&#x27; = None):&#10;        self.val = int(x)&#10;        self.next = next&#10;        self.random = random&#10;def copyRandomList(head: &#x27;Optional[Node]&#x27;) -&gt; &#x27;Optional[Node]&#x27;:&#10;    if not head: return None&#10;    iter = head&#10;    while iter:&#10;        nxt = iter.next&#10;        copy = Node(iter.val)&#10;        iter.next = copy&#10;        copy.next = nxt&#10;        iter = nxt&#10;    iter = head&#10;    while iter:&#10;        if iter.random:&#10;            iter.next.random = iter.random.next&#10;        iter = iter.next.next&#10;    iter = head&#10;    pseudoHead = Node(0)&#10;    copy = pseudoHead&#10;    while iter:&#10;        nxt = iter.next.next&#10;        copy.next = iter.next&#10;        iter.next = nxt&#10;        copy = copy.next&#10;        iter = nxt&#10;    return pseudoHead.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">26</td>
+      <td rowspan="1">Ll 30 Add Two Numbers Ii<br><br></b> <a href='https://leetcode.com/problems/add-two-numbers-ii/' target='_blank'>LeetCode 445</a></td>
+      <td rowspan="1"><b>Example 1:</b> Stack or reverse.</td>
+      <td><b>Time:</b> O(N + M)<br><b>Space:</b> O(N + M)</td>
+      <td><code>#include <stack></code></td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use two stacks to store the digits of the lists. Pop from stacks, add along with carry, and construct the new list by inserting at the head.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def addTwoNumbers(l1: Optional[ListNode], l2: Optional[ListNode]) -&gt; Optional[ListNode]:&#10;    s1, s2 = [], []&#10;    while l1:&#10;        s1.append(l1.val)&#10;        l1 = l1.next&#10;    while l2:&#10;        s2.append(l2.val)&#10;        l2 = l2.next&#10;    carry = 0&#10;    head = None&#10;    while s1 or s2 or carry:&#10;        sum_val = carry&#10;        if s1: sum_val += s1.pop()&#10;        if s2: sum_val += s2.pop()&#10;        node = ListNode(sum_val % 10)&#10;        node.next = head&#10;        head = node&#10;        carry = sum_val // 10&#10;    return head</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">27</td>
+      <td rowspan="1">Ll 31 Split Linked List In Parts<br><br></b> <a href='https://leetcode.com/problems/split-linked-list-in-parts/' target='_blank'>LeetCode 725</a></td>
+      <td rowspan="1"><b>Example 1:</b> Calculate lengths.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(k)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Count total nodes `N`. Each part will have at least `N // k` nodes, and the first `N % k` parts will have one extra node. Iterate and break the links.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def splitListToParts(head: Optional[ListNode], k: int) -&gt; List[Optional[ListNode]]:&#10;    ans = [None] * k&#10;    n = 0&#10;    node = head&#10;    while node:&#10;        n += 1&#10;        node = node.next&#10;    part, extra = divmod(n, k)&#10;    node = head&#10;    prev = None&#10;    for i in range(k):&#10;        if not node: break&#10;        ans[i] = node&#10;        for j in range(part + (1 if extra &gt; 0 else 0)):&#10;            prev = node&#10;            node = node.next&#10;        if prev: prev.next = None&#10;        extra -= 1&#10;    return ans</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">28</td>
+      <td rowspan="1">Ll 32 Insertion Sort List<br><br></b> <a href='https://leetcode.com/problems/insertion-sort-list/' target='_blank'>LeetCode 147</a></td>
+      <td rowspan="1"><b>Example 1:</b> Dummy head.</td>
+      <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a dummy head for the sorted part. For each node in the original list, iterate through the sorted part to find its correct position and insert it.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def insertionSortList(head: Optional[ListNode]) -&gt; Optional[ListNode]:&#10;    dummy = ListNode(0)&#10;    curr = head&#10;    while curr:&#10;        prev = dummy&#10;        while prev.next and prev.next.val &lt;= curr.val:&#10;            prev = prev.next&#10;        nxt = curr.next&#10;        curr.next = prev.next&#10;        prev.next = curr&#10;        curr = nxt&#10;    return dummy.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">29</td>
+      <td rowspan="1">Ll 33 Sort List<br><br></b> <a href='https://leetcode.com/problems/sort-list/' target='_blank'>LeetCode 148</a></td>
+      <td rowspan="1"><b>Example 1:</b> Merge sort.</td>
+      <td><b>Time:</b> O(N log N)<br><b>Space:</b> O(log N) due to recursion stack</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Merge sort for linked lists. Find mid using fast and slow pointers, split list into two, recursively sort, and merge the two sorted halves.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def sortList(head: Optional[ListNode]) -&gt; Optional[ListNode]:&#10;    if not head or not head.next: return head&#10;    slow, fast = head, head.next&#10;    while fast and fast.next:&#10;        slow = slow.next&#10;        fast = fast.next.next&#10;    mid = slow.next&#10;    slow.next = None&#10;    left = sortList(head)&#10;    right = sortList(mid)&#10;    dummy = ListNode(0)&#10;    tail = dummy&#10;    while left and right:&#10;        if left.val &lt; right.val:&#10;            tail.next = left&#10;            left = left.next&#10;        else:&#10;            tail.next = right&#10;            right = right.next&#10;        tail = tail.next&#10;    if left: tail.next = left&#10;    if right: tail.next = right&#10;    return dummy.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">30</td>
+      <td rowspan="1">Ll 34 Partition List<br><br></b> <a href='https://leetcode.com/problems/partition-list/' target='_blank'>LeetCode 86</a></td>
+      <td rowspan="1"><b>Example 1:</b> Two lists then join.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Maintain two separate linked lists: `before` and `after` with their own dummy heads. Iterate through original list, appending to `before` or `after` based on value. Then link `before` tail to `after` head.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def partition(head: Optional[ListNode], x: int) -&gt; Optional[ListNode]:&#10;    before_head = ListNode(0)&#10;    before = before_head&#10;    after_head = ListNode(0)&#10;    after = after_head&#10;    while head:&#10;        if head.val &lt; x:&#10;            before.next = head&#10;            before = before.next&#10;        else:&#10;            after.next = head&#10;            after = after.next&#10;        head = head.next&#10;    after.next = None&#10;    before.next = after_head.next&#10;    return before_head.next</code></pre></details></td>
+    </tr>
+    <tr>
+      <td rowspan="1">31</td>
+      <td rowspan="1">Ll 35 Swap Nodes In Pairs<br><br></b> <a href='https://leetcode.com/problems/swap-nodes-in-pairs/' target='_blank'>LeetCode 24</a></td>
+      <td rowspan="1"><b>Example 1:</b> Iterative with dummy.</td>
+      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td><b>Explanation:</b> Use a dummy node. Maintain a `prev` pointer. While `prev->next` and `prev->next->next` exist, swap them and move `prev` two steps ahead.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def swapPairs(head: Optional[ListNode]) -&gt; Optional[ListNode]:&#10;    dummy = ListNode(0)&#10;    dummy.next = head&#10;    prev = dummy&#10;    while prev.next and prev.next.next:&#10;        first = prev.next&#10;        second = prev.next.next&#10;        first.next = second.next&#10;        second.next = first&#10;        prev.next = second&#10;        prev = first&#10;    return dummy.next</code></pre></details></td>
+    </tr>
   </tbody>
 </table>

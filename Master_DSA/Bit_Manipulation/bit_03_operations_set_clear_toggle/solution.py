@@ -1,4 +1,4 @@
-# Time Complexity: O(1) (Constraint)
+# Time Complexity: O(1)
 # Space Complexity: O(1)
 # Explanation: Use OR (`|`) to set, AND with NOT (`& ~`) to clear, and XOR (`^`) to toggle.
 

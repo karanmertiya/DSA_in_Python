@@ -3,16 +3,11 @@
 <table border="1">
   <thead>
     <tr>
-      <th rowspan="2" style="width: 5%;">S.No</th>
-      <th rowspan="2" style="width: 15%;">Problem Name</th>
-      <th rowspan="2" style="width: 25%;">Example & Constraints</th>
-      <th rowspan="2" style="width: 10%;">Complexity</th>
-      <th colspan="2" style="width: 20%;">Conditions & Edge Cases</th>
-      <th rowspan="2" style="width: 25%;">Logic</th>
-    </tr>
-    <tr>
-      <th>Dependencies / Setup</th>
-      <th>Edge Case Handling</th>
+      <th style="width: 5%;">S.No</th>
+      <th style="width: 15%;">Problem Name</th>
+      <th style="width: 30%;">Example & Constraints</th>
+      <th style="width: 15%;">Complexity</th>
+      <th style="width: 35%;">Logic</th>
     </tr>
   </thead>
   <tbody>
@@ -21,8 +16,6 @@
       <td>Trie 01 Implement Trie Prefix Tree<br><br></b> <a href='https://leetcode.com/problems/implement-trie-prefix-tree/' target='_blank'>LeetCode 208</a></td>
       <td><b>Example 1:</b> `insert("apple")`, `search("apple")` -> true, `search("app")` -> false, `startsWith("app")` -> true.<br><br><b>Note (Constraint):</b> 1 &le; word.length &le; 2000, lowercase English letters.</td>
       <td><b>Time:</b> O(Length of word) (Constraint)<br><b>Space:</b> O(Length * 26) per word</td>
-      <td>Custom Node Struct/Class</td>
-      <td><b>startsWith vs search:</b> `startsWith` returns true simply if the traversal succeeds without hitting NULL. `search` requires the final node's `isEnd` flag to be true.</td>
       <td><b>Explanation:</b> Use a Tree where each node contains an array of 26 pointers (for 'a'-'z') and a boolean flag `isEnd`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class TrieNode:&#10;    def __init__(self):&#10;        self.children = {}&#10;        self.is_end = False&#10;&#10;class Trie:&#10;    def __init__(self):&#10;        self.root = TrieNode()&#10;&#10;    def insert(self, word: str) -&gt; None:&#10;        node = self.root&#10;        for char in word:&#10;            if char not in node.children:&#10;                node.children[char] = TrieNode()&#10;            node = node.children[char]&#10;        node.is_end = True&#10;&#10;    def search(self, word: str) -&gt; bool:&#10;        node = self.root&#10;        for char in word:&#10;            if char not in node.children:&#10;                return False&#10;            node = node.children[char]&#10;        return node.is_end&#10;&#10;    def startsWith(self, prefix: str) -&gt; bool:&#10;        node = self.root&#10;        for char in prefix:&#10;            if char not in node.children:&#10;                return False&#10;            node = node.children[char]&#10;        return True</code></pre></details></td>
     </tr>
     <tr>
@@ -30,8 +23,6 @@
       <td>Trie 02 Implement Trie Ii<br><br></b> <a href='https://www.codingninjas.com/studio/problems/implement-trie_1387095' target='_blank'>Coding Ninjas</a></td>
       <td><b>Example 1:</b> Specialized Trie functions.</td>
       <td><b>Time:</b> O(len) per operation<br><b>Space:</b> O(N * len)</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> Trie Nodes have a `cntEndWith` and `cntPrefix` integers. Increment `cntPrefix` dynamically as you insert, and `cntEndWith` at the final node. Decrement them during erase.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None] * 26&#10;        self.cntEndWith = 0&#10;        self.cntPrefix = 0&#10;class Trie:&#10;    def __init__(self):&#10;        self.root = Node()&#10;    def insert(self, word: str):&#10;        node = self.root&#10;        for ch in word:&#10;            idx = ord(ch) - 97&#10;            if not node.links[idx]: node.links[idx] = Node()&#10;            node = node.links[idx]&#10;            node.cntPrefix += 1&#10;        node.cntEndWith += 1&#10;    def countWordsEqualTo(self, word: str) -&gt; int:&#10;        node = self.root&#10;        for ch in word:&#10;            idx = ord(ch) - 97&#10;            if not node.links[idx]: return 0&#10;            node = node.links[idx]&#10;        return node.cntEndWith</code></pre></details></td>
     </tr>
     <tr>
@@ -39,8 +30,6 @@
       <td>Trie 03 Implement Trie Ii<br><br></b> <a href='https://www.codingninjas.com/codestudio/problems/implement-trie_1387095' target='_blank'>Coding Ninjas</a></td>
       <td><b>Example 1:</b> Trie with counts.</td>
       <td><b>Time:</b> O(length of word)<br><b>Space:</b> O(total characters * 26)</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> Modify Node to store `countEndsWith` and `countPrefix`. Increment `countPrefix` while traversing during insertion, and `countEndsWith` at the end. For erase, decrement these counts.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None] * 26&#10;        self.cntEndWith = 0&#10;        self.cntPrefix = 0&#10;    def containsKey(self, ch):&#10;        return self.links[ord(ch) - ord(&#x27;a&#x27;)] is not None&#10;    def put(self, ch, node):&#10;        self.links[ord(ch) - ord(&#x27;a&#x27;)] = node&#10;    def get(self, ch):&#10;        return self.links[ord(ch) - ord(&#x27;a&#x27;)]&#10;    def increaseEnd(self): self.cntEndWith += 1&#10;    def increasePrefix(self): self.cntPrefix += 1&#10;    def deleteEnd(self): self.cntEndWith -= 1&#10;    def reducePrefix(self): self.cntPrefix -= 1&#10;    def getEnd(self): return self.cntEndWith&#10;    def getPrefix(self): return self.cntPrefix&#10;&#10;class Trie:&#10;    def __init__(self):&#10;        self.root = Node()&#10;    def insert(self, word: str) -&gt; None:&#10;        node = self.root&#10;        for ch in word:&#10;            if not node.containsKey(ch):&#10;                node.put(ch, Node())&#10;            node = node.get(ch)&#10;            node.increasePrefix()&#10;        node.increaseEnd()&#10;    def countWordsEqualTo(self, word: str) -&gt; int:&#10;        node = self.root&#10;        for ch in word:&#10;            if not node.containsKey(ch):&#10;                return 0&#10;            node = node.get(ch)&#10;        return node.getEnd()&#10;    def countWordsStartingWith(self, prefix: str) -&gt; int:&#10;        node = self.root&#10;        for ch in prefix:&#10;            if not node.containsKey(ch):&#10;                return 0&#10;            node = node.get(ch)&#10;        return node.getPrefix()&#10;    def erase(self, word: str) -&gt; None:&#10;        node = self.root&#10;        for ch in word:&#10;            if node.containsKey(ch):&#10;                node = node.get(ch)&#10;                node.reducePrefix()&#10;            else:&#10;                return&#10;        node.deleteEnd()</code></pre></details></td>
     </tr>
     <tr>
@@ -48,8 +37,6 @@
       <td>Trie 04 Longest String With All Prefixes<br><br></b> <a href='https://www.codingninjas.com/codestudio/problems/complete-string_2687860' target='_blank'>Coding Ninjas</a></td>
       <td><b>Example 1:</b> Insert all, check each word.</td>
       <td><b>Time:</b> O(N * max_len)<br><b>Space:</b> O(N * max_len)</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> Insert all words into a Trie. For each word, check if every prefix exists (i.e., every node from root to end has `isEnd == true`). Keep track of the longest valid word. Resolve ties lexicographically.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None] * 26&#10;        self.flag = False&#10;    def containsKey(self, ch):&#10;        return self.links[ord(ch) - ord(&#x27;a&#x27;)] is not None&#10;    def put(self, ch, node):&#10;        self.links[ord(ch) - ord(&#x27;a&#x27;)] = node&#10;    def get(self, ch):&#10;        return self.links[ord(ch) - ord(&#x27;a&#x27;)]&#10;    def setEnd(self): self.flag = True&#10;    def isEnd(self): return self.flag&#10;class Trie:&#10;    def __init__(self):&#10;        self.root = Node()&#10;    def insert(self, word):&#10;        node = self.root&#10;        for ch in word:&#10;            if not node.containsKey(ch): node.put(ch, Node())&#10;            node = node.get(ch)&#10;        node.setEnd()&#10;    def checkAllPrefixes(self, word):&#10;        node = self.root&#10;        for ch in word:&#10;            if node.containsKey(ch):&#10;                node = node.get(ch)&#10;                if not node.isEnd(): return False&#10;            else: return False&#10;        return True&#10;def completeString(n: int, a: List[str]) -&gt; str:&#10;    trie = Trie()&#10;    for word in a: trie.insert(word)&#10;    longest = &quot;&quot;&#10;    for word in a:&#10;        if trie.checkAllPrefixes(word):&#10;            if len(word) &gt; len(longest):&#10;                longest = word&#10;            elif len(word) == len(longest) and word &lt; longest:&#10;                longest = word&#10;    return longest if longest else &quot;None&quot;</code></pre></details></td>
     </tr>
     <tr>
@@ -57,8 +44,6 @@
       <td>Trie 05 Number Of Distinct Substrings In A String<br><br></b> <a href='https://www.codingninjas.com/codestudio/problems/count-distinct-substrings_985292' target='_blank'>Coding Ninjas</a></td>
       <td><b>Example 1:</b> Insert all suffixes.</td>
       <td><b>Time:</b> O(N^2)<br><b>Space:</b> O(N^2)</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> To find all substrings, iterate `i` from 0 to N-1, and `j` from `i` to N-1. Each sequence `s[i...j]` is a substring. Insert it into the Trie. Every time we create a new node, it corresponds to a new distinct substring. Increment count. Add 1 for the empty substring.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None] * 26&#10;    def containsKey(self, ch):&#10;        return self.links[ord(ch) - ord(&#x27;a&#x27;)] is not None&#10;    def put(self, ch, node):&#10;        self.links[ord(ch) - ord(&#x27;a&#x27;)] = node&#10;    def get(self, ch):&#10;        return self.links[ord(ch) - ord(&#x27;a&#x27;)]&#10;def countDistinctSubstrings(s: str) -&gt; int:&#10;    root = Node()&#10;    count = 0&#10;    for i in range(len(s)):&#10;        node = root&#10;        for j in range(i, len(s)):&#10;            if not node.containsKey(s[j]):&#10;                node.put(s[j], Node())&#10;                count += 1&#10;            node = node.get(s[j])&#10;    return count + 1</code></pre></details></td>
     </tr>
     <tr>
@@ -66,8 +51,6 @@
       <td>Trie 06 Maximum Xor Of Two Numbers In An Array<br><br></b> <a href='https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/' target='_blank'>LeetCode 421</a></td>
       <td><b>Example 1:</b> Bit Trie.</td>
       <td><b>Time:</b> O(N * 32)<br><b>Space:</b> O(N * 32)</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> Insert binary representation of each number (from MSB to LSB, 31 to 0) into a Trie. To find max XOR for `x`, traverse the Trie aiming for opposite bits (1 for 0, 0 for 1). If opposite bit exists, go that way and add `1 << i` to result. Else go same way.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None, None]&#10;    def containsKey(self, bit): return self.links[bit] is not None&#10;    def put(self, bit, node): self.links[bit] = node&#10;    def get(self, bit): return self.links[bit]&#10;class Trie:&#10;    def __init__(self):&#10;        self.root = Node()&#10;    def insert(self, num):&#10;        node = self.root&#10;        for i in range(31, -1, -1):&#10;            bit = (num &gt;&gt; i) &amp; 1&#10;            if not node.containsKey(bit):&#10;                node.put(bit, Node())&#10;            node = node.get(bit)&#10;    def getMax(self, num):&#10;        node = self.root&#10;        maxNum = 0&#10;        for i in range(31, -1, -1):&#10;            bit = (num &gt;&gt; i) &amp; 1&#10;            if node.containsKey(1 - bit):&#10;                maxNum |= (1 &lt;&lt; i)&#10;                node = node.get(1 - bit)&#10;            else:&#10;                node = node.get(bit)&#10;        return maxNum&#10;def findMaximumXOR(nums: List[int]) -&gt; int:&#10;    trie = Trie()&#10;    for num in nums: trie.insert(num)&#10;    maxi = 0&#10;    for num in nums:&#10;        maxi = max(maxi, trie.getMax(num))&#10;    return maxi</code></pre></details></td>
     </tr>
     <tr>
@@ -75,8 +58,6 @@
       <td>Trie 07 Maximum Xor With An Element From Array<br><br></b> <a href='https://leetcode.com/problems/maximum-xor-with-an-element-from-array/' target='_blank'>LeetCode 1707</a></td>
       <td><b>Example 1:</b> Offline Queries.</td>
       <td><b>Time:</b> O(N log N + Q log Q + Q * 32 + N * 32)<br><b>Space:</b> O(N * 32 + Q)</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> Sort `nums` array. Store queries as `{m, x, index}` and sort them by `m`. Iterate through queries. While `nums[i] <= m`, insert `nums[i]` into Trie. If Trie is empty, answer is -1. Else, query Trie for max XOR with `x`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None, None]&#10;    def containsKey(self, bit): return self.links[bit] is not None&#10;    def put(self, bit, node): self.links[bit] = node&#10;    def get(self, bit): return self.links[bit]&#10;class Trie:&#10;    def __init__(self):&#10;        self.root = Node()&#10;    def insert(self, num):&#10;        node = self.root&#10;        for i in range(31, -1, -1):&#10;            bit = (num &gt;&gt; i) &amp; 1&#10;            if not node.containsKey(bit): node.put(bit, Node())&#10;            node = node.get(bit)&#10;    def getMax(self, num):&#10;        node = self.root&#10;        maxNum = 0&#10;        for i in range(31, -1, -1):&#10;            bit = (num &gt;&gt; i) &amp; 1&#10;            if node.containsKey(1 - bit):&#10;                maxNum |= (1 &lt;&lt; i)&#10;                node = node.get(1 - bit)&#10;            else:&#10;                node = node.get(bit)&#10;        return maxNum&#10;def maximizeXor(nums: List[int], queries: List[List[int]]) -&gt; List[int]:&#10;    nums.sort()&#10;    oQ = sorted([(q[1], q[0], i) for i, q in enumerate(queries)])&#10;    ans = [0] * len(queries)&#10;    trie = Trie()&#10;    ind = 0&#10;    for m, x, qInd in oQ:&#10;        while ind &lt; len(nums) and nums[ind] &lt;= m:&#10;            trie.insert(nums[ind])&#10;            ind += 1&#10;        if ind == 0: ans[qInd] = -1&#10;        else: ans[qInd] = trie.getMax(x)&#10;    return ans</code></pre></details></td>
     </tr>
     <tr>
@@ -84,8 +65,6 @@
       <td>Trie 08 Word Search Ii<br><br></b> <a href='https://leetcode.com/problems/word-search-ii/' target='_blank'>LeetCode 212</a></td>
       <td><b>Example 1:</b> DFS + Trie.</td>
       <td><b>Time:</b> O(M * N * 4^L)<br><b>Space:</b> O(sum(L))</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> Insert all words into a Trie. Store the actual word at the `isEnd` node for easy retrieval. Do DFS from each cell. During DFS, traverse the Trie simultaneously. If a Trie node has a word, add it to results and remove the word from the node to avoid duplicates.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None] * 26&#10;        self.word = &quot;&quot;&#10;def findWords(board: List[List[str]], words: List[str]) -&gt; List[str]:&#10;    root = Node()&#10;    for w in words:&#10;        node = root&#10;        for c in w:&#10;            if not node.links[ord(c)-97]: node.links[ord(c)-97] = Node()&#10;            node = node.links[ord(c)-97]&#10;        node.word = w&#10;    res = []&#10;    def dfs(i, j, node):&#10;        c = board[i][j]&#10;        if c == &#x27;#&#x27; or not node.links[ord(c)-97]: return&#10;        node = node.links[ord(c)-97]&#10;        if node.word:&#10;            res.append(node.word)&#10;            node.word = &quot;&quot;&#10;        board[i][j] = &#x27;#&#x27;&#10;        for x, y in [(0, 1), (1, 0), (0, -1), (-1, 0)]:&#10;            if 0 &lt;= i+x &lt; len(board) and 0 &lt;= j+y &lt; len(board[0]):&#10;                dfs(i+x, j+y, node)&#10;        board[i][j] = c&#10;    for i in range(len(board)):&#10;        for j in range(len(board[0])):&#10;            dfs(i, j, root)&#10;    return res</code></pre></details></td>
     </tr>
     <tr>
@@ -93,8 +72,6 @@
       <td>Trie 09 Palindrome Pairs<br><br></b> <a href='https://leetcode.com/problems/palindrome-pairs/' target='_blank'>LeetCode 336</a></td>
       <td><b>Example 1:</b> Trie of reversed words.</td>
       <td><b>Time:</b> O(N * L^2)<br><b>Space:</b> O(N * L)</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> Insert the REVERSE of every word into a Trie. Store index of word at node. For each word, search the Trie. Three cases: 1. Trie word is longer (current word exhausted, check if rest of Trie branch is palindrome). 2. Current word is longer (Trie exhausted, check if rest of current word is palindrome). 3. Exact match. Store valid indices.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None] * 26&#10;        self.idx = -1&#10;        self.pal_indices = []&#10;def is_pal(s, i, j):&#10;    while i &lt; j:&#10;        if s[i] != s[j]: return False&#10;        i += 1; j -= 1&#10;    return True&#10;def palindromePairs(words: List[str]) -&gt; List[List[int]]:&#10;    root = Node()&#10;    for i, w in enumerate(words):&#10;        node = root&#10;        for j in range(len(w) - 1, -1, -1):&#10;            if is_pal(w, 0, j): node.pal_indices.append(i)&#10;            idx = ord(w[j]) - 97&#10;            if not node.links[idx]: node.links[idx] = Node()&#10;            node = node.links[idx]&#10;        node.idx = i&#10;        node.pal_indices.append(i)&#10;    res = []&#10;    for i, w in enumerate(words):&#10;        node = root&#10;        valid = True&#10;        for j in range(len(w)):&#10;            if node.idx != -1 and node.idx != i and is_pal(w, j, len(w)-1):&#10;                res.append([i, node.idx])&#10;            idx = ord(w[j]) - 97&#10;            if not node.links[idx]:&#10;                valid = False&#10;                break&#10;            node = node.links[idx]&#10;        if valid:&#10;            for pid in node.pal_indices:&#10;                if i != pid: res.append([i, pid])&#10;    return res</code></pre></details></td>
     </tr>
     <tr>
@@ -102,8 +79,6 @@
       <td>Trie 10 Print Anagrams Together<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/print-anagrams-together/1' target='_blank'>GFG</a></td>
       <td><b>Example 1:</b> Trie with sorted string.</td>
       <td><b>Time:</b> O(N * K log K)<br><b>Space:</b> O(N * K)</td>
-      <td>Trie</td>
-      <td>-</td>
       <td><b>Explanation:</b> Sort each string to form a key. Insert the sorted key into the Trie. At the end node of the key in the Trie, store a list of indices representing the original strings that map to this key.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class TrieNode:&#10;    def __init__(self):&#10;        self.children = {}&#10;        self.indices = []&#10;class Solution:&#10;    def Anagrams(self, string_list):&#10;        root = TrieNode()&#10;        for i, word in enumerate(string_list):&#10;            sorted_word = &quot;&quot;.join(sorted(word))&#10;            node = root&#10;            for char in sorted_word:&#10;                if char not in node.children:&#10;                    node.children[char] = TrieNode()&#10;                node = node.children[char]&#10;            node.indices.append(i)&#10;        ans = []&#10;        def traverse(node):&#10;            if node.indices:&#10;                ans.append([string_list[i] for i in node.indices])&#10;            for child in node.children.values():&#10;                traverse(child)&#10;        traverse(root)&#10;        return ans</code></pre></details></td>
     </tr>
     <tr>
@@ -111,8 +86,6 @@
       <td>Trie 11 Maximum Xor Subarray<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/maximum-xor-subarray/1' target='_blank'>GFG</a></td>
       <td><b>Example 1:</b> Trie + Prefix XOR.</td>
       <td><b>Time:</b> O(N * 32)<br><b>Space:</b> O(N * 32)</td>
-      <td>Trie</td>
-      <td>-</td>
       <td><b>Explanation:</b> Compute prefix XORs. For each prefix XOR `curr_xor`, insert it into a Trie. Then, query the Trie to find the maximum XOR of `curr_xor` with any previously inserted prefix XOR (by trying to follow the opposite bit path). The maximum value over all queries is the answer.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class Node:&#10;    def __init__(self):&#10;        self.links = [None, None]&#10;class Trie:&#10;    def __init__(self):&#10;        self.root = Node()&#10;    def insert(self, num):&#10;        node = self.root&#10;        for i in range(31, -1, -1):&#10;            bit = (num &gt;&gt; i) &amp; 1&#10;            if not node.links[bit]:&#10;                node.links[bit] = Node()&#10;            node = node.links[bit]&#10;    def getMax(self, num):&#10;        node = self.root&#10;        maxNum = 0&#10;        for i in range(31, -1, -1):&#10;            bit = (num &gt;&gt; i) &amp; 1&#10;            if node.links[1 - bit]:&#10;                maxNum |= (1 &lt;&lt; i)&#10;                node = node.links[1 - bit]&#10;            else:&#10;                node = node.links[bit]&#10;        return maxNum&#10;def maxSubarrayXOR(N, arr):&#10;    trie = Trie()&#10;    trie.insert(0)&#10;    max_xor, curr_xor = float(&#x27;-inf&#x27;), 0&#10;    for num in arr:&#10;        curr_xor ^= num&#10;        trie.insert(curr_xor)&#10;        max_xor = max(max_xor, trie.getMax(curr_xor))&#10;    return max_xor</code></pre></details></td>
     </tr>
     <tr>
@@ -120,8 +93,6 @@
       <td>Trie 12 Design Add And Search Words Data Structure<br><br></b> <a href='https://leetcode.com/problems/design-add-and-search-words-data-structure/' target='_blank'>LeetCode 211</a></td>
       <td><b>Example 1:</b> Backtracking with Trie.</td>
       <td><b>Time:</b> O(Word Length) for Add, O(26^Dots * Word Length) for Search<br><b>Space:</b> O(Total Chars)</td>
-      <td>Trie</td>
-      <td>-</td>
       <td><b>Explanation:</b> Add words normally to the Trie. When searching, if the current character is '.', iterate over all 26 possible children and recursively search the remaining word. If any path returns true, the word is found.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class TrieNode:&#10;    def __init__(self):&#10;        self.children = {}&#10;        self.isEnd = False&#10;class WordDictionary:&#10;    def __init__(self):&#10;        self.root = TrieNode()&#10;    def addWord(self, word: str) -&gt; None:&#10;        node = self.root&#10;        for char in word:&#10;            if char not in node.children:&#10;                node.children[char] = TrieNode()&#10;            node = node.children[char]&#10;        node.isEnd = True&#10;    def search(self, word: str) -&gt; bool:&#10;        def searchInNode(i, node):&#10;            if not node: return False&#10;            if i == len(word): return node.isEnd&#10;            if word[i] != &#x27;.&#x27;:&#10;                if word[i] not in node.children: return False&#10;                return searchInNode(i + 1, node.children[word[i]])&#10;            for child in node.children.values():&#10;                if searchInNode(i + 1, child): return True&#10;            return False&#10;        return searchInNode(0, self.root)</code></pre></details></td>
     </tr>
     <tr>
@@ -129,8 +100,6 @@
       <td>Trie 13 Implement Magic Dictionary<br><br></b> <a href='https://leetcode.com/problems/implement-magic-dictionary/' target='_blank'>LeetCode 676</a></td>
       <td><b>Example 1:</b> Recursive Trie Search.</td>
       <td><b>Time:</b> O(N) Add, O(N * 26) Search<br><b>Space:</b> O(Total Chars)</td>
-      <td>Trie</td>
-      <td>-</td>
       <td><b>Explanation:</b> Store dictionary in a Trie. For searching, recursively traverse the Trie. Maintain a `modified` boolean flag. If characters mismatch, set `modified` to true and continue. If we reach the end of the word and `modified` is true, return true.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class TrieNode:&#10;    def __init__(self):&#10;        self.children = {}&#10;        self.isEnd = False&#10;class MagicDictionary:&#10;    def __init__(self):&#10;        self.root = TrieNode()&#10;    def buildDict(self, dictionary: list[str]) -&gt; None:&#10;        for word in dictionary:&#10;            node = self.root&#10;            for char in word:&#10;                if char not in node.children:&#10;                    node.children[char] = TrieNode()&#10;                node = node.children[char]&#10;            node.isEnd = True&#10;    def search(self, searchWord: str) -&gt; bool:&#10;        def dfs(i, node, modified):&#10;            if i == len(searchWord): return modified and node.isEnd&#10;            if modified:&#10;                if searchWord[i] in node.children:&#10;                    return dfs(i + 1, node.children[searchWord[i]], True)&#10;                return False&#10;            for char, child in node.children.items():&#10;                if dfs(i + 1, child, char != searchWord[i]): return True&#10;            return False&#10;        return dfs(0, self.root, False)</code></pre></details></td>
     </tr>
     <tr>
@@ -138,8 +107,6 @@
       <td>Trie 14 Find All Words In A Matrix<br><br></b> <a href='https://practice.geeksforgeeks.org/problems/find-all-words-in-a-matrix/1' target='_blank'>GFG</a></td>
       <td><b>Example 1:</b> Trie + DFS.</td>
       <td><b>Time:</b> O(N * M * 4^L) where L is max word length<br><b>Space:</b> O(Total Chars in Dict)</td>
-      <td>Trie</td>
-      <td>-</td>
       <td><b>Explanation:</b> Build a Trie from the dictionary. Perform DFS from every cell in the matrix. During DFS, traverse the Trie simultaneously. If `node.word` is found, add it to result and clear `node.word` to prevent duplicates. Mark visited cells to avoid loops.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class TrieNode:&#10;    def __init__(self):&#10;        self.children = {}&#10;        self.word = &quot;&quot;&#10;class Solution:&#10;    def findWords(self, board: list[list[str]], words: list[str]) -&gt; list[str]:&#10;        root = TrieNode()&#10;        for w in words:&#10;            node = root&#10;            for c in w:&#10;                if c not in node.children:&#10;                    node.children[c] = TrieNode()&#10;                node = node.children[c]&#10;            node.word = w&#10;        ans = []&#10;        def dfs(i, j, node):&#10;            c = board[i][j]&#10;            if c == &#x27;#&#x27; or c not in node.children: return&#10;            node = node.children[c]&#10;            if node.word:&#10;                ans.append(node.word)&#10;                node.word = &quot;&quot;&#10;            board[i][j] = &#x27;#&#x27;&#10;            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:&#10;                r, c_nxt = i + dr, j + dc&#10;                if 0 &lt;= r &lt; len(board) and 0 &lt;= c_nxt &lt; len(board[0]):&#10;                    dfs(r, c_nxt, node)&#10;            board[i][j] = c&#10;        for i in range(len(board)):&#10;            for j in range(len(board[0])):&#10;                dfs(i, j, root)&#10;        return sorted(ans)</code></pre></details></td>
     </tr>
     <tr>
@@ -147,8 +114,6 @@
       <td>Trie 15 Replace Words<br><br></b> <a href='https://leetcode.com/problems/replace-words/' target='_blank'>LeetCode 648</a></td>
       <td><b>Example 1:</b> Trie matching.</td>
       <td><b>Time:</b> O(N * W)<br><b>Space:</b> O(Total Chars in Dict + Sentence Length)</td>
-      <td>Trie</td>
-      <td>-</td>
       <td><b>Explanation:</b> Insert all dictionary roots into a Trie. For each word in the sentence, search the Trie. If a prefix matches a root (i.e., `isEnd` becomes true), replace the word with the root. If no root matches, keep the original word.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class TrieNode:&#10;    def __init__(self):&#10;        self.children = {}&#10;        self.isEnd = False&#10;class Solution:&#10;    def replaceWords(self, dictionary: list[str], sentence: str) -&gt; str:&#10;        root = TrieNode()&#10;        for word in dictionary:&#10;            node = root&#10;            for char in word:&#10;                if char not in node.children:&#10;                    node.children[char] = TrieNode()&#10;                node = node.children[char]&#10;            node.isEnd = True&#10;        def findRoot(word):&#10;            node = root&#10;            prefix = &quot;&quot;&#10;            for char in word:&#10;                if char not in node.children: break&#10;                prefix += char&#10;                node = node.children[char]&#10;                if node.isEnd: return prefix&#10;            return word&#10;        return &quot; &quot;.join(findRoot(word) for word in sentence.split())</code></pre></details></td>
     </tr>
     <tr>
@@ -156,8 +121,6 @@
       <td>Trie 16 Longest Word In Dictionary<br><br></b> <a href='https://leetcode.com/problems/longest-word-in-dictionary/' target='_blank'>LeetCode 720</a></td>
       <td><b>Example 1:</b> Trie + DFS.</td>
       <td><b>Time:</b> O(Total Chars)<br><b>Space:</b> O(Total Chars)</td>
-      <td>Trie</td>
-      <td>-</td>
       <td><b>Explanation:</b> Insert all words into a Trie, marking the end of each word. Perform DFS on the Trie. Only proceed to children that are marked as the end of a word (i.e., `isEnd == true`). Keep track of the longest string found during DFS.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class TrieNode:&#10;    def __init__(self):&#10;        self.children = {}&#10;        self.isEnd = False&#10;        self.word = &quot;&quot;&#10;class Solution:&#10;    def longestWord(self, words: list[str]) -&gt; str:&#10;        root = TrieNode()&#10;        for w in words:&#10;            node = root&#10;            for c in w:&#10;                if c not in node.children:&#10;                    node.children[c] = TrieNode()&#10;                node = node.children[c]&#10;            node.isEnd = True&#10;            node.word = w&#10;        longest = &quot;&quot;&#10;        def dfs(node):&#10;            nonlocal longest&#10;            if node.isEnd:&#10;                if len(node.word) &gt; len(longest) or (len(node.word) == len(longest) and node.word &lt; longest):&#10;                    longest = node.word&#10;            for child in node.children.values():&#10;                if child.isEnd:&#10;                    dfs(child)&#10;        for child in root.children.values():&#10;            if child.isEnd:&#10;                dfs(child)&#10;        return longest</code></pre></details></td>
     </tr>
     <tr>
@@ -165,8 +128,6 @@
       <td>Trie 17 Camelcase Matching<br><br></b> <a href='https://leetcode.com/problems/camelcase-matching/' target='_blank'>LeetCode 1023</a></td>
       <td><b>Example 1:</b> Trie matching.</td>
       <td><b>Time:</b> O(N * M)<br><b>Space:</b> O(1) excluding output</td>
-      <td>-</td>
-      <td>-</td>
       <td><b>Explanation:</b> Build a Trie with the queries (optional, can also be done linearly). Better approach: for each query, match characters with pattern. If characters match, increment pattern index. If characters mismatch and query character is uppercase, it's a mismatch. Finally, check if pattern index reached pattern length.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def camelMatch(queries, pattern):&#10;    ans = []&#10;    for q in queries:&#10;        i = 0&#10;        match = True&#10;        for c in q:&#10;            if i &lt; len(pattern) and c == pattern[i]: i += 1&#10;            elif c.isupper():&#10;                match = False&#10;                break&#10;        if i &lt; len(pattern): match = False&#10;        ans.append(match)&#10;    return ans</code></pre></details></td>
     </tr>
     <tr>
@@ -174,8 +135,6 @@
       <td>Trie 18 Prefix And Suffix Search<br><br></b> <a href='https://leetcode.com/problems/prefix-and-suffix-search/' target='_blank'>LeetCode 745</a></td>
       <td><b>Example 1:</b> Suffix + '{' + Prefix Trie.</td>
       <td><b>Time:</b> O(N * K^2) Insert, O(K) Search<br><b>Space:</b> O(N * K^2)</td>
-      <td>Trie</td>
-      <td>-</td>
       <td><b>Explanation:</b> For each word, generate all possible suffixes, append a special character '{', and then append the original word. Insert all these combinations into a Trie along with the index. When querying, search for `suffix + '{' + prefix` in the Trie.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class TrieNode:&#10;    def __init__(self):&#10;        self.children = {}&#10;        self.index = -1&#10;class WordFilter:&#10;    def __init__(self, words: list[str]):&#10;        self.root = TrieNode()&#10;        for i, w in enumerate(words):&#10;            for j in range(len(w) + 1):&#10;                s = w[j:] + &quot;{&quot; + w&#10;                node = self.root&#10;                for char in s:&#10;                    if char not in node.children:&#10;                        node.children[char] = TrieNode()&#10;                    node = node.children[char]&#10;                    node.index = i&#10;    def f(self, pref: str, suff: str) -&gt; int:&#10;        s = suff + &quot;{&quot; + pref&#10;        node = self.root&#10;        for char in s:&#10;            if char not in node.children: return -1&#10;            node = node.children[char]&#10;        return node.index</code></pre></details></td>
     </tr>
   </tbody>

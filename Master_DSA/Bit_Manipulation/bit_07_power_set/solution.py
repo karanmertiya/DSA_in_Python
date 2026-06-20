@@ -1,16 +1,16 @@
-# Time Complexity: O(2^N * N)
-# Space Complexity: O(2^N * N)
-# Explanation: Iterate from 1 to `2^N - 1`. For each number, treat its binary representation as a mask to pick characters from the string. Sort the resulting list of subsequences.
+# Time Complexity: O(N * 2^N)
+# Space Complexity: O(N * 2^N)
+# Explanation: Bit manipulation technique. For N elements, there are 2^N subsets. Count from 0 to 2^N - 1. For each number, its binary representation indicates which elements to include.
 
-def AllPossibleStrings(s):
-    n = len(s)
+def subsets(nums: List[int]) -> List[List[int]]:
+    n = len(nums)
+    subsets_count = 1 << n
     ans = []
-    for i in range(1, 1 << n):
-        sub = ""
+    for i in range(subsets_count):
+        subset = []
         for j in range(n):
             if i & (1 << j):
-                sub += s[j]
-        ans.append(sub)
-    ans.sort()
+                subset.append(nums[j])
+        ans.append(subset)
     return ans
 

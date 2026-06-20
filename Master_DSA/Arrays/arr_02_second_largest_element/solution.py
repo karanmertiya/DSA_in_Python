@@ -1,6 +1,16 @@
+# Time Complexity: O(N log N)
+# Space Complexity: O(1)
+# Explanation: Brute Force: Sort the array, then iterate from the back to find the first element smaller than the largest.
+
+def print2largest(arr, n):
+    arr.sort()
+    for i in range(n-2, -1, -1):
+        if arr[i] != arr[n-1]: return arr[i]
+    return -1
+
 # Time Complexity: O(N) (Constraint)
 # Space Complexity: O(1) (Constraint)
-# Explanation: Maintain two variables, `largest` and `second_largest`. Update them simultaneously during a single pass.
+# Explanation: Optimal: Maintain two variables, `largest` and `second_largest`. Update them simultaneously during a single pass.
 
 def print2largest(arr: list[int]) -> int:
     largest = -1

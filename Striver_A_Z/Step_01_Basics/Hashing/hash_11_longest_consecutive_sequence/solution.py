@@ -1,6 +1,23 @@
+# Time Complexity: O(N log N)
+# Space Complexity: O(1)
+# Explanation: Brute Force: Sort the array first, then count consecutive elements linearly.
+
+def longestConsecutive(nums):
+    if not nums: return 0
+    nums.sort()
+    longest, current = 1, 1
+    for i in range(1, len(nums)):
+        if nums[i] == nums[i-1]: continue
+        if nums[i] == nums[i-1] + 1:
+            current += 1
+        else:
+            longest = max(longest, current)
+            current = 1
+    return max(longest, current)
+
 # Time Complexity: O(N) (Constraint)
 # Space Complexity: O(N)
-# Explanation: Insert all elements into a Hash Set. Iterate through elements. If `num - 1` is NOT in the set, it's the start of a sequence. Count forwards.
+# Explanation: Optimal: Insert all elements into a Hash Set. Iterate through elements. If `num - 1` is NOT in the set, it's the start of a sequence. Count forwards.
 
 def longestConsecutive(nums: list[int]) -> int:
     num_set = set(nums)

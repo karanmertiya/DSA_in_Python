@@ -1,6 +1,25 @@
+# Time Complexity: O(N^2) or worse
+# Space Complexity: O(N) or O(1)
+# Explanation: Brute Force: Standard unoptimized approach. (TODO: Implement specific logic)
+
+# TODO: Implement Brute Force
+def shipWithinDays(weights: List[int], days: int) -> int:
+    def canShip(cap):
+        d, load = 1, 0
+        for w in weights:
+            if load + w > cap: d += 1; load = w
+            else: load += w
+        return d <= days
+    low, high = max(weights), sum(weights)
+    while low <= high:
+        mid = (low + high) // 2
+        if canShip(mid): high = mid - 1
+        else: low = mid + 1
+    return low
+
 # Time Complexity: O(N log(sum - max))
 # Space Complexity: O(1)
-# Explanation: Binary search on capacity. Low = `max(weights)`, High = `sum(weights)`. Iterate through packages and accumulate weight, increment day if limit is exceeded.
+# Explanation: Optimal: Binary search on capacity. Low = `max(weights)`, High = `sum(weights)`. Iterate through packages and accumulate weight, increment day if limit is exceeded.
 
 def shipWithinDays(weights: List[int], days: int) -> int:
     def canShip(cap):

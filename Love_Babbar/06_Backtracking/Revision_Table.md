@@ -20,14 +20,14 @@
     </tr>
     <tr>
       <td>2</td>
-      <td>Rec 02 N Queens<br><br></b> <a href="https://leetcode.com/problems/n-queens/" target="_blank">LeetCode 51</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Striver A Z, Love Babbar</details></td>
+      <td>Rec 02 N Queens<br><br></b> <a href="https://leetcode.com/problems/n-queens/" target="_blank">LeetCode 51</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Love Babbar</details></td>
       <td><b>Example 1:</b> <br><b>Input:</b> n = 4<br><b>Output:</b> [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]<br><br><b>Note (Constraint):</b> 1 &le; n &le; 9</td>
       <td><b>Time:</b> O(N!) (Constraint)<br><b>Space:</b> O(N) (Constraint)</td>
       <td><b>Explanation:</b> Backtracking. Try placing a queen in each row of the current column. Use `O(1)` lookups (Hashing logic) via arrays to check if row/diagonals are safe.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def solve_n_queens(n: int) -&gt; list[list[str]]:&#10;    ans = []&#10;    board = [[&quot;.&quot;] * n for _ in range(n)]&#10;    left_row = [0] * n&#10;    upper_diag = [0] * (2 * n - 1)&#10;    lower_diag = [0] * (2 * n - 1)&#10;    &#10;    def solve(col):&#10;        if col == n:&#10;            ans.append([&quot;&quot;.join(row) for row in board])&#10;            return&#10;            &#10;        for row in range(n):&#10;            if left_row[row] == 0 and lower_diag[row + col] == 0 and upper_diag[n - 1 + col - row] == 0:&#10;                board[row][col] = &#x27;Q&#x27;&#10;                left_row[row] = 1&#10;                lower_diag[row + col] = 1&#10;                upper_diag[n - 1 + col - row] = 1&#10;                &#10;                solve(col + 1)&#10;                &#10;                board[row][col] = &#x27;.&#x27;&#10;                left_row[row] = 0&#10;                lower_diag[row + col] = 0&#10;                upper_diag[n - 1 + col - row] = 0&#10;                &#10;    solve(0)&#10;    return ans</code></pre></details></td>
     </tr>
     <tr>
       <td>3</td>
-      <td>Rec 03 Permutations<br><br></b> <a href="https://leetcode.com/problems/permutations/" target="_blank">LeetCode 46</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Striver A Z, Love Babbar</details></td>
+      <td>Rec 03 Permutations<br><br></b> <a href="https://leetcode.com/problems/permutations/" target="_blank">LeetCode 46</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Love Babbar</details></td>
       <td><b>Example 1:</b> <br><b>Input:</b> nums = [1,2,3]<br><b>Output:</b> [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]</td>
       <td><b>Time:</b> O(N! * N)<br><b>Space:</b> O(N)</td>
       <td><b>Explanation:</b> Backtracking. Swap elements to generate permutations. For index `i`, swap it with every index from `i` to `n-1`, recurse, then backtrack (swap back).<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def permute(nums: list[int]) -&gt; list[list[int]]:&#10;    ans = []&#10;    def solve(idx):&#10;        if idx == len(nums):&#10;            ans.append(nums[:])&#10;            return&#10;        for i in range(idx, len(nums)):&#10;            nums[idx], nums[i] = nums[i], nums[idx]&#10;            solve(idx + 1)&#10;            nums[idx], nums[i] = nums[i], nums[idx]&#10;    solve(0)&#10;    return ans</code></pre></details></td>
@@ -55,14 +55,14 @@
     </tr>
     <tr>
       <td>7</td>
-      <td>Rec 07 Word Break<br><br></b> <a href="https://leetcode.com/problems/word-break/" target="_blank">LeetCode 139</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Apna College, Striver A Z, Love Babbar</details></td>
+      <td>Rec 07 Word Break<br><br></b> <a href="https://leetcode.com/problems/word-break/" target="_blank">LeetCode 139</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Apna College, Love Babbar</details></td>
       <td><b>Example 1:</b> <br><b>Input:</b> s = 'leetcode', wordDict = ['leet','code']<br><b>Output:</b> true</td>
       <td><b>Time:</b> O(N^3)<br><b>Space:</b> O(N)</td>
       <td><b>Explanation:</b> Recursion with Memoization (or DP). For each index, try all possible word lengths. If a prefix exists in dict, recurse for the suffix. DP array `dp[i]` stores if `s[0...i-1]` is valid.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; bool:&#10;    word_set = set(wordDict)&#10;    dp = [False] * (len(s) + 1)&#10;    dp[0] = True&#10;    for i in range(1, len(s) + 1):&#10;        for j in range(i):&#10;            if dp[j] and s[j:i] in word_set:&#10;                dp[i] = True&#10;                break&#10;    return dp[-1]</code></pre></details></td>
     </tr>
     <tr>
       <td>8</td>
-      <td>Rec 08 Word Break Ii<br><br></b> <a href="https://leetcode.com/problems/word-break-ii/" target="_blank">LeetCode 140</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
+      <td>Rec 08 Word Break II<br><br></b> <a href="https://leetcode.com/problems/word-break-ii/" target="_blank">LeetCode 140</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
       <td><b>Example 1:</b> Return list of sentences.</td>
       <td><b>Time:</b> O(2^N)<br><b>Space:</b> O(2^N)</td>
       <td><b>Explanation:</b> Backtracking. Generate all combinations. At each step, if a prefix is in dict, recursively call for the rest of the string and append the prefix to the result of the recursive call.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def wordBreak(s: str, wordDict: List[str]) -&gt; List[str]:&#10;    word_set = set(wordDict)&#10;    memo = {}&#10;    def solve(s):&#10;        if s in memo: return memo[s]&#10;        if not s: return [&quot;&quot;]&#10;        res = []&#10;        for i in range(1, len(s) + 1):&#10;            word = s[:i]&#10;            if word in word_set:&#10;                rem = solve(s[i:])&#10;                for st in rem:&#10;                    res.append(word + (&quot; &quot; if st else &quot;&quot;) + st)&#10;        memo[s] = res&#10;        return res&#10;    return solve(s)</code></pre></details></td>
@@ -83,21 +83,21 @@
     </tr>
     <tr>
       <td>11</td>
-      <td>Rec 11 Subset Sums Ii<br><br></b> <a href="https://leetcode.com/problems/subsets-ii/" target="_blank">LeetCode 90</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
+      <td>Rec 11 Subset Sums II<br><br></b> <a href="https://leetcode.com/problems/subsets-ii/" target="_blank">LeetCode 90</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
       <td><b>Example 1:</b><br><b>Output:</b> [[],[1],[1,2],[1,2,2],[2],[2,2]]</td>
       <td><b>Time:</b> O(2^N * N)<br><b>Space:</b> O(2^N * N)</td>
       <td><b>Explanation:</b> Sort array first to bring duplicates together. In recursive call, loop from `ind` to `n`. If `i > ind` and `nums[i] == nums[i-1]`, `continue` to skip duplicate recursive branches.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def subsetsWithDup(nums: List[int]) -&gt; List[List[int]]:&#10;    ans = []&#10;    nums.sort()&#10;    def findSubsets(ind, ds):&#10;        ans.append(list(ds))&#10;        for i in range(ind, len(nums)):&#10;            if i != ind and nums[i] == nums[i-1]: continue&#10;            ds.append(nums[i])&#10;            findSubsets(i + 1, ds)&#10;            ds.pop()&#10;    findSubsets(0, [])&#10;    return ans</code></pre></details></td>
     </tr>
     <tr>
       <td>12</td>
-      <td>Rec 12 Combination Sum Ii<br><br></b> <a href="https://leetcode.com/problems/combination-sum-ii/" target="_blank">LeetCode 40</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
+      <td>Rec 12 Combination Sum II<br><br></b> <a href="https://leetcode.com/problems/combination-sum-ii/" target="_blank">LeetCode 40</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
       <td><b>Example 1:</b> Return unique combinations.</td>
       <td><b>Time:</b> O(2^N * k)<br><b>Space:</b> O(k * x)</td>
       <td><b>Explanation:</b> Sort the array. Recursive function iterates from `ind` to `n`. Skip duplicates (`if i > ind and arr[i] == arr[i-1]`). If `arr[i] > target`, break. Else add to path, subtract from target, and recurse.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def combinationSum2(candidates: List[int], target: int) -&gt; List[List[int]]:&#10;    ans = []&#10;    candidates.sort()&#10;    def findCombinations(ind, target, ds):&#10;        if target == 0:&#10;            ans.append(list(ds))&#10;            return&#10;        for i in range(ind, len(candidates)):&#10;            if i &gt; ind and candidates[i] == candidates[i-1]: continue&#10;            if candidates[i] &gt; target: break&#10;            ds.append(candidates[i])&#10;            findCombinations(i + 1, target - candidates[i], ds)&#10;            ds.pop()&#10;    findCombinations(0, target, [])&#10;    return ans</code></pre></details></td>
     </tr>
     <tr>
       <td>13</td>
-      <td>Rec 13 Combination Sum Iii<br><br></b> <a href="https://leetcode.com/problems/combination-sum-iii/" target="_blank">LeetCode 216</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
+      <td>Rec 13 Combination Sum III<br><br></b> <a href="https://leetcode.com/problems/combination-sum-iii/" target="_blank">LeetCode 216</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
       <td><b>Example 1:</b> Return combinations.</td>
       <td><b>Time:</b> O(2^9)<br><b>Space:</b> O(k)</td>
       <td><b>Explanation:</b> Backtracking. Start from 1, go up to 9. Add the current number to the path and subtract from target. Stop when path size is `k` and `target` is 0.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def combinationSum3(k: int, n: int) -&gt; List[List[int]]:&#10;    ans = []&#10;    def solve(start, k, n, ds):&#10;        if k == 0 and n == 0:&#10;            ans.append(list(ds))&#10;            return&#10;        if k == 0 or n &lt; 0: return&#10;        for i in range(start, 10):&#10;            ds.append(i)&#10;            solve(i + 1, k - 1, n - i, ds)&#10;            ds.pop()&#10;    solve(1, k, n, [])&#10;    return ans</code></pre></details></td>
@@ -118,7 +118,7 @@
     </tr>
     <tr>
       <td>16</td>
-      <td>Rec 16 N Queens Ii<br><br></b> <a href="https://leetcode.com/problems/n-queens-ii/" target="_blank">LeetCode 52</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
+      <td>Rec 16 N Queens II<br><br></b> <a href="https://leetcode.com/problems/n-queens-ii/" target="_blank">LeetCode 52</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
       <td><b>Example 1:</b> Backtracking with hashing.</td>
       <td><b>Time:</b> O(N!)<br><b>Space:</b> O(N)</td>
       <td><b>Explanation:</b> Use backtracking to place queens column by column. Use three hash arrays (or bitmasks) to track attacked rows, upper diagonals, and lower diagonals. If placing a queen is safe, update hashes, recurse for next column, and then backtrack.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def totalNQueens(n: int) -&gt; int:&#10;    count = 0&#10;    leftRow = [0] * n&#10;    upperDiag = [0] * (2 * n - 1)&#10;    lowerDiag = [0] * (2 * n - 1)&#10;    def solve(col):&#10;        nonlocal count&#10;        if col == n:&#10;            count += 1&#10;            return&#10;        for row in range(n):&#10;            if leftRow[row] == 0 and lowerDiag[row + col] == 0 and upperDiag[n - 1 + col - row] == 0:&#10;                leftRow[row] = 1&#10;                lowerDiag[row + col] = 1&#10;                upperDiag[n - 1 + col - row] = 1&#10;                solve(col + 1)&#10;                leftRow[row] = 0&#10;                lowerDiag[row + col] = 0&#10;                upperDiag[n - 1 + col - row] = 0&#10;    solve(0)&#10;    return count</code></pre></details></td>
@@ -146,7 +146,7 @@
     </tr>
     <tr>
       <td>20</td>
-      <td>Rec 20 Print All Permutations Of A String<br><br></b> <a href="https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1" target="_blank">GFG</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Striver A Z, Love Babbar</details></td>
+      <td>Rec 20 Print All Permutations Of A String<br><br></b> <a href="https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1" target="_blank">GFG</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Love Babbar</details></td>
       <td><b>Example 1:</b> Recursive Backtracking.</td>
       <td><b>Time:</b> O(N! * N)<br><b>Space:</b> O(N)</td>
       <td><b>Explanation:</b> Convert string to char array and sort it. Use backtracking: pass a boolean visited array and a temporary string. If temporary string length equals original length, add to answer. Else, iterate through characters. To avoid duplicates, if `i > 0` and `s[i] == s[i-1]` and `!vis[i-1]`, skip. Otherwise, mark visited, append, recurse, unmark, pop.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def find_permutation(S: str) -&gt; List[str]:&#10;    S = sorted(list(S))&#10;    ans = []&#10;    vis = [False] * len(S)&#10;    def solve(curr):&#10;        if len(curr) == len(S):&#10;            ans.append(&quot;&quot;.join(curr))&#10;            return&#10;        for i in range(len(S)):&#10;            if vis[i] or (i &gt; 0 and S[i] == S[i-1] and not vis[i-1]):&#10;                continue&#10;            vis[i] = True&#10;            curr.append(S[i])&#10;            solve(curr)&#10;            curr.pop()&#10;            vis[i] = False&#10;    solve([])&#10;    return ans</code></pre></details></td>

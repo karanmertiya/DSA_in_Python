@@ -15,8 +15,8 @@
       <td>1</td>
       <td>Hash 01 Design Hashset<br><br></b> <a href="https://leetcode.com/problems/design-hashset/" target="_blank">LeetCode 705</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
       <td><b></b> Array of Linked Lists (Chaining).</td>
-      <td><details><summary><b>Approach 1</b></summary><b>Time:</b> O(N^2) or worse<br><b>Space:</b> O(N) or O(1)</details><details><summary><b>Approach 2</b></summary><b>Time:</b> O(1) average, O(N) worst case<br><b>Space:</b> O(N)</details></td>
-      <td><details><summary><b>Approach 1</b></summary><b>Explanation:</b> Brute Force: Standard unoptimized approach. (TODO: Implement specific logic)<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># TODO: Implement Brute Force&#10;class MyHashSet:&#10;    def __init__(self):&#10;        self.size = 10000&#10;        self.buckets = [[] for _ in range(self.size)]&#10;    def add(self, key: int) -&gt; None:&#10;        i = key % self.size&#10;        if key not in self.buckets[i]:&#10;            self.buckets[i].append(key)&#10;    def remove(self, key: int) -&gt; None:&#10;        i = key % self.size&#10;        if key in self.buckets[i]:&#10;            self.buckets[i].remove(key)&#10;    def contains(self, key: int) -&gt; bool:&#10;        return key in self.buckets[key % self.size]</code></pre></details></details><details><summary><b>Approach 2</b></summary><b>Explanation:</b> Optimal: Use a large array (e.g., size 10000) of linked lists or vectors. The hash function maps `key` to `key % 10000`. To add, if not present in the bucket, append it. To remove, find and erase. To contain, iterate through bucket.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class MyHashSet:&#10;    def __init__(self):&#10;        self.size = 10000&#10;        self.buckets = [[] for _ in range(self.size)]&#10;    def add(self, key: int) -&gt; None:&#10;        i = key % self.size&#10;        if key not in self.buckets[i]:&#10;            self.buckets[i].append(key)&#10;    def remove(self, key: int) -&gt; None:&#10;        i = key % self.size&#10;        if key in self.buckets[i]:&#10;            self.buckets[i].remove(key)&#10;    def contains(self, key: int) -&gt; bool:&#10;        return key in self.buckets[key % self.size]</code></pre></details></details></td>
+      <td><b>Time:</b> O(1) average, O(N) worst case<br><b>Space:</b> O(N)</td>
+      <td><b>Explanation:</b> Optimal: Use a large array (e.g., size 10000) of linked lists or vectors. The hash function maps `key` to `key % 10000`. To add, if not present in the bucket, append it. To remove, find and erase. To contain, iterate through bucket.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">class MyHashSet:&#10;    def __init__(self):&#10;        self.size = 10000&#10;        self.buckets = [[] for _ in range(self.size)]&#10;    def add(self, key: int) -&gt; None:&#10;        i = key % self.size&#10;        if key not in self.buckets[i]:&#10;            self.buckets[i].append(key)&#10;    def remove(self, key: int) -&gt; None:&#10;        i = key % self.size&#10;        if key in self.buckets[i]:&#10;            self.buckets[i].remove(key)&#10;    def contains(self, key: int) -&gt; bool:&#10;        return key in self.buckets[key % self.size]</code></pre></details></td>
     </tr>
     <tr>
       <td>2</td>
@@ -62,14 +62,14 @@
     </tr>
     <tr>
       <td>8</td>
-      <td>Ll 08 Intersection Of Two Linked Lists<br><br></b> <a href="https://leetcode.com/problems/intersection-of-two-linked-lists/" target="_blank">LeetCode 160</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Apna College, Striver A Z, Love Babbar</details></td>
+      <td>Ll 08 Intersection Of Two Linked Lists<br><br></b> <a href="https://leetcode.com/problems/intersection-of-two-linked-lists/" target="_blank">LeetCode 160</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Apna College, Love Babbar</details></td>
       <td><b>Example 1:</b> <br><b>Input:</b> intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3<br><b>Output:</b> Intersected at '8'</td>
       <td><b>Time:</b> O(N + M)<br><b>Space:</b> O(1)</td>
       <td><b>Explanation:</b> Two pointers `a` and `b`. Traverse `A` then `B`, and `B` then `A`. They will meet at the intersection node or `NULL`.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def getIntersectionNode(headA: ListNode, headB: ListNode) -&gt; ListNode:&#10;    a, b = headA, headB&#10;    while a != b:&#10;        a = a.next if a else headB&#10;        b = b.next if b else headA&#10;    return a</code></pre></details></td>
     </tr>
     <tr>
       <td>9</td>
-      <td>Ll 09 Reverse Nodes In K Group<br><br></b> <a href="https://leetcode.com/problems/reverse-nodes-in-k-group/" target="_blank">LeetCode 25</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Apna College, Striver A Z, Love Babbar</details></td>
+      <td>Ll 09 Reverse Nodes In K Group<br><br></b> <a href="https://leetcode.com/problems/reverse-nodes-in-k-group/" target="_blank">LeetCode 25</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Apna College, Love Babbar</details></td>
       <td><b>Example 1:</b> <br><b>Input:</b> head = [1,2,3,4,5], k = 2<br><b>Output:</b> [2,1,4,3,5]</td>
       <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
       <td><b>Explanation:</b> Find length of list. Traverse groups of size k. For each group, perform standard linked list reversal. Link the prev group's tail to the current reversed head.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverseKGroup(head: Optional[ListNode], k: int) -&gt; Optional[ListNode]:&#10;    if not head or k == 1: return head&#10;    dummy = ListNode(0)&#10;    dummy.next = head&#10;    cur, pre, count = head, dummy, 0&#10;    while cur: &#10;        count += 1; cur = cur.next&#10;    while count &gt;= k:&#10;        cur = pre.next&#10;        nex = cur.next&#10;        for _ in range(1, k):&#10;            cur.next = nex.next&#10;            nex.next = pre.next&#10;            pre.next = nex&#10;            nex = cur.next&#10;        pre = cur&#10;        count -= k&#10;    return dummy.next</code></pre></details></td>
@@ -153,7 +153,7 @@
     </tr>
     <tr>
       <td>21</td>
-      <td>Ll 21 Add Two Numbers Ii<br><br></b> <a href="https://leetcode.com/problems/add-two-numbers-ii/" target="_blank">LeetCode 445</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
+      <td>Ll 21 Add Two Numbers II<br><br></b> <a href="https://leetcode.com/problems/add-two-numbers-ii/" target="_blank">LeetCode 445</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar</details></td>
       <td><b>Example 1:</b> Stack or reverse.</td>
       <td><b>Time:</b> O(N + M)<br><b>Space:</b> O(N + M)</td>
       <td><b>Explanation:</b> Use two stacks to store the digits of the lists. Pop from stacks, add along with carry, and construct the new list by inserting at the head.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def addTwoNumbers(l1: Optional[ListNode], l2: Optional[ListNode]) -&gt; Optional[ListNode]:&#10;    s1, s2 = [], []&#10;    while l1:&#10;        s1.append(l1.val)&#10;        l1 = l1.next&#10;    while l2:&#10;        s2.append(l2.val)&#10;        l2 = l2.next&#10;    carry = 0&#10;    head = None&#10;    while s1 or s2 or carry:&#10;        sum_val = carry&#10;        if s1: sum_val += s1.pop()&#10;        if s2: sum_val += s2.pop()&#10;        node = ListNode(sum_val % 10)&#10;        node.next = head&#10;        head = node&#10;        carry = sum_val // 10&#10;    return head</code></pre></details></td>
@@ -209,14 +209,14 @@
     </tr>
     <tr>
       <td>29</td>
-      <td>Ll 29 Lru Cache Ll<br><br></b> <a href="https://leetcode.com/problems/lru-cache/" target="_blank">LeetCode 146</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Striver A Z, Love Babbar</details></td>
+      <td>Ll 29 Lru Cache Ll<br><br></b> <a href="https://leetcode.com/problems/lru-cache/" target="_blank">LeetCode 146</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Love Babbar</details></td>
       <td><b>Example 1:</b> Duplicate logic entry to ensure coverage.</td>
       <td><b>Time:</b> O(1)<br><b>Space:</b> O(N)</td>
       <td><b>Explanation:</b> Included for chapter coverage completeness. See sq_31_lru_cache.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># See Stacks and Queues module for full implementation.</code></pre></details></td>
     </tr>
     <tr>
       <td>30</td>
-      <td>Ll 30 Lfu Cache Ll<br><br></b> <a href="https://leetcode.com/problems/lfu-cache/" target="_blank">LeetCode 460</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Striver A Z, Love Babbar</details></td>
+      <td>Ll 30 Lfu Cache Ll<br><br></b> <a href="https://leetcode.com/problems/lfu-cache/" target="_blank">LeetCode 460</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Love Babbar</details></td>
       <td><b>Example 1:</b> Duplicate logic entry to ensure coverage.</td>
       <td><b>Time:</b> O(1)<br><b>Space:</b> O(N)</td>
       <td><b>Explanation:</b> Included for chapter coverage completeness. See sq_32_lfu_cache.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># See Stacks and Queues module for full implementation.</code></pre></details></td>
@@ -286,7 +286,7 @@
     </tr>
     <tr>
       <td>40</td>
-      <td>Ll 40 Reverse A Linked List In Groups Of Given Size<br><br></b> <a href="https://practice.geeksforgeeks.org/problems/reverse-a-linked-list-in-groups-of-given-size/1" target="_blank">GFG</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Striver A Z, Love Babbar</details></td>
+      <td>Ll 40 Reverse A Linked List In Groups Of Given Size<br><br></b> <a href="https://practice.geeksforgeeks.org/problems/reverse-a-linked-list-in-groups-of-given-size/1" target="_blank">GFG</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Love Babbar</details></td>
       <td><b>Example 1:</b> Recursive grouping.</td>
       <td><b>Time:</b> O(N)<br><b>Space:</b> O(N/K)</td>
       <td><b>Explanation:</b> Reverse the first `k` nodes of the linked list iteratively. After reversing, the `head` pointer will be the end of the reversed group, and `curr` will point to the next node. Recursively call the function for `curr` and set `head->next` to the result.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def reverse(head: Node, k: int) -&gt; Node:&#10;    if not head: return None&#10;    curr, prev, nxt = head, None, None&#10;    count = 0&#10;    while curr and count &lt; k:&#10;        nxt = curr.next&#10;        curr.next = prev&#10;        prev = curr&#10;        curr = nxt&#10;        count += 1&#10;    if nxt:&#10;        head.next = reverse(nxt, k)&#10;    return prev</code></pre></details></td>

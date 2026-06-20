@@ -1,19 +1,3 @@
-# Time Complexity: O(N^2) or worse
-# Space Complexity: O(N) or O(1)
-# Explanation: Brute Force: Standard unoptimized approach. (TODO: Implement specific logic)
-
-# TODO: Implement Brute Force
-def findKthNumber(m: int, n: int, k: int) -> int:
-    low, high = 1, m * n
-    while low < high:
-        mid = low + (high - low) // 2
-        count = sum(min(mid // i, n) for i in range(1, m + 1))
-        if count >= k:
-            high = mid
-        else:
-            low = mid + 1
-    return low
-
 # Time Complexity: O(m * log(m*n))
 # Space Complexity: O(1)
 # Explanation: Optimal: Binary search on range `[1, m*n]`. For a value `mid`, the number of elements `<= mid` in row `i` is `min(mid / i, n)`. Sum this for all rows to get total count. If count >= k, search left. Else search right.

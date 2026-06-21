@@ -1,4 +1,4 @@
-# Time Complexity: O(1)
+# Time Complexity: O(log10 N)
 # Space Complexity: O(1)
 # Explanation: Convert the absolute value of the number to a string and return its length.
 
@@ -18,7 +18,7 @@ def countDigits(n: int) -> int:
         n = int(n / 10)
     return count
 
-# Time Complexity: O(1)
+# Time Complexity: O(log10 N)
 # Space Complexity: O(1)
 # Explanation: Use the base-10 logarithm function to find the number of digits mathematically.
 

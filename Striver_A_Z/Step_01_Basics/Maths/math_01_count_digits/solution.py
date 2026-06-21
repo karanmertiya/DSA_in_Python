@@ -1,9 +1,9 @@
 # Time Complexity: O(1)
 # Space Complexity: O(1)
-# Explanation: Convert the number to a string and return its length.
+# Explanation: Convert the absolute value of the number to a string and return its length.
 
 def countDigits(n: int) -> int:
-    return len(str(n))
+    return len(str(abs(n)))
 
 # Time Complexity: O(log10 N)
 # Space Complexity: O(1)
@@ -12,9 +12,10 @@ def countDigits(n: int) -> int:
 def countDigits(n: int) -> int:
     if n == 0: return 1
     count = 0
-    while n > 0:
+    # Use int(n/10) to truncate toward zero in Python
+    while n != 0:
         count += 1
-        n //= 10
+        n = int(n / 10)
     return count
 
 # Time Complexity: O(1)
@@ -24,5 +25,5 @@ def countDigits(n: int) -> int:
 import math
 def countDigits(n: int) -> int:
     if n == 0: return 1
-    return int(math.log10(n) + 1)
+    return int(math.log10(abs(n)) + 1)
 

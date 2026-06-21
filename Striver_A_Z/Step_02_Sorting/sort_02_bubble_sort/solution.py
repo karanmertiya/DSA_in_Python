@@ -4,7 +4,7 @@
 
 def bubble_sort(arr: list[int]) -> None:
     n = len(arr)
-    for i in range(n - 1, -1, -1):
+    for i in range(n - 1, 0, -1):
         did_swap = False
         for j in range(i):
             if arr[j] > arr[j + 1]:

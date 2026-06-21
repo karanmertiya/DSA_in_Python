@@ -67,21 +67,16 @@
       <td><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def lcmAndGcd(a: int, b: int) -&gt; list[int]:&#10;    original_a, original_b = a, b&#10;    while a &gt; 0 and b &gt; 0:&#10;        if a &gt; b:&#10;            a = a % b&#10;        else:&#10;            b = b % a&#10;    # m if n == 0 else n can be replaced by a + b since one is 0&#10;    gcd = a + b&#10;    lcm = (original_a // gcd) * original_b  # Divide first to prevent overflow&#10;    return [lcm, gcd]</code></pre></details></td>
     </tr>
     <tr>
-      <td rowspan="2">5</td>
-      <td rowspan="2">Math 05 Check For Prime<br><br></b> <a href="https://practice.geeksforgeeks.org/problems/prime-number2314/1" target="_blank">GFG</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar, SDE Sheet</details></td>
-      <td rowspan="2"><b>Example 1:</b> <br><b>Input:</b> N = 5<br><b>Output:</b> 1</td>
-      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
-      <td><b>Approach 1:</b><br>Brute Force: Iterate from 2 to N-1 and check if N is divisible.</td>
-      <td><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isPrime(N: int) -&gt; int:&#10;    if N &lt;= 1: return 0&#10;    for i in range(2, N):&#10;        if N % i == 0: return 0&#10;    return 1</code></pre></details></td>
-    </tr>
-    <tr>
+      <td rowspan="1">5</td>
+      <td rowspan="1">Math 05 Check For Prime<br><br></b> <a href="https://practice.geeksforgeeks.org/problems/prime-number2314/1" target="_blank">GFG</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, Love Babbar, SDE Sheet</details></td>
+      <td rowspan="1"><b>Example 1:</b> <br><b>Input:</b> N = 5<br><b>Output:</b> 1</td>
       <td><b>Time:</b> O(sqrt(N))<br><b>Space:</b> O(1)</td>
-      <td><b>Approach 2:</b><br>Optimal: Check divisibility up to sqrt(N). Factors appear in pairs.</td>
+      <td>Check divisibility up to sqrt(N). Iterating up to N (O(N) time) is unnecessary and inefficient since factors always appear in pairs.</td>
       <td><b>Edge Cases:</b> <b>N=1:</b> Not prime.<br><br><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def isPrime(N: int) -&gt; int:&#10;    if N &lt;= 1: return 0&#10;    for i in range(2, int(N**0.5) + 1):&#10;        if N % i == 0: return 0&#10;    return 1</code></pre></details></td>
     </tr>
     <tr>
       <td rowspan="2">6</td>
-      <td rowspan="2">Math 06 Pow X N<br><br></b> <a href="https://leetcode.com/problems/powx-n/" target="_blank">LeetCode 50</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> SDE Sheet, Love Babbar, Striver A Z</details></td>
+      <td rowspan="2">Math 06 Pow X N<br><br></b> <a href="https://leetcode.com/problems/powx-n/" target="_blank">LeetCode 50</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z, SDE Sheet, Love Babbar</details></td>
       <td rowspan="2"><b>Example 1:</b> Binary Exponentiation.</td>
       <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
       <td><b>Approach 1:</b><br>Brute Force: Loop n times and multiply ans by x.</td>
@@ -109,16 +104,11 @@
       <td><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def AllPrimeFactors(N):&#10;    ans = []&#10;    for i in range(2, int(N**0.5) + 1):&#10;        if N % i == 0:&#10;            ans.append(i)&#10;            while N % i == 0: N //= i&#10;    if N &gt; 1: ans.append(N)&#10;    return ans</code></pre></details></td>
     </tr>
     <tr>
-      <td rowspan="2">9</td>
-      <td rowspan="2">Math 09 Print All Divisors<br><br></b> <a href="https://practice.geeksforgeeks.org/problems/print-all-divisors-of-a-number/1" target="_blank">GFG</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z</details></td>
-      <td rowspan="2"><b>Example 1:</b> Iterate up to sqrt(N).</td>
-      <td><b>Time:</b> O(N)<br><b>Space:</b> O(1)</td>
-      <td><b>Approach 1:</b><br>Brute Force: Iterate from 1 to N and check if N % i == 0.</td>
-      <td><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def printDivisors(n: int):&#10;    for i in range(1, n + 1):&#10;        if n % i == 0:&#10;            print(i, end=&quot; &quot;)</code></pre></details></td>
-    </tr>
-    <tr>
+      <td rowspan="1">9</td>
+      <td rowspan="1">Math 09 Print All Divisors<br><br></b> <a href="https://practice.geeksforgeeks.org/problems/print-all-divisors-of-a-number/1" target="_blank">GFG</a><br><br><details><summary>ℹ️</summary><b>Tags:</b> Striver A Z</details></td>
+      <td rowspan="1"><b>Example 1:</b> Iterate up to sqrt(N).</td>
       <td><b>Time:</b> O(sqrt(N) + k log k)<br><b>Space:</b> O(k)</td>
-      <td><b>Approach 2:</b><br>Optimal: Iterate up to sqrt(N). If 'i' divides N, then 'N/i' is also a divisor.</td>
+      <td>Iterate up to sqrt(N). If 'i' divides N, then 'N/i' is also a divisor. Iterating up to N (O(N) time) is unnecessary and inefficient.</td>
       <td><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">def print_divisors(n):&#10;    ans = []&#10;    for i in range(1, int(n**0.5) + 1):&#10;        if n % i == 0:&#10;            ans.append(i)&#10;            if n // i != i: ans.append(n // i)&#10;    ans.sort()&#10;    print(*(ans))</code></pre></details></td>
     </tr>
     <tr>

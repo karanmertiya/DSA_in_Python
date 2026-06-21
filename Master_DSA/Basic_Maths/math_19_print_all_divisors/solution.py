@@ -1,15 +1,6 @@
-# Time Complexity: O(N)
-# Space Complexity: O(1)
-# Explanation: Brute Force: Iterate from 1 to N and check if N % i == 0.
-
-def printDivisors(n: int):
-    for i in range(1, n + 1):
-        if n % i == 0:
-            print(i, end=" ")
-
 # Time Complexity: O(sqrt(N) + k log k)
 # Space Complexity: O(k)
-# Explanation: Optimal: Iterate up to sqrt(N). If 'i' divides N, then 'N/i' is also a divisor.
+# Explanation: Iterate up to sqrt(N). If 'i' divides N, then 'N/i' is also a divisor. Iterating up to N (O(N) time) is unnecessary and inefficient.
 
 def print_divisors(n):
     ans = []

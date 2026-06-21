@@ -3427,8 +3427,8 @@
       <td rowspan="1">Heap 12 Reorganize String<br><br></b> <a href="https://leetcode.com/problems/reorganize-string/" target="_blank">LeetCode 767</a></td>
       <td rowspan="1"><b>Example 1:</b> Duplicate logic entry. See Greedy chapter.</td>
       <td><b>Time:</b> O(N)<br><b>Space:</b> O(26)</td>
-      <td>See greedy_38_reorganize_string.</td>
-      <td><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python"># Implementation provided in greedy chapter.</code></pre></details></td>
+      <td>Count frequencies. If max frequency > (len + 1) / 2, it's impossible. Fill the most frequent character at even indices (0, 2, 4...). Then fill the remaining characters alternately at remaining even indices and then odd indices.</td>
+      <td><details><summary><b>View Code</b></summary><pre style="white-space: pre-wrap; word-wrap: break-word;"><code class="language-python">import collections&#10;def reorganizeString(s: str) -&gt; str:&#10;    counts = collections.Counter(s)&#10;    max_f, letter = 0, &#x27;&#x27;&#10;    for char, count in counts.items():&#10;        if count &gt; max_f:&#10;            max_f = count&#10;            letter = char&#10;    if max_f &gt; (len(s) + 1) // 2: return &quot;&quot;&#10;    res = [&#x27;&#x27;] * len(s)&#10;    idx = 0&#10;    while counts[letter] &gt; 0:&#10;        res[idx] = letter&#10;        idx += 2&#10;        counts[letter] -= 1&#10;    for char, count in counts.items():&#10;        while counts[char] &gt; 0:&#10;            if idx &gt;= len(s): idx = 1&#10;            res[idx] = char&#10;            idx += 2&#10;            counts[char] -= 1&#10;    return &quot;&quot;.join(res)</code></pre></details></td>
     </tr>
     <tr>
       <td rowspan="1">13</td>
